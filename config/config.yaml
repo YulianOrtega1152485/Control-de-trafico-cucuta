@@ -1,0 +1,20 @@
+tls_ids:
+  - a9c2t
+  - agc2t
+  - a9c5t
+  - agc5t
+  - alc8t
+  - alc4t
+  - alc2t
+
+tiempos_fijos:
+  verde: 25
+  amarilla: 3
+  todo_rojo: 2
+
+adaptativo:
+  verde_min: 10
+  verde_max: 45
+  peso_cola: 1.0
+  peso_espera: 0.5
+  intervalo_decision: 5

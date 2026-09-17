@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-09-15 19:19:24.669990 by Eclipse SUMO randomTrips.py v1_27_1+0000-7717f2379d9
+<configuration>
+    <net-file value="sumo\red_guaimaral_libertadores.net.xml.gz"/>
+    <route-file value="data\escenarios\alto_buses.trips.xml"/>
+    <prefix value="bus_"/>
+    <vehicle-class value="bus"/>
+    <fringe-factor value="5"/>
+    <end value="1800.0"/>
+    <period value="60.0"/>
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vType id="bus__bus" vClass="bus"/>
+    <trip id="bus_0" depart="0.00" from="176719622#3" to="-1024613828#2" type="bus__bus"/>
+    <trip id="bus_1" depart="60.00" from="-80735968#1" to="-303726987#0" type="bus__bus"/>
+    <trip id="bus_2" depart="120.00" from="69605046#0" to="-1064430742" type="bus__bus"/>
+    <trip id="bus_3" depart="180.00" from="1122799069" to="-1046571973" type="bus__bus"/>
+    <trip id="bus_4" depart="240.00" from="-69687107#6" to="1070244952" type="bus__bus"/>
+    <trip id="bus_5" depart="300.00" from="-1024369482" to="-134144623" type="bus__bus"/>
+    <trip id="bus_6" depart="360.00" from="287898717#4" to="120368476#3" type="bus__bus"/>
+    <trip id="bus_7" depart="420.00" from="-69687107#6" to="133294602#0" type="bus__bus"/>
+    <trip id="bus_8" depart="480.00" from="39195691#6" to="-1024369479#1" type="bus__bus"/>
+    <trip id="bus_9" depart="540.00" from="39195691#4" to="303726325#0" type="bus__bus"/>
+    <trip id="bus_10" depart="600.00" from="1046628859" to="-133295648#2" type="bus__bus"/>
+    <trip id="bus_11" depart="660.00" from="806844890" to="-806508978" type="bus__bus"/>
+    <trip id="bus_12" depart="720.00" from="-120369540#2" to="-120368470#0" type="bus__bus"/>
+    <trip id="bus_13" depart="780.00" from="45403516" to="133295651#1" type="bus__bus"/>
+    <trip id="bus_14" depart="840.00" from="39195691#5" to="304831008#1" type="bus__bus"/>
+    <trip id="bus_15" depart="900.00" from="133440066#1" to="806508980#1" type="bus__bus"/>
+    <trip id="bus_16" depart="960.00" from="1051356715" to="120368491#2" type="bus__bus"/>
+    <trip id="bus_17" depart="1020.00" from="45400526#1" to="133440052" type="bus__bus"/>
+    <trip id="bus_18" depart="1080.00" from="46165712#1" to="132982567#0" type="bus__bus"/>
+    <trip id="bus_19" depart="1140.00" from="305162658#1" to="-1046628858#1" type="bus__bus"/>
+    <trip id="bus_20" depart="1200.00" from="-69687108#3" to="-69324239" type="bus__bus"/>
+    <trip id="bus_21" depart="1260.00" from="-120368476#1" to="-316984417#0" type="bus__bus"/>
+    <trip id="bus_22" depart="1320.00" from="-120369542" to="-46165712#1" type="bus__bus"/>
+    <trip id="bus_23" depart="1380.00" from="176719612#2" to="-80735874#0" type="bus__bus"/>
+    <trip id="bus_24" depart="1440.00" from="1051320860" to="-303721073#0" type="bus__bus"/>
+    <trip id="bus_25" depart="1500.00" from="-80735932#1" to="69665532#1" type="bus__bus"/>
+    <trip id="bus_26" depart="1560.00" from="287898717#3" to="133295657" type="bus__bus"/>
+    <trip id="bus_27" depart="1620.00" from="-39195688#1" to="304831008#1" type="bus__bus"/>
+    <trip id="bus_28" depart="1680.00" from="-305172115#1" to="-81129162" type="bus__bus"/>
+    <trip id="bus_29" depart="1740.00" from="80736727#0" to="133508110" type="bus__bus"/>
+</routes>

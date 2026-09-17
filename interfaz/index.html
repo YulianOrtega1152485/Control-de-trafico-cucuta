@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de tráfico — Guaimaral / Libertadores, Cúcuta</title>
+<style>
+  :root {
+    --bg: #0c0f14;
+    --panel: #151a22;
+    --panel-border: #232a35;
+    --texto: #e7ebf1;
+    --texto-tenue: #8b93a3;
+    --naranja: #e2963a;
+    --teal: #35c9ad;
+    --verde: #3ecf6a;
+    --amarillo: #e2b93a;
+    --rojo: #e2543a;
+    --azul: #4f8ef7;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--texto);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: 28px;
+  }
+
+  .encabezado { max-width: 1720px; margin: 0 auto 20px; }
+  .encabezado .rotulo {
+    color: var(--naranja);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .encabezado h1 { font-size: 26px; margin: 0 0 10px; }
+  .encabezado p { color: var(--texto-tenue); max-width: 680px; line-height: 1.5; margin: 0; }
+
+  .cuerpo {
+    max-width: 1720px;
+    margin: 24px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .panel h2 {
+    font-size: 13px;
+    color: var(--texto-tenue);
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+
+  .lienzo-envoltura { position: relative; }
+  canvas {
+    width: 100%;
+    background: #05070a;
+    border-radius: 8px;
+    display: block;
+    cursor: grab;
+  }
+  canvas:active { cursor: grabbing; }
+  .tiempo-actual {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    color: var(--naranja);
+    font-size: 13px;
+  }
+
+  .controles-reproduccion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .boton {
+    background: #1c2330;
+    border: 1px solid var(--panel-border);
+    color: var(--texto);
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .boton:hover { background: #262e3d; }
+  .boton.activo { background: var(--naranja); color: #201203; border-color: var(--naranja); }
+
+  .grupo-velocidad { display: flex; gap: 6px; margin-left: auto; }
+  .grupo-velocidad .boton { padding: 6px 10px; font-size: 12px; }
+
+  .leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--texto-tenue);
+  }
+  .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+  .punto { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  .icono-semaforo {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px 4px;
+    background: #1a1f28;
+    border: 1px solid #3a4356;
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+  .icono-semaforo i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    opacity: 0.35;
+  }
+  .icono-semaforo i.rojo { background: var(--rojo); opacity: 1; }
+  .icono-semaforo i.amarillo { background: var(--amarillo); }
+  .icono-semaforo i.verde { background: var(--verde); }
+
+  .tooltip-semaforo {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+    max-width: 220px;
+    padding: 10px 12px;
+    background: #1c2330;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.45;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transform: translate(-50%, -100%) translateY(-8px);
+    transition: opacity 0.12s ease;
+  }
+  .tooltip-semaforo.visible { opacity: 1; }
+  .tooltip-semaforo .titulo {
+    font-weight: 600;
+    color: var(--texto);
+    margin-bottom: 6px;
+  }
+  .tooltip-semaforo .fase {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .tooltip-semaforo .lampara-mini {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .modal-mapa {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 7, 10, 0.85);
+    z-index: 50;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .modal-mapa.visible { display: flex; }
+  .modal-mapa .contenido {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  .modal-mapa img {
+    max-width: 95vw;
+    max-height: 90vh;
+    display: block;
+    border-radius: 10px;
+    border: 1px solid var(--panel-border);
+  }
+  .modal-mapa .cerrar {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--naranja);
+    color: #201203;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lateral { display: flex; flex-direction: column; gap: 16px; }
+
+  .opciones { display: flex; gap: 8px; }
+  .opciones .boton { flex: 1; text-align: center; }
+  .opciones .boton.nivel-bajo.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
+  .opciones .boton.modo-adaptativo.activo { background: var(--teal); border-color: var(--teal); color: #04211b; }
+
+  .metrica { margin-bottom: 12px; }
+  .metrica .etiqueta { font-size: 12px; color: var(--texto-tenue); margin-bottom: 4px; }
+  .metrica .valor { font-size: 22px; font-weight: 600; }
+  .metrica .valor.muted { color: var(--texto-tenue); font-weight: 400; }
+
+  .comparativo {
+    max-width: 1720px;
+    margin: 20px auto 0;
+  }
+  .barras {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 180px;
+    margin-top: 18px;
+    padding: 0 20px;
+  }
+  .grupo-barra { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 90px; }
+  .par-barras { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
+  .barra { width: 30px; border-radius: 4px 4px 0 0; position: relative; }
+  .barra.fijo { background: #4d5568; }
+  .barra.adaptativo { background: var(--teal); }
+  .barra .num {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--texto-tenue);
+    white-space: nowrap;
+  }
+  .grupo-barra .etiqueta-nivel { font-size: 13px; color: var(--texto); text-transform: capitalize; }
+  .clave-barras { display: flex; gap: 18px; justify-content: center; margin-top: 8px; font-size: 12px; color: var(--texto-tenue); }
+
+  @media (max-width: 860px) {
+    .cuerpo { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="encabezado">
+  <div class="rotulo">SEMINARIO INTEGRADOR — UFPS · SIMULACIÓN EN SUMO</div>
+  <h1>Control de tráfico del corredor Guaimaral / Libertadores, Cúcuta</h1>
+  <p>Simulación real de 7 intersecciones semaforizadas. Elige un nivel de tráfico y compara, en la misma corrida, cómo se comporta un esquema de tiempo fijo frente al algoritmo de control adaptativo propuesto en este proyecto.</p>
+</div>
+
+<div class="cuerpo">
+  <div class="panel">
+    <h2>SIMULACIÓN EN VIVO</h2>
+    <div class="lienzo-envoltura">
+      <canvas id="lienzo" width="1400" height="820"></canvas>
+      <div class="tiempo-actual" id="etiquetaTiempo">t = 0 s</div>
+      <div class="tooltip-semaforo" id="tooltipSemaforo" aria-hidden="true"></div>
+    </div>
+    <div class="controles-reproduccion">
+      <button class="boton" id="botonJugar">▶ Reproducir</button>
+      <button class="boton" id="botonReiniciar">↺ Reiniciar</button>
+      <div class="grupo-velocidad">
+        <button class="boton velocidad activo" data-velocidad="1">1×</button>
+        <button class="boton velocidad" data-velocidad="2">2×</button>
+        <button class="boton velocidad" data-velocidad="4">4×</button>
+        <button class="boton" id="botonResetZoom">🔍 Restablecer zoom</button>
+        <button class="boton" id="botonVerMapa">🗺️ Ver en Maps</button>
+      </div>
+    </div>
+    <p style="color: var(--texto-tenue); font-size: 12px; margin: 8px 0 0;">
+      Rueda del mouse para zoom · arrastrar para mover · pasa el cursor sobre un semáforo para ver su estado
+    </p>
+    <div class="leyenda">
+      <span><span class="punto" style="background: var(--azul)"></span> Carro</span>
+      <span><span class="punto" style="background: var(--naranja)"></span> Moto</span>
+      <span><span class="punto" style="background: #b06fe0"></span> Bus</span>
+      <span>
+        <span class="icono-semaforo" aria-hidden="true"><i class="rojo"></i><i class="amarillo"></i><i class="verde"></i></span>
+        Semáforo (luz encendida = paso del carril)
+      </span>
+    </div>
+  </div>
+
+  <div class="lateral">
+    <div class="panel">
+      <h2>NIVEL DE TRÁFICO</h2>
+      <div class="opciones">
+        <button class="boton nivel-bajo activo" data-nivel="bajo">Bajo</button>
+        <button class="boton nivel-medio" data-nivel="medio">Medio</button>
+        <button class="boton nivel-alto" data-nivel="alto">Alto</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>MODO DE CONTROL</h2>
+      <div class="opciones">
+        <button class="boton modo-fijo" data-modo="fijo">Tiempo fijo</button>
+        <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>MÉTRICAS</h2>
+      <div class="metrica">
+        <div class="etiqueta">Vehículos activos</div>
+        <div class="valor" id="metricaVehiculos">—</div>
+      </div>
+      <div class="metrica">
+        <div class="etiqueta">Espera promedio por vehículo (corrida completa)</div>
+        <div class="valor" id="metricaEspera">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel comparativo">
+  <h2>COMPARATIVO — tiempo de espera promedio por vehículo (segundos), datos reales de esta simulación</h2>
+  <div class="barras" id="contenedorBarras"></div>
+  <div class="clave-barras">
+    <span><span class="punto" style="background:#4d5568"></span> Tiempo fijo</span>
+    <span><span class="punto" style="background: var(--teal)"></span> Adaptativo</span>
+  </div>
+</div>
+
+<div class="modal-mapa" id="modalMapa">
+  <div class="contenido">
+    <button class="cerrar" id="cerrarModalMapa">✕</button>
+    <img src="image/maps.png" alt="Ubicación en Google Maps — Guaimaral / Libertadores, Cúcuta">
+  </div>
+</div>
+
+<script src="datos.js"></script>
+<script>
+(function () {
+  const datos = typeof DATOS_SIMULACION !== "undefined" ? DATOS_SIMULACION : null;
+
+  const lienzo = document.getElementById("lienzo");
+  const ctx = lienzo.getContext("2d");
+  const etiquetaTiempo = document.getElementById("etiquetaTiempo");
+  const metricaVehiculos = document.getElementById("metricaVehiculos");
+  const metricaEspera = document.getElementById("metricaEspera");
+  const botonJugar = document.getElementById("botonJugar");
+  const botonReiniciar = document.getElementById("botonReiniciar");
+  const tooltipSemaforo = document.getElementById("tooltipSemaforo");
+  const envolturaLienzo = lienzo.parentElement;
+
+  const COLOR_VEHICULO = { carro: "#5b9bff", moto: "#ffab3d", bus: "#c98bff" };
+
+  let nivel = "bajo";
+  let modo = "adaptativo";
+  let indiceFrame = 0;
+  let reproduciendo = false;
+  let velocidad = 1;
+  let temporizador = null;
+
+  // --- estado de zoom / desplazamiento del mapa ---
+  let zoom = 1;
+  let panX = 0;
+  let panY = 0;
+  let arrastrando = false;
+  let ultimoMouse = { x: 0, y: 0 };
+  let semaforosParaHover = [];
+  let semaforoHoverId = null;
+
+  // --- para poder orientar el rectángulo de cada vehículo según hacia dónde se mueve ---
+  let posicionesAnteriores = new Map();
+  const anguloPorVehiculo = new Map();
+
+  function corridaActual() {
+    if (!datos) return null;
+    return datos.corridas[`${nivel}_${modo}`] || null;
+  }
+
+  function colorEnlace(caracter) {
+    if (caracter === "G" || caracter === "g") return "#3ecf6a";
+    if (caracter === "y" || caracter === "Y") return "#e2b93a";
+    if (caracter === "r" || caracter === "R") return "#e2543a";
+    return "#555555";
+  }
+
+  function dibujarRed() {
+    if (!datos) return;
+    for (const calle of datos.red.calles) {
+      ctx.beginPath();
+      ctx.strokeStyle = "#4a5568";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      calle.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
+      ctx.stroke();
+    }
+
+  }
+
+  function fasePrioritaria(caracteres) {
+    if (caracteres.some((c) => c === "G" || c === "g")) return "verde";
+    if (caracteres.some((c) => c === "y" || c === "Y")) return "amarillo";
+    if (caracteres.some((c) => c === "r" || c === "R")) return "rojo";
+    return "apagado";
+  }
+
+  const COLORES_LAMPARA = {
+    rojo: { apagada: "#4a2220", encendida: "#e2543a" },
+    amarillo: { apagada: "#4a4020", encendida: "#e2b93a" },
+    verde: { apagada: "#204a28", encendida: "#3ecf6a" },
+  };
+
+  const ETIQUETA_FASE = {
+    verde: "Verde — paso permitido",
+    amarillo: "Amarillo — precaución",
+    rojo: "Rojo — detenerse",
+    apagado: "Sin señal",
+  };
+
+  function anguloVia(tlsId, indiceVia, x, y) {
+    const angulos = datos.red.angulos_enlace && datos.red.angulos_enlace[tlsId];
+    if (angulos && angulos[indiceVia] != null) return angulos[indiceVia];
+    const centro = datos.red.semaforos && datos.red.semaforos[tlsId];
+    if (!centro) return 0;
+    return Math.atan2(centro[1] - y, centro[0] - x);
+  }
+
+  /** Un poco aguas arriba del punto de parada, siguiendo el sentido del carril. */
+  function posicionEnVia(x, y, anguloFlujo) {
+    const retroceso = 9;
+    return [x - Math.cos(anguloFlujo) * retroceso, y - Math.sin(anguloFlujo) * retroceso];
+  }
+
+  function dibujarMiniSemaforo(x, y, anguloFlujo, faseActiva, escala, resaltar) {
+    const esc = escala || 1;
+    const fases = ["rojo", "amarillo", "verde"];
+    const separacion = 4.2 * esc;
+    const radio = 2.4 * esc;
+
+    ctx.save();
+    ctx.translate(x, y);
+    // Columna alineada con el sentido del carril: rojo aguas arriba, verde hacia la intersección.
+    ctx.rotate(anguloFlujo);
+
+    const anchoPlaca = radio * 2 + 3.5 * esc;
+    const altoPlaca = separacion * 2 + radio * 2 + 3.5 * esc;
+    ctx.beginPath();
+    ctx.roundRect(-anchoPlaca / 2, -altoPlaca / 2, anchoPlaca, altoPlaca, 2 * esc);
+    ctx.fillStyle = resaltar ? "#252d3d" : "#141820";
+    ctx.fill();
+    ctx.strokeStyle = resaltar ? "#6b7890" : "#3a4356";
+    ctx.lineWidth = resaltar ? 1.2 : 0.75;
+    ctx.stroke();
+
+    fases.forEach((nombre, i) => {
+      const py = (i - 1) * separacion;
+      const activa = nombre === faseActiva;
+      const colores = COLORES_LAMPARA[nombre];
+
+      if (activa) {
+        ctx.shadowColor = colores.encendida;
+        ctx.shadowBlur = resaltar ? 8 : 5;
+      }
+
+      ctx.beginPath();
+      ctx.arc(0, py, radio, 0, Math.PI * 2);
+      ctx.fillStyle = activa ? colores.encendida : colores.apagada;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.strokeStyle = activa ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)";
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    });
+
+    ctx.restore();
+  }
+
+  function caracteresEnPunto(tlsId, indicePunto, estado) {
+    const indicesPorPunto = datos.red.indices_enlace ? datos.red.indices_enlace[tlsId] : null;
+    const indices = indicesPorPunto ? indicesPorPunto[indicePunto] : [indicePunto];
+    const libres = new Set((datos.red.indices_libres && datos.red.indices_libres[tlsId]) || []);
+
+    // Si el carril mezcla un movimiento "libre" (siempre verde, sin relación
+    // con el ciclo semafórico, ej. un giro canalizado) con otro que sí cicla,
+    // ignoramos el libre para que el color mostrado refleje el movimiento
+    // real controlado por el semáforo.
+    const indicesControlados = indices.filter((i) => !libres.has(i));
+    const indicesAUsar = indicesControlados.length > 0 ? indicesControlados : indices;
+
+    return estado ? indicesAUsar.map((i) => estado[i]).filter(Boolean) : [];
+  }
+
+  function dibujarSemaforos(estados) {
+    if (!datos || !datos.red.enlaces) return;
+    semaforosParaHover = [];
+
+    for (const [tlsId, puntos] of Object.entries(datos.red.enlaces)) {
+      const estado = estados ? estados[tlsId] : "";
+
+      puntos.forEach((punto, indiceVia) => {
+        if (!punto) return;
+        const [x0, y0] = punto;
+        const angulo = anguloVia(tlsId, indiceVia, x0, y0);
+        const [x, y] = posicionEnVia(x0, y0, angulo);
+        const caracteres = caracteresEnPunto(tlsId, indiceVia, estado);
+        const fase = fasePrioritaria(caracteres);
+
+        const resaltar = semaforoHoverId === `${tlsId}:${indiceVia}`;
+        dibujarMiniSemaforo(x, y, angulo, fase, 0.95, resaltar);
+
+        semaforosParaHover.push({
+          id: `${tlsId}:${indiceVia}`,
+          tlsId,
+          indiceCarril: indiceVia + 1,
+          x,
+          y,
+          fase,
+          radio: 11,
+          tipo: "carril",
+        });
+      });
+    }
+  }
+
+  function dibujarVehiculos(vehiculosActuales, vehiculosSiguientes, fraccion) {
+    const posicionesActuales = new Map();
+    const siguientesPorId = new Map((vehiculosSiguientes || []).map((v) => [v[0], v]));
+
+    for (const [id, tipo, x0, y0] of vehiculosActuales) {
+      let x = x0, y = y0;
+      const siguiente = siguientesPorId.get(id);
+      if (siguiente) {
+        const [, , x1, y1] = siguiente;
+        x = x0 + (x1 - x0) * fraccion;
+        y = y0 + (y1 - y0) * fraccion;
+      }
+
+      let angulo = anguloPorVehiculo.get(id) || 0;
+      const anterior = posicionesAnteriores.get(id);
+      if (anterior) {
+        const dx = x - anterior[0];
+        const dy = y - anterior[1];
+        if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+          angulo = Math.atan2(dy, dx);
+          anguloPorVehiculo.set(id, angulo);
+        }
+      }
+    
+      posicionesActuales.set(id, [x, y]);
+
+      const largo = tipo === "bus" ? 15 : tipo === "moto" ? 7 : 10;
+      const ancho = tipo === "bus" ? 6.5 : tipo === "moto" ? 4 : 5.5;
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angulo);
+      ctx.fillStyle = COLOR_VEHICULO[tipo] || COLOR_VEHICULO.carro;
+      ctx.strokeStyle = "#0c0f14";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(-largo / 2, -ancho / 2, largo, ancho, 1.5);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    posicionesAnteriores = posicionesActuales;
+  }
+
+  function dibujarFrame(fraccion = 0) {
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, lienzo.width, lienzo.height);
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(panX, panY);
+    ctx.scale(zoom, zoom);
+
+    dibujarRed();
+
+    const corrida = corridaActual();
+    if (!corrida || corrida.frames.length === 0) {
+      ctx.fillStyle = "#8b93a3";
+      ctx.font = "14px sans-serif";
+      ctx.fillText("No hay datos para esta combinación todavía.", 20, 30);
+      ctx.restore();
+      return;
+    }
+
+    const frame = corrida.frames[indiceFrame];
+    const siguienteIndice = (indiceFrame + 1) % corrida.frames.length;
+    const frameSiguiente = corrida.frames[siguienteIndice];
+
+    dibujarSemaforos(frame.s);
+    dibujarVehiculos(frame.v, frameSiguiente ? frameSiguiente.v : null, fraccion);
+
+    ctx.restore();
+
+    const tInterpolado = frame.t + (frameSiguiente ? (frameSiguiente.t - frame.t) * fraccion : 0);
+    etiquetaTiempo.textContent = `t = ${tInterpolado.toFixed(1)} s`;
+    metricaVehiculos.textContent = frame.v.length;
+  }
+
+  function actualizarMetricaEspera() {
+    const valor = datos && datos.comparativo[nivel] ? datos.comparativo[nivel][modo] : null;
+    metricaEspera.textContent = valor != null ? `${valor.toFixed(1)} s` : "—";
+  }
+
+  const MS_POR_SEGUNDO_SIM = 220;
+
+  let idAnimacion = null;
+  let tiempoInicioPaso = 0;
+  let duracionPasoActual = 0;
+
+  function prepararPaso() {
+    const corrida = corridaActual();
+    if (!corrida || corrida.frames.length === 0) { duracionPasoActual = 0; return; }
+    const frameActual = corrida.frames[indiceFrame];
+    const siguienteIndice = (indiceFrame + 1) % corrida.frames.length;
+    const frameSiguiente = corrida.frames[siguienteIndice];
+    const delta = frameSiguiente.t >= frameActual.t ? frameSiguiente.t - frameActual.t : 2;
+    duracionPasoActual = Math.max(30, (delta * MS_POR_SEGUNDO_SIM) / velocidad);
+  }
+
+  function loopReproduccion(ahora) {
+    if (!reproduciendo) return;
+    const corrida = corridaActual();
+    if (!corrida || corrida.frames.length === 0) {
+      idAnimacion = requestAnimationFrame(loopReproduccion);
+      return;
+    }
+
+    if (tiempoInicioPaso === 0) {
+      tiempoInicioPaso = ahora;
+      prepararPaso();
+    }
+
+    const transcurrido = ahora - tiempoInicioPaso;
+    const fraccion = duracionPasoActual > 0 ? Math.min(1, transcurrido / duracionPasoActual) : 1;
+
+    dibujarFrame(fraccion);
+
+    if (transcurrido >= duracionPasoActual) {
+      indiceFrame = (indiceFrame + 1) % corrida.frames.length;
+      tiempoInicioPaso = ahora;
+      prepararPaso();
+    }
+
+    idAnimacion = requestAnimationFrame(loopReproduccion);
+  }
+
+  function iniciarReproduccion() {
+    reproduciendo = true;
+    botonJugar.textContent = "⏸ Pausar";
+    tiempoInicioPaso = 0;
+    idAnimacion = requestAnimationFrame(loopReproduccion);
+  }
+
+  function detenerReproduccion() {
+    reproduciendo = false;
+    botonJugar.textContent = "▶ Reproducir";
+    if (idAnimacion) cancelAnimationFrame(idAnimacion);
+  }
+
+  function reiniciar() {
+    detenerReproduccion();
+    indiceFrame = 0;
+    posicionesAnteriores = new Map();
+    anguloPorVehiculo.clear();
+    dibujarFrame();
+  }
+
+  // --- interacción de zoom (rueda del mouse) y desplazamiento (arrastrar) ---
+  lienzo.addEventListener(
+    "wheel",
+    (evento) => {
+      evento.preventDefault();
+      const factor = evento.deltaY < 0 ? 1.12 : 0.89;
+      const nuevoZoom = Math.min(6, Math.max(0.6, zoom * factor));
+
+      const rect = lienzo.getBoundingClientRect();
+      const escalaCanvas = lienzo.width / rect.width;
+      const mx = (evento.clientX - rect.left) * escalaCanvas;
+      const my = (evento.clientY - rect.top) * escalaCanvas;
+
+      panX = mx - ((mx - panX) * nuevoZoom) / zoom;
+      panY = my - ((my - panY) * nuevoZoom) / zoom;
+      zoom = nuevoZoom;
+
+      dibujarFrame();
+    },
+    { passive: false }
+  );
+
+  lienzo.addEventListener("mousedown", (evento) => {
+    arrastrando = true;
+    ultimoMouse = { x: evento.clientX, y: evento.clientY };
+  });
+
+  const modalMapa = document.getElementById("modalMapa");
+  document.getElementById("botonVerMapa").addEventListener("click", () => {
+    modalMapa.classList.add("visible");
+  });
+  document.getElementById("cerrarModalMapa").addEventListener("click", () => {
+    modalMapa.classList.remove("visible");
+  });
+  modalMapa.addEventListener("click", (evento) => {
+    if (evento.target === modalMapa) modalMapa.classList.remove("visible"); // cerrar clickeando afuera
+  });
+
+  function coordenadasMundo(clientX, clientY) {
+    const rect = lienzo.getBoundingClientRect();
+    const escalaCanvas = lienzo.width / rect.width;
+    const mx = (clientX - rect.left) * escalaCanvas;
+    const my = (clientY - rect.top) * escalaCanvas;
+    return { x: (mx - panX) / zoom, y: (my - panY) / zoom };
+  }
+
+  function colorFase(fase) {
+    if (fase === "verde") return COLORES_LAMPARA.verde.encendida;
+    if (fase === "amarillo") return COLORES_LAMPARA.amarillo.encendida;
+    if (fase === "rojo") return COLORES_LAMPARA.rojo.encendida;
+    return "#555";
+  }
+
+  function actualizarTooltipSemaforo(evento, objetivo) {
+    if (!objetivo) {
+      tooltipSemaforo.classList.remove("visible");
+      semaforoHoverId = null;
+      lienzo.style.cursor = arrastrando ? "grabbing" : "grab";
+      return;
+    }
+
+    semaforoHoverId = objetivo.id;
+    lienzo.style.cursor = "pointer";
+
+    const titulo =
+      objetivo.tipo === "interseccion"
+        ? `Intersección ${objetivo.tlsId}`
+        : `Vía de entrada ${objetivo.indiceCarril}`;
+
+    tooltipSemaforo.innerHTML = `
+      <div class="titulo">${titulo}</div>
+      <div style="color: var(--texto-tenue)">ID semáforo: ${objetivo.tlsId}</div>
+      <div class="fase">
+        <span class="lampara-mini" style="background:${colorFase(objetivo.fase)}"></span>
+        <span>${ETIQUETA_FASE[objetivo.fase] || objetivo.fase}</span>
+      </div>
+    `;
+
+    const rectEnv = envolturaLienzo.getBoundingClientRect();
+    tooltipSemaforo.style.left = `${evento.clientX - rectEnv.left}px`;
+    tooltipSemaforo.style.top = `${evento.clientY - rectEnv.top}px`;
+    tooltipSemaforo.classList.add("visible");
+  }
+
+  function buscarSemaforoBajoCursor(clientX, clientY) {
+    const { x, y } = coordenadasMundo(clientX, clientY);
+    let mejor = null;
+    let mejorDist = Infinity;
+
+    for (const item of semaforosParaHover) {
+      const radio = item.radio / zoom;
+      const dx = x - item.x;
+      const dy = y - item.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist <= radio && dist < mejorDist) {
+        mejor = item;
+        mejorDist = dist;
+      }
+    }
+    return mejor;
+  }
+
+  window.addEventListener("mousemove", (evento) => {
+    if (arrastrando) {
+      const escalaCanvas = lienzo.width / lienzo.getBoundingClientRect().width;
+      panX += (evento.clientX - ultimoMouse.x) * escalaCanvas;
+      panY += (evento.clientY - ultimoMouse.y) * escalaCanvas;
+      ultimoMouse = { x: evento.clientX, y: evento.clientY };
+      actualizarTooltipSemaforo(evento, null);
+      dibujarFrame();
+      return;
+    }
+
+    const bajoCursor = buscarSemaforoBajoCursor(evento.clientX, evento.clientY);
+    const idPrevio = semaforoHoverId;
+    actualizarTooltipSemaforo(evento, bajoCursor);
+    if (bajoCursor?.id !== idPrevio) dibujarFrame();
+  });
+
+  window.addEventListener("mouseup", () => {
+    arrastrando = false;
+    lienzo.style.cursor = "grab";
+  });
+
+  lienzo.addEventListener("mouseleave", () => {
+    actualizarTooltipSemaforo(null, null);
+    if (semaforoHoverId) {
+      semaforoHoverId = null;
+      dibujarFrame();
+    }
+  });
+
+  document.getElementById("botonResetZoom").addEventListener("click", () => {
+    zoom = 1;
+    panX = 0;
+    panY = 0;
+    dibujarFrame();
+  });
+
+  botonJugar.addEventListener("click", () => {
+    reproduciendo ? detenerReproduccion() : iniciarReproduccion();
+  });
+
+  botonReiniciar.addEventListener("click", reiniciar);
+
+  document.querySelectorAll(".velocidad").forEach((boton) => {
+    boton.addEventListener("click", () => {
+      document.querySelectorAll(".velocidad").forEach((b) => b.classList.remove("activo"));
+      boton.classList.add("activo");
+      velocidad = Number(boton.dataset.velocidad);
+      if (reproduciendo) {
+        detenerReproduccion();
+        iniciarReproduccion();
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-nivel]").forEach((boton) => {
+    boton.addEventListener("click", () => {
+      document.querySelectorAll("[data-nivel]").forEach((b) => b.classList.remove("activo"));
+      boton.classList.add("activo");
+      nivel = boton.dataset.nivel;
+      reiniciar();
+      actualizarMetricaEspera();
+    });
+  });
+
+  document.querySelectorAll("[data-modo]").forEach((boton) => {
+    boton.addEventListener("click", () => {
+      document.querySelectorAll("[data-modo]").forEach((b) => b.classList.remove("activo"));
+      boton.classList.add("activo");
+      modo = boton.dataset.modo;
+      reiniciar();
+      actualizarMetricaEspera();
+    });
+  });
+
+  function construirBarras() {
+    const contenedor = document.getElementById("contenedorBarras");
+    if (!datos) return;
+    const maxima = Math.max(
+      ...Object.values(datos.comparativo).flatMap((n) => [n.fijo || 0, n.adaptativo || 0])
+    );
+
+    for (const nombreNivel of ["bajo", "medio", "alto"]) {
+      const valores = datos.comparativo[nombreNivel] || {};
+      const grupo = document.createElement("div");
+      grupo.className = "grupo-barra";
+
+      const par = document.createElement("div");
+      par.className = "par-barras";
+
+      const altoMaximo = 140;
+      const alturaFijo = maxima ? (valores.fijo / maxima) * altoMaximo : 0;
+      const alturaAdaptativo = maxima ? (valores.adaptativo / maxima) * altoMaximo : 0;
+
+      par.innerHTML = `
+        <div class="barra fijo" style="height:${alturaFijo}px">
+          <span class="num">${(valores.fijo ?? 0).toFixed(1)}</span>
+        </div>
+        <div class="barra adaptativo" style="height:${alturaAdaptativo}px">
+          <span class="num">${(valores.adaptativo ?? 0).toFixed(1)}</span>
+        </div>
+      `;
+
+      const etiqueta = document.createElement("div");
+      etiqueta.className = "etiqueta-nivel";
+      etiqueta.textContent = nombreNivel;
+
+      grupo.appendChild(par);
+      grupo.appendChild(etiqueta);
+      contenedor.appendChild(grupo);
+    }
+  }
+
+  if (!datos) {
+    console.warn("No se encontró DATOS_SIMULACION — corre combinar_datos.py primero.");
+  }
+
+  dibujarFrame();
+  actualizarMetricaEspera();
+  construirBarras();
+})();
+</script>
+
+</body>
+</html>

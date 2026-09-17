@@ -1,0 +1,9 @@
+metrica,valor
+escenario,bajo
+modo,fijo
+duracion_simulada_s,1800
+cola_promedio_red,2.0922222222222224
+espera_acumulada_red_promedio,57.443333333333335
+vehiculos_completados,144
+espera_promedio_por_vehiculo_s,25.520833333333332
+duracion_viaje_promedio_s,117.19444444444444

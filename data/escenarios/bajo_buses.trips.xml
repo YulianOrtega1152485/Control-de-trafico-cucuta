@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-09-15 19:17:52.615822 by Eclipse SUMO randomTrips.py v1_27_1+0000-7717f2379d9
+<configuration>
+    <net-file value="sumo\red_guaimaral_libertadores.net.xml.gz"/>
+    <route-file value="data\escenarios\bajo_buses.trips.xml"/>
+    <prefix value="bus_"/>
+    <vehicle-class value="bus"/>
+    <fringe-factor value="5"/>
+    <end value="1800.0"/>
+    <period value="240.0"/>
+</configuration>
+-->
+
+<!-- generated on 2026-09-15T19:17:52.506764-05:00 by Eclipse SUMO duarouter 1.27.1
+<duarouterConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
+
+    <input>
+        <net-file value="sumo\red_guaimaral_libertadores.net.xml.gz"/>
+        <route-files value="trips.trips.xml"/>
+    </input>
+
+    <output>
+        <output-file value="data\escenarios\bajo_buses.trips.xml"/>
+        <alternatives-output value="NUL"/>
+    </output>
+
+    <processing>
+        <routing-threads value="6"/>
+    </processing>
+
+    <time>
+        <begin value="0"/>
+        <end value="1800.0"/>
+    </time>
+
+    <report>
+        <no-warnings value="true"/>
+        <ignore-errors value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+</duarouterConfiguration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vType id="bus__bus" vClass="bus"/>
+    <vehicle id="bus_0" type="bus__bus" depart="0.00">
+        <route edges="176719622#3 176719622#4 176719622#6 315992920#0 315992920#1 315992920#2 315992920#3 315992920#5 315992920#6 315992920#7 315992920#8 315992920#9 134073611#0 134073611#1 134073611#2 134073611#3 1024613828#0 1024613828#1 1024613828#2 -1024613828#2"/>
+    </vehicle>
+    <vehicle id="bus_1" type="bus__bus" depart="240.00">
+        <route edges="-80735968#1 -80735968#0 317004106#0 317004106#1 317004106#2 1061173217 1051329639#0 1046625590 303726325#1 303726325#2 303726325#3 39195691#5 -303726987#1 -303726987#0"/>
+    </vehicle>
+    <vehicle id="bus_2" type="bus__bus" depart="480.00">
+        <route edges="69605046#0 69605046#1 806535308#1 176719622#0 1046628860 1046628858#0 1046628858#1 1046628859 134073618#1 134073618#2 134073618#3 134073618#4 133440057#0 133295651#0 133295651#1 -1064430742"/>
+    </vehicle>
+    <vehicle id="bus_3" type="bus__bus" depart="720.00">
+        <route edges="1122799069 1122799067#2 1122799067#3 317004236#1 317004236#2 305162658#1 305162658#2 305162658#4 305162658#5 305162658#6 305162658#7 39453468#0 -1046571973"/>
+    </vehicle>
+    <vehicle id="bus_4" type="bus__bus" depart="960.00">
+        <route edges="-69687107#6 39195691#0 39195691#1 39195691#2 308249260#1 308249260#2 46165711#1 46165711#3 1061173218 1110048984#0 1110048984#1 1110048984#2 1110048983 1046623683#0 1122799069 303916283#1 1070244952"/>
+    </vehicle>
+    <vehicle id="bus_5" type="bus__bus" depart="1200.00">
+        <route edges="-1024369482 69687108#0 69687108#1 69687108#2 69687108#3 69687108#4 69687107#2 69687107#4 39195691#0 39195691#1 -134144623"/>
+    </vehicle>
+    <vehicle id="bus_6" type="bus__bus" depart="1440.00">
+        <route edges="287898717#4 308244808#1 305162658#1 305162658#2 305162658#4 305162658#5 -1051159241#1 -1051159241#0 -120368491#3 -120368491#2 120368476#2 120368476#3"/>
+    </vehicle>
+    <vehicle id="bus_7" type="bus__bus" depart="1680.00">
+        <route edges="-69687107#6 -69687107#4 -69687107#2 -69687107#0 134073611#2 -133294601#1 133294602#0"/>
+    </vehicle>
+</routes>
