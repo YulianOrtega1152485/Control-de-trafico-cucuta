@@ -219,6 +219,20 @@
   .metrica .valor { font-size: 22px; font-weight: 600; }
   .metrica .valor.muted { color: var(--texto-tenue); font-weight: 400; }
 
+  .toggle-falla {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--texto-tenue);
+    cursor: pointer;
+  }
+  .toggle-falla input { margin-top: 2px; accent-color: var(--naranja); }
+  .toggle-falla b { color: var(--texto); }
+  .toggle-falla.deshabilitado { opacity: 0.45; cursor: not-allowed; }
+
   .mqtt-cabecera { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--texto-tenue); margin-bottom: 12px; }
   .registro-mqtt {
     margin-top: 10px;
@@ -329,6 +343,23 @@
         <button class="boton modo-fijo" data-modo="fijo">Tiempo fijo</button>
         <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
       </div>
+      <label class="toggle-falla" id="etiquetaFalla">
+        <input type="checkbox" id="checkFalla">
+        <span><b>Simular falla de detector (B5)</b><br>
+        La intersección a9c2t cae y vuelve sola al plan fijo, luego se recupera.</span>
+      </label>
+    </div>
+
+    <div class="panel">
+      <h2>SEGURIDAD Y RESPALDO</h2>
+      <div class="metrica">
+        <div class="etiqueta">Violaciones de seguridad (B1)</div>
+        <div class="valor" id="metricaViolaciones">0</div>
+      </div>
+      <div class="metrica">
+        <div class="etiqueta">Estado de respaldo (B5)</div>
+        <div class="valor muted" id="metricaRespaldo" style="font-size:15px">sin fallas</div>
+      </div>
     </div>
 
     <div class="panel">
@@ -392,6 +423,10 @@
   const etiquetaTiempo = document.getElementById("etiquetaTiempo");
   const metricaVehiculos = document.getElementById("metricaVehiculos");
   const metricaEspera = document.getElementById("metricaEspera");
+  const metricaViolaciones = document.getElementById("metricaViolaciones");
+  const metricaRespaldo = document.getElementById("metricaRespaldo");
+  const checkFalla = document.getElementById("checkFalla");
+  const etiquetaFalla = document.getElementById("etiquetaFalla");
   const mqttMensajes = document.getElementById("mqttMensajes");
   const mqttComandos = document.getElementById("mqttComandos");
   const mqttLatencia = document.getElementById("mqttLatencia");
@@ -405,6 +440,7 @@
 
   let nivel = "bajo";
   let modo = "adaptativo";
+  let verFalla = false;
   let indiceFrame = 0;
   let reproduciendo = false;
   let velocidad = 1;
@@ -431,9 +467,14 @@
   let posicionesAnteriores = new Map();
   const anguloPorVehiculo = new Map();
 
+  function claveActual() {
+    if (verFalla && modo === "adaptativo") return `${nivel}_adaptativo_detectores`;
+    return `${nivel}_${modo}`;
+  }
+
   function corridaActual() {
     if (!datos) return null;
-    return datos.corridas[`${nivel}_${modo}`] || null;
+    return datos.corridas[claveActual()] || null;
   }
 
   function colorEnlace(caracter) {
@@ -491,7 +532,7 @@
     return [x - Math.cos(anguloFlujo) * retroceso, y - Math.sin(anguloFlujo) * retroceso];
   }
 
-  function dibujarMiniSemaforo(x, y, anguloFlujo, faseActiva, escala, resaltar) {
+  function dibujarMiniSemaforo(x, y, anguloFlujo, faseActiva, escala, resaltar, enRespaldo) {
     const esc = escala || 1;
     const fases = ["rojo", "amarillo", "verde"];
     const separacion = 4.2 * esc;

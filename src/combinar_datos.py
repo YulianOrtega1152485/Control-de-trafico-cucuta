@@ -32,6 +32,9 @@ MODOS = ["fijo", "adaptativo"]
 # datos.js para el panel "pregrabado" de la interfaz (funciona sin broker).
 NOMBRE_MQTT = os.environ.get("MQTT_NOMBRE", "demo")
 
+# Sufijo de las corridas con detectores E2 y falla simulada (B5).
+SUFIJO_DETECTORES = "_adaptativo_detectores"
+
 CANVAS_ANCHO = 1400
 CANVAS_ALTO = 820
 PADDING = 50
@@ -245,6 +248,39 @@ def leer_mqtt(ruta_csv):
     return {"archivo": os.path.basename(ruta_csv), "resumen": resumen, "eventos": eventos}
 
 
+def leer_seguridad(ruta_csv):
+    """
+    Lee el registro del monitor de seguridad (B1). Devuelve el conteo de
+    violaciones (debe ser 0) y el detalle [tiempo, tls, tipo, detalle].
+    """
+    detalle = []
+    if os.path.exists(ruta_csv):
+        with open(ruta_csv, "r", encoding="utf-8") as archivo:
+            lector = csv.reader(archivo)
+            next(lector, None)  # encabezado
+            for fila in lector:
+                if len(fila) >= 4:
+                    detalle.append([int(float(fila[0])), fila[1], fila[2], fila[3]])
+    return {"violaciones": len(detalle), "detalle": detalle}
+
+
+def leer_respaldo(ruta_csv):
+    """
+    Lee los eventos del modo respaldo (B5): [tiempo, tls, evento], con
+    evento 'entra_respaldo' o 'sale_respaldo'.
+    """
+    eventos = []
+    if os.path.exists(ruta_csv):
+        with open(ruta_csv, "r", encoding="utf-8") as archivo:
+            lector = csv.reader(archivo)
+            next(lector, None)
+            for fila in lector:
+                if len(fila) >= 3:
+                    eventos.append([int(float(fila[0])), fila[1], fila[2]])
+    return eventos
+
+
+
 def calcular_indices_libres(corridas, indices_enlace):
     """
     Detecta, por cada semaforo, los indices de enlace que estan en verde
@@ -287,23 +323,42 @@ def main():
 
     comparativo = {}
     corridas = {}
+    seguridad = {}
+    respaldo = {}
+    esperas = {}
+
+    def cargar_corrida(clave, con_comparativo=False):
+        """Carga frames + seguridad + respaldo de una corrida, si existe."""
+        ruta_frames = os.path.join(CARPETA_RESULTADOS, f"{clave}_frames.csv")
+        ruta_resumen = os.path.join(CARPETA_RESULTADOS, f"{clave}_resumen.csv")
+        if not os.path.exists(ruta_frames) or not os.path.exists(ruta_resumen):
+            print(f"AVISO: faltan archivos para '{clave}', se omite.")
+            return False
+
+        print(f"Procesando {clave}...")
+        corridas[clave] = {"frames": leer_frames(ruta_frames, transformar)}
+        resumen = leer_resumen(ruta_resumen)
+        esperas[clave] = float(resumen.get("espera_promedio_por_vehiculo_s", 0))
+        seguridad[clave] = leer_seguridad(
+            os.path.join(CARPETA_RESULTADOS, f"{clave}_seguridad.csv"))
+        respaldo[clave] = leer_respaldo(
+            os.path.join(CARPETA_RESULTADOS, f"{clave}_respaldo.csv"))
+        return resumen
 
     for nivel in NIVELES:
         comparativo[nivel] = {}
         for modo in MODOS:
             clave = f"{nivel}_{modo}"
-            ruta_frames = os.path.join(CARPETA_RESULTADOS, f"{clave}_frames.csv")
-            ruta_resumen = os.path.join(CARPETA_RESULTADOS, f"{clave}_resumen.csv")
+            resumen = cargar_corrida(clave)
+            if resumen is not None and resumen is not False:
+                comparativo[nivel][modo] = float(
+                    resumen.get("espera_promedio_por_vehiculo_s", 0))
 
-            if not os.path.exists(ruta_frames) or not os.path.exists(ruta_resumen):
-                print(f"AVISO: faltan archivos para '{clave}', se omite.")
-                continue
+    # Corridas con detectores E2 + falla simulada (B5), para demostrar en la
+    # interfaz cómo la intersección vuelve sola al plan fijo y luego se recupera.
+    for nivel in NIVELES:
+        cargar_corrida(f"{nivel}{SUFIJO_DETECTORES}")
 
-            print(f"Procesando {clave}...")
-            corridas[clave] = {"frames": leer_frames(ruta_frames, transformar)}
-
-            resumen = leer_resumen(ruta_resumen)
-            comparativo[nivel][modo] = float(resumen.get("espera_promedio_por_vehiculo_s", 0))
     indices_libres = calcular_indices_libres(corridas, indices_enlace)
 
     mqtt_datos = None
@@ -327,6 +382,9 @@ def main():
         },
         "comparativo": comparativo,
         "corridas": corridas,
+        "esperas": esperas,
+        "seguridad": seguridad,
+        "respaldo": respaldo,
         "mqtt": mqtt_datos,
     }
 

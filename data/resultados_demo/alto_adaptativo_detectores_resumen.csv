@@ -1,0 +1,14 @@
+metrica,valor
+escenario,alto
+modo,adaptativo
+fuente_datos,detectores
+semilla,42
+duracion_simulada_s,1800
+cola_promedio_red,15.01388888888889
+espera_acumulada_red_promedio,872.085
+vehiculos_completados,521
+espera_promedio_por_vehiculo_s,42.67754318618042
+duracion_viaje_promedio_s,133.94625719769672
+violaciones_seguridad,0
+tls_con_falla,a9c2t
+eventos_respaldo,2
