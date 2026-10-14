@@ -4,6 +4,8 @@ import os
 import traci
 import xml.etree.ElementTree as ET
 
+from capa_integracion import ActuadorTraCI, FuenteTraCI, construir_fuente
+
 # ---------------------------------------------------------------------------
 # CONFIGURACIÓN — lo único que deberían tocar seguido
 # ---------------------------------------------------------------------------
@@ -12,6 +14,10 @@ SUMO_BINARY = "sumo"  # cambiar a "sumo-gui" para ver la simulación mientras co
 NET_FILE = os.path.join(os.path.dirname(__file__), "..", "sumo", "red_guaimaral_libertadores.net.xml.gz")
 CARPETA_ESCENARIOS = os.path.join(os.path.dirname(__file__), "..", "data", "escenarios")
 CARPETA_RESULTADOS = os.path.join(os.path.dirname(__file__), "..", "data", "resultados_demo")
+
+# Archivos de la capa de sensores (B3): detectores E2 y su mapa carril->detector
+ARCHIVO_DETECTORES = os.path.join(os.path.dirname(__file__), "..", "sumo", "detectores.add.xml")
+MAPA_DETECTORES = os.path.join(os.path.dirname(__file__), "..", "sumo", "mapa_detectores.json")
 
 TLS_IDS = ["a9c2t", "agc2t", "a9c5t", "agc5t", "alc8t", "alc4t", "alc2t"]
 
@@ -107,13 +113,16 @@ def carriles_por_indice(tls_id):
 # ---------------------------------------------------------------------------
 
 class ControladorAdaptativo:
-    def __init__(self, tls_id):
+    def __init__(self, tls_id, fuente=None, actuador=None):
         self.tls_id = tls_id
+        # Capa de abstraccion (B8): por defecto usa TraCI, igual que antes.
+        self.fuente = fuente if fuente is not None else FuenteTraCI()
+        self.actuador = actuador if actuador is not None else ActuadorTraCI()
         self.indices_por_fase = indices_verdes_por_fase(tls_id)
         self.carril_por_indice = carriles_por_indice(tls_id)
         self.fase_actual = 0
         self.tiempo_en_fase = 0
-        traci.trafficlight.setPhase(tls_id, 0)
+        self.actuador.aplicar_fase(tls_id, 0)
 
     def _demanda_de_fase(self, num_fase):
         total = 0.0
@@ -121,8 +130,8 @@ class ControladorAdaptativo:
             carril = self.carril_por_indice.get(indice)
             if carril is None:
                 continue
-            cola = traci.lane.getLastStepHaltingNumber(carril)
-            espera = traci.lane.getWaitingTime(carril)
+            cola = self.fuente.cola(carril)
+            espera = self.fuente.espera(carril)
             total += PESO_COLA * cola + PESO_ESPERA * espera
         return total
 
@@ -151,7 +160,7 @@ class ControladorAdaptativo:
         if forzar_cambio or (mejor_fase != self.fase_actual and mejor_demanda > demanda_actual):
             self.fase_actual = mejor_fase
             self.tiempo_en_fase = 0
-            traci.trafficlight.setPhase(self.tls_id, self.fase_actual)
+            self.actuador.aplicar_fase(self.tls_id, self.fase_actual)
 
 
 # ---------------------------------------------------------------------------
@@ -205,25 +214,39 @@ def calcular_metricas_por_vehiculo(ruta_tripinfo):
 
     return completados, espera_promedio, duracion_promedio
 
-def correr(escenario, modo, duracion_segundos):
+def correr(escenario, modo, duracion_segundos, fuente_datos="traci"):
     ruta_rou = os.path.join(CARPETA_ESCENARIOS, f"{escenario}.rou.xml")
 
-    os.makedirs(CARPETA_RESULTADOS, exist_ok=True)
-    ruta_frames = os.path.join(CARPETA_RESULTADOS, f"{escenario}_{modo}_frames.csv")
-    ruta_resumen = os.path.join(CARPETA_RESULTADOS, f"{escenario}_{modo}_resumen.csv")
-    ruta_tripinfo = os.path.join(CARPETA_RESULTADOS, f"{escenario}_{modo}_tripinfo.xml")
+    # La fuente 'traci' conserva los nombres de archivo originales; las demas
+    # fuentes llevan sufijo para no pisar la linea base.
+    sufijo = "" if fuente_datos == "traci" else f"_{fuente_datos}"
+    base = f"{escenario}_{modo}{sufijo}"
 
-    traci.start([
+    os.makedirs(CARPETA_RESULTADOS, exist_ok=True)
+    ruta_frames = os.path.join(CARPETA_RESULTADOS, f"{base}_frames.csv")
+    ruta_resumen = os.path.join(CARPETA_RESULTADOS, f"{base}_resumen.csv")
+    ruta_tripinfo = os.path.join(CARPETA_RESULTADOS, f"{base}_tripinfo.xml")
+
+    comando = [
         SUMO_BINARY, "-n", NET_FILE, "-r", ruta_rou, "--no-warnings", "true",
         "--tripinfo-output", ruta_tripinfo,
-    ])
+    ]
+    if fuente_datos == "detectores":
+        comando += ["-a", ARCHIVO_DETECTORES]
+    traci.start(comando)
+
+    # Capa de abstraccion (B8): una sola fuente, compartida por los 7 controladores.
+    fuente = construir_fuente(fuente_datos, MAPA_DETECTORES)
 
     if modo == "fijo":
         for tls_id in TLS_IDS:
             construir_programa_fijo(tls_id)
         controladores = {}
     elif modo == "adaptativo":
-        controladores = {tls_id: ControladorAdaptativo(tls_id) for tls_id in TLS_IDS}
+        controladores = {
+            tls_id: ControladorAdaptativo(tls_id, fuente=fuente, actuador=ActuadorTraCI())
+            for tls_id in TLS_IDS
+        }
     else:
         raise ValueError("modo debe ser 'fijo' o 'adaptativo'")
 
@@ -237,6 +260,7 @@ def correr(escenario, modo, duracion_segundos):
         paso = 0
         while paso < duracion_segundos and traci.simulation.getMinExpectedNumber() > 0:
             traci.simulationStep()
+            fuente.paso()
 
             if modo == "adaptativo":
                 for controlador in controladores.values():
@@ -258,6 +282,7 @@ def correr(escenario, modo, duracion_segundos):
         escritor.writerow(["metrica", "valor"])
         escritor.writerow(["escenario", escenario])
         escritor.writerow(["modo", modo])
+        escritor.writerow(["fuente_datos", fuente_datos])
         escritor.writerow(["duracion_simulada_s", paso])
         escritor.writerow(["cola_promedio_red", sum(sumas_cola) / len(sumas_cola) if sumas_cola else 0])
         escritor.writerow(["espera_acumulada_red_promedio", sum(sumas_espera) / len(sumas_espera) if sumas_espera else 0])
@@ -273,7 +298,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--escenario", required=True, choices=["bajo", "medio", "alto"])
     parser.add_argument("--modo", required=True, choices=["fijo", "adaptativo"])
+    parser.add_argument("--fuente", default="traci", choices=["traci", "detectores"],
+                        help="origen de datos: 'traci' (perfecto) o 'detectores' (E2)")
     parser.add_argument("--duracion", type=int, default=1800, help="segundos de simulación (no de generación de vehículos)")
     args = parser.parse_args()
 
-    correr(args.escenario, args.modo, args.duracion)
+    correr(args.escenario, args.modo, args.duracion, args.fuente)
