@@ -120,17 +120,23 @@ class ControladorAdaptativo:
 
     VERDE, AMARILLO, TODO_ROJO = "verde", "amarillo", "todo_rojo"
 
-    def __init__(self, tls_id, fuente=None, actuador=None):
+    def __init__(self, tls_id, fuente=None, actuador=None,
+                 estados_programa=None, carril_por_indice=None):
         self.tls_id = tls_id
         # Capa de abstraccion (B8): por defecto usa TraCI, igual que antes.
         self.fuente = fuente if fuente is not None else FuenteTraCI()
         self.actuador = actuador if actuador is not None else ActuadorTraCI()
 
-        logica = traci.trafficlight.getAllProgramLogics(tls_id)[0]
-        self.estados = [fase.state for fase in logica.phases]
+        # El programa de fases y el mapa link->carril se pueden inyectar (para
+        # correr el mismo controlador en el centro de control remoto por MQTT,
+        # donde no hay acceso a TraCI). Si no, se leen de TraCI.
+        if estados_programa is None:
+            logica = traci.trafficlight.getAllProgramLogics(tls_id)[0]
+            estados_programa = [fase.state for fase in logica.phases]
+        self.estados = list(estados_programa)
         self.verdes = [i for i, s in enumerate(self.estados) if es_fase_verde(s)]
         self.amarillo_de = {g: self._amarillo_siguiente(g) for g in self.verdes}
-        self.carril_por_indice = carriles_por_indice(tls_id)
+        self.carril_por_indice = carril_por_indice if carril_por_indice is not None else carriles_por_indice(tls_id)
         self.indices_por_fase = {
             i: [k for k, c in enumerate(self.estados[i]) if c in ("G", "g")]
             for i in self.verdes

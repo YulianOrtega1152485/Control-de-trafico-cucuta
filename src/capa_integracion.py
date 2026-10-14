@@ -14,7 +14,14 @@ actuador (TraCI hoy, MQTT despues) sin tocar la logica de decision.
 from abc import ABC, abstractmethod
 from collections import deque
 import json
+import time
 import traci
+
+# Topicos MQTT (B10). El nodo de borde publica estado y escucha comando.
+TOPICO_ESTADO = "interseccion/{tls}/estado"
+TOPICO_COMANDO = "interseccion/{tls}/comando"
+TOPICO_ACK = "interseccion/{tls}/ack"
+TOPICO_CONFIG = "interseccion/{tls}/config"
 
 # Tamano de la ventana movil (segundos) para estimar la espera desde los E2.
 # Se guarda 1 muestra por segundo; 'espera' es la suma de los ultimos
@@ -152,6 +159,57 @@ class ActuadorTraCI(Actuador):
 
     def aplicar_estado(self, tls_id, estado):
         traci.trafficlight.setRedYellowGreenState(tls_id, estado)
+
+
+class FuenteMQTT(FuenteDeDatos):
+    """
+    Fuente de datos (B8/B10) que lee el estado de las intersecciones desde
+    los mensajes MQTT `interseccion/<tls>/estado`. El nodo de borde los
+    publica; aqui solo se guarda el ultimo recibido por semaforo.
+    """
+
+    def __init__(self, carril_a_tls):
+        self.carril_a_tls = carril_a_tls  # carril -> tls
+        self.ultimo = {}                  # tls -> {"cola": {...}, "espera": {...}}
+
+    def actualizar(self, tls_id, datos):
+        self.ultimo[tls_id] = datos
+
+    def _dato(self, carril, campo):
+        tls_id = self.carril_a_tls.get(carril)
+        if tls_id is None:
+            return 0
+        return (self.ultimo.get(tls_id) or {}).get(campo, {}).get(carril, 0)
+
+    def cola(self, carril):
+        return self._dato(carril, "cola")
+
+    def espera(self, carril):
+        return self._dato(carril, "espera")
+
+    def disponible(self, carril):
+        tls_id = self.carril_a_tls.get(carril)
+        return tls_id in self.ultimo
+
+
+class ActuadorMQTT(Actuador):
+    """
+    Actuador (B8/B10) que publica el estado deseado en
+    `interseccion/<tls>/comando`. El nodo de borde lo aplica por TraCI.
+    """
+
+    def __init__(self, cliente, topico=TOPICO_COMANDO):
+        self.cliente = cliente
+        self.topico = topico
+        self.ultimo_estado = {}
+
+    def estado_actual(self, tls_id):
+        return self.ultimo_estado.get(tls_id, "")
+
+    def aplicar_estado(self, tls_id, estado):
+        self.ultimo_estado[tls_id] = estado
+        payload = json.dumps({"tls": tls_id, "estado": estado, "ts": time.time()})
+        self.cliente.publish(self.topico.format(tls=tls_id), payload)
 
 
 # ---------------------------------------------------------------------------

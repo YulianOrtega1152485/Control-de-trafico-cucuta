@@ -2,3 +2,4 @@ sumolib
 traci
 pandas
 matplotlib
+paho-mqtt

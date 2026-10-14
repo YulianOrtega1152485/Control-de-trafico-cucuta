@@ -15,6 +15,11 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Datos locales del broker MQTT (no se versionan)
+mqtt/*.db
+mqtt/*.log
+mqtt/mosquitto.pid
+
 # Configuración de IDEs
 .vscode/
 .idea/
