@@ -80,18 +80,15 @@ def construir_programa_fijo(tls_id):
     traci.trafficlight.setProgramLogic(tls_id, nueva_logica)
 
 
-def indices_verdes_por_fase(tls_id):
-    """
-    Devuelve, por cada fase del programa actual, la lista de índices de
-    link (posiciones en el string de estado) que están en verde ('G'/'g')
-    durante esa fase.
-    """
-    logica = traci.trafficlight.getAllProgramLogics(tls_id)[0]
-    resultado = []
-    for fase in logica.phases:
-        indices = [i for i, c in enumerate(fase.state) if c in ("G", "g")]
-        resultado.append(indices)
-    return resultado
+def es_fase_verde(estado):
+    """Una fase es 'verde' si tiene algún verde ('G'/'g') y ningún amarillo."""
+    e = estado.lower()
+    return "g" in e and "y" not in e
+
+
+def es_fase_amarilla(estado):
+    """Una fase es de transición ('amarillo') si tiene algún 'y'."""
+    return "y" in estado.lower()
 
 
 def carriles_por_indice(tls_id):
@@ -113,20 +110,56 @@ def carriles_por_indice(tls_id):
 # ---------------------------------------------------------------------------
 
 class ControladorAdaptativo:
+    """
+    Controlador por intersección (Opción A: sin coordinación entre semáforos).
+
+    Decisión: elige la fase verde con mayor demanda (cola + espera). Cuando
+    decide cambiar o se alcanza VERDE_MAX, el cambio NUNCA salta directo de un
+    verde a otro: pasa por AMARILLO y luego TODO-ROJO antes de abrir el
+    siguiente verde. Así no hay fases conflictivas (requisito de seguridad B1).
+
+    Escribe por ESTADO (string R/Y/G) usando el actuador, de modo que el
+    controlador es dueño total de la secuencia y el programa de la red no la
+    pisa.
+    """
+
+    VERDE, AMARILLO, TODO_ROJO = "verde", "amarillo", "todo_rojo"
+
     def __init__(self, tls_id, fuente=None, actuador=None):
         self.tls_id = tls_id
         # Capa de abstraccion (B8): por defecto usa TraCI, igual que antes.
         self.fuente = fuente if fuente is not None else FuenteTraCI()
         self.actuador = actuador if actuador is not None else ActuadorTraCI()
-        self.indices_por_fase = indices_verdes_por_fase(tls_id)
-        self.carril_por_indice = carriles_por_indice(tls_id)
-        self.fase_actual = 0
-        self.tiempo_en_fase = 0
-        self.actuador.aplicar_fase(tls_id, 0)
 
-    def _demanda_de_fase(self, num_fase):
+        logica = traci.trafficlight.getAllProgramLogics(tls_id)[0]
+        self.estados = [fase.state for fase in logica.phases]
+        self.verdes = [i for i, s in enumerate(self.estados) if es_fase_verde(s)]
+        self.amarillo_de = {g: self._amarillo_siguiente(g) for g in self.verdes}
+        self.carril_por_indice = carriles_por_indice(tls_id)
+        self.indices_por_fase = {
+            i: [k for k, c in enumerate(self.estados[i]) if c in ("G", "g")]
+            for i in self.verdes
+        }
+        self.todo_rojo = "r" * len(self.estados[0])
+
+        self.fase_actual = self.verdes[0]
+        self.estado_control = self.VERDE
+        self.tiempo_en_estado = 0
+        self.siguiente_verde = None
+        self.actuador.aplicar_estado(tls_id, self.estados[self.fase_actual])
+
+    def _amarillo_siguiente(self, verde):
+        """Índice de la fase amarilla que sigue al verde dado (cíclico)."""
+        n = len(self.estados)
+        for avance in range(1, n + 1):
+            j = (verde + avance) % n
+            if es_fase_amarilla(self.estados[j]):
+                return j
+        return verde
+
+    def _demanda_de_fase(self, verde):
         total = 0.0
-        for indice in self.indices_por_fase[num_fase]:
+        for indice in self.indices_por_fase[verde]:
             carril = self.carril_por_indice.get(indice)
             if carril is None:
                 continue
@@ -135,32 +168,57 @@ class ControladorAdaptativo:
             total += PESO_COLA * cola + PESO_ESPERA * espera
         return total
 
+    def _entrar_amarillo(self, siguiente_verde):
+        self.siguiente_verde = siguiente_verde
+        self.estado_control = self.AMARILLO
+        self.tiempo_en_estado = 0
+        self.actuador.aplicar_estado(self.tls_id, self.estados[self.amarillo_de[self.fase_actual]])
+
+    def _entrar_todo_rojo(self):
+        self.estado_control = self.TODO_ROJO
+        self.tiempo_en_estado = 0
+        self.actuador.aplicar_estado(self.tls_id, self.todo_rojo)
+
+    def _entrar_verde(self, verde):
+        self.fase_actual = verde
+        self.estado_control = self.VERDE
+        self.tiempo_en_estado = 0
+        self.siguiente_verde = None
+        self.actuador.aplicar_estado(self.tls_id, self.estados[verde])
+
     def paso(self):
         """Se llama una vez por segundo de simulación."""
-        self.tiempo_en_fase += 1
+        if self.estado_control == self.AMARILLO:
+            self.tiempo_en_estado += 1
+            if self.tiempo_en_estado >= AMARILLA_FIJA:
+                self._entrar_todo_rojo()
+            return
 
-        if self.tiempo_en_fase < VERDE_MIN:
-            return  # todavía no se puede evaluar cambio
+        if self.estado_control == self.TODO_ROJO:
+            self.tiempo_en_estado += 1
+            if self.tiempo_en_estado >= TODO_ROJO_FIJO:
+                self._entrar_verde(self.siguiente_verde)
+            return
 
-        if self.tiempo_en_fase % INTERVALO_DECISION != 0 and self.tiempo_en_fase < VERDE_MAX:
-            return  # todavía no toca reevaluar
+        # estado_control == VERDE: evaluar si extender o cambiar de fase
+        self.tiempo_en_estado += 1
+        if self.tiempo_en_estado < VERDE_MIN:
+            return
+        if self.tiempo_en_estado % INTERVALO_DECISION != 0 and self.tiempo_en_estado < VERDE_MAX:
+            return
 
         demanda_actual = self._demanda_de_fase(self.fase_actual)
-        num_fases = len(self.indices_por_fase)
-        mejor_fase, mejor_demanda = self.fase_actual, demanda_actual
-
-        for candidata in range(num_fases):
+        mejor_verde, mejor_demanda = self.fase_actual, demanda_actual
+        for candidata in self.verdes:
             if candidata == self.fase_actual:
                 continue
             d = self._demanda_de_fase(candidata)
             if d > mejor_demanda:
-                mejor_fase, mejor_demanda = candidata, d
+                mejor_verde, mejor_demanda = candidata, d
 
-        forzar_cambio = self.tiempo_en_fase >= VERDE_MAX
-        if forzar_cambio or (mejor_fase != self.fase_actual and mejor_demanda > demanda_actual):
-            self.fase_actual = mejor_fase
-            self.tiempo_en_fase = 0
-            self.actuador.aplicar_fase(self.tls_id, self.fase_actual)
+        forzar_cambio = self.tiempo_en_estado >= VERDE_MAX
+        if forzar_cambio or (mejor_verde != self.fase_actual and mejor_demanda > demanda_actual):
+            self._entrar_amarillo(mejor_verde)
 
 
 # ---------------------------------------------------------------------------
@@ -214,7 +272,7 @@ def calcular_metricas_por_vehiculo(ruta_tripinfo):
 
     return completados, espera_promedio, duracion_promedio
 
-def correr(escenario, modo, duracion_segundos, fuente_datos="traci"):
+def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42):
     ruta_rou = os.path.join(CARPETA_ESCENARIOS, f"{escenario}.rou.xml")
 
     # La fuente 'traci' conserva los nombres de archivo originales; las demas
@@ -229,7 +287,7 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci"):
 
     comando = [
         SUMO_BINARY, "-n", NET_FILE, "-r", ruta_rou, "--no-warnings", "true",
-        "--tripinfo-output", ruta_tripinfo,
+        "--tripinfo-output", ruta_tripinfo, "--seed", str(semilla),
     ]
     if fuente_datos == "detectores":
         comando += ["-a", ARCHIVO_DETECTORES]
@@ -283,6 +341,7 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci"):
         escritor.writerow(["escenario", escenario])
         escritor.writerow(["modo", modo])
         escritor.writerow(["fuente_datos", fuente_datos])
+        escritor.writerow(["semilla", semilla])
         escritor.writerow(["duracion_simulada_s", paso])
         escritor.writerow(["cola_promedio_red", sum(sumas_cola) / len(sumas_cola) if sumas_cola else 0])
         escritor.writerow(["espera_acumulada_red_promedio", sum(sumas_espera) / len(sumas_espera) if sumas_espera else 0])
@@ -300,7 +359,9 @@ if __name__ == "__main__":
     parser.add_argument("--modo", required=True, choices=["fijo", "adaptativo"])
     parser.add_argument("--fuente", default="traci", choices=["traci", "detectores"],
                         help="origen de datos: 'traci' (perfecto) o 'detectores' (E2)")
+    parser.add_argument("--semilla", type=int, default=42,
+                        help="semilla aleatoria de SUMO para corridas reproducibles")
     parser.add_argument("--duracion", type=int, default=1800, help="segundos de simulación (no de generación de vehículos)")
     args = parser.parse_args()
 
-    correr(args.escenario, args.modo, args.duracion, args.fuente)
+    correr(args.escenario, args.modo, args.duracion, args.fuente, args.semilla)

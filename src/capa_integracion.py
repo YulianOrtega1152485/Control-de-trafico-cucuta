@@ -107,25 +107,31 @@ class FuenteDetectoresE2(FuenteDeDatos):
 # ---------------------------------------------------------------------------
 
 class Actuador(ABC):
-    """Como se leen y aplican los cambios de fase a un semaforo."""
+    """Como se leen y aplican los estados (R/Y/G) de un semaforo."""
 
     @abstractmethod
-    def fase_actual(self, tls_id):
-        """Indice de la fase activa del semaforo."""
+    def estado_actual(self, tls_id):
+        """String de estado activo del semaforo (una letra R/Y/G por link)."""
 
     @abstractmethod
-    def aplicar_fase(self, tls_id, fase):
-        """Cambia el semaforo a la fase indicada."""
+    def aplicar_estado(self, tls_id, estado):
+        """Impone el string de estado indicado al semaforo."""
 
 
 class ActuadorTraCI(Actuador):
-    """Actuador que escribe directamente por TraCI (comportamiento actual)."""
+    """
+    Actuador que escribe directamente por TraCI.
 
-    def fase_actual(self, tls_id):
-        return traci.trafficlight.getPhase(tls_id)
+    Se trabaja por ESTADO (no por indice de fase) porque el controlador
+    necesita pasar por amarillo y todo-rojo antes de abrir el siguiente
+    verde; `setRedYellowGreenState` permite imponer esos estados exactos.
+    """
 
-    def aplicar_fase(self, tls_id, fase):
-        traci.trafficlight.setPhase(tls_id, fase)
+    def estado_actual(self, tls_id):
+        return traci.trafficlight.getRedYellowGreenState(tls_id)
+
+    def aplicar_estado(self, tls_id, estado):
+        traci.trafficlight.setRedYellowGreenState(tls_id, estado)
 
 
 # ---------------------------------------------------------------------------
