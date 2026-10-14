@@ -324,6 +324,10 @@
         <span class="icono-semaforo" aria-hidden="true"><i class="rojo"></i><i class="amarillo"></i><i class="verde"></i></span>
         Semáforo (luz encendida = paso del carril)
       </span>
+      <span>
+        <span style="display:inline-block;width:16px;height:3px;border-radius:2px;background:rgba(53,201,173,0.6);vertical-align:middle"></span>
+        Sensor E2 (detector de carril)
+      </span>
     </div>
   </div>
 
@@ -499,6 +503,22 @@
       ctx.stroke();
     }
 
+  }
+
+  function dibujarDetectores() {
+    if (!datos || !datos.red.detectores) return;
+    for (const det of datos.red.detectores) {
+      const [ax, ay] = det.a;
+      const [bx, by] = det.b;
+      const enRespaldo = det.tls && tlsRespaldoActual.has(det.tls);
+      ctx.beginPath();
+      ctx.strokeStyle = enRespaldo ? "#e2963a" : "rgba(53, 201, 173, 0.5)";
+      ctx.lineWidth = enRespaldo ? 3 : 2;
+      ctx.lineCap = "round";
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
+      ctx.stroke();
+    }
   }
 
   function fasePrioritaria(caracteres) {
@@ -683,6 +703,7 @@
     ctx.scale(zoom, zoom);
 
     dibujarRed();
+    dibujarDetectores();
 
     const corrida = corridaActual();
     if (!corrida || corrida.frames.length === 0) {

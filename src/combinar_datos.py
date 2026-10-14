@@ -12,8 +12,10 @@ import csv
 import json
 import math
 import os
+import xml.etree.ElementTree as ET
 
 import sumolib
+import sumolib.geomhelper as geomhelper
 
 # ---------------------------------------------------------------------------
 # CONFIGURACION
@@ -23,6 +25,10 @@ RAIZ = os.path.join(os.path.dirname(__file__), "..")
 NET_FILE = os.path.join(RAIZ, "sumo", "red_guaimaral_libertadores.net.xml.gz")
 CARPETA_RESULTADOS = os.path.join(RAIZ, "data", "resultados_demo")
 SALIDA_JS = os.path.join(RAIZ, "interfaz", "datos.js")
+
+# Sensores simulados (B3): detectores E2 y su mapa carril->detector / detector->semaforo.
+ARCHIVO_DETECTORES = os.path.join(RAIZ, "sumo", "detectores.add.xml")
+MAPA_DETECTORES = os.path.join(RAIZ, "sumo", "mapa_detectores.json")
 
 TLS_IDS = ["a9c2t", "agc2t", "a9c5t", "agc5t", "alc8t", "alc4t", "alc2t"]
 NIVELES = ["bajo", "medio", "alto"]
@@ -189,6 +195,57 @@ def extraer_geometria_red(net, transformar):
 
 
 # ---------------------------------------------------------------------------
+# SENSORES SIMULADOS (DETECTORES E2, B3)
+# ---------------------------------------------------------------------------
+
+def extraer_detectores(net, transformar):
+    """
+    Posicion (en coordenadas de canvas) de cada detector E2, para dibujarlos
+    sobre el mapa. Devuelve una lista de dicts {id, tls, a:[x,y], b:[x,y]},
+    donde a-b es la zona que cubre el detector sobre el carril.
+    """
+    det_a_tls = {}
+    if os.path.exists(MAPA_DETECTORES):
+        with open(MAPA_DETECTORES, encoding="utf-8") as archivo:
+            mapa = json.load(archivo)
+        for tls_id, ids in mapa.get("por_semaforo", {}).items():
+            for det_id in ids:
+                det_a_tls[det_id] = tls_id
+
+    detectores = []
+    if not os.path.exists(ARCHIVO_DETECTORES):
+        print("AVISO: no se encontro detectores.add.xml; no se dibujaran sensores.")
+        return detectores
+
+    arbol = ET.parse(ARCHIVO_DETECTORES)
+    for det in arbol.getroot().findall("laneAreaDetector"):
+        det_id = det.get("id")
+        try:
+            carril = net.getLane(det.get("lane"))
+        except KeyError:
+            continue
+        forma = carril.getShape()
+        if len(forma) < 2:
+            continue
+
+        largo = carril.getLength()
+        inicio = max(0.0, min(float(det.get("pos", 0.0)), largo))
+        fin = float(det.get("endPos", largo))
+        fin = max(inicio, min(fin, largo))
+
+        pa = geomhelper.positionAtShapeOffset(forma, inicio)
+        pb = geomhelper.positionAtShapeOffset(forma, fin)
+        detectores.append({
+            "id": det_id,
+            "tls": det_a_tls.get(det_id, ""),
+            "a": transformar(*pa),
+            "b": transformar(*pb),
+        })
+
+    return detectores
+
+
+# ---------------------------------------------------------------------------
 # LECTURA DE FRAMES Y RESUMEN POR CORRIDA
 # ---------------------------------------------------------------------------
 
@@ -348,6 +405,8 @@ def main():
     calles, semaforos, enlaces, indices_enlace, angulos_enlace = extraer_geometria_red(
         net, transformar
     )
+    detectores = extraer_detectores(net, transformar)
+    print(f"Detectores E2 dibujados: {len(detectores)}")
 
     comparativo = {}
     corridas = {}
@@ -407,6 +466,7 @@ def main():
             "indices_enlace": indices_enlace,
             "angulos_enlace": angulos_enlace,
             "indices_libres": indices_libres,
+            "detectores": detectores,
         },
         "comparativo": comparativo,
         "corridas": corridas,
