@@ -28,6 +28,10 @@ TLS_IDS = ["a9c2t", "agc2t", "a9c5t", "agc5t", "alc8t", "alc4t", "alc2t"]
 NIVELES = ["bajo", "medio", "alto"]
 MODOS = ["fijo", "adaptativo"]
 
+# Grabación del lazo MQTT (B10) que produce mqtt/demo.sh. Se incrusta en
+# datos.js para el panel "pregrabado" de la interfaz (funciona sin broker).
+NOMBRE_MQTT = os.environ.get("MQTT_NOMBRE", "demo")
+
 CANVAS_ANCHO = 1400
 CANVAS_ALTO = 820
 PADDING = 50
@@ -201,6 +205,46 @@ def leer_resumen(ruta_csv):
                 valores[fila[0]] = fila[1]
     return valores
 
+
+def leer_mqtt(ruta_csv):
+    """
+    Lee la grabación del lazo MQTT (B10) y la compacta para el panel de la
+    interfaz. `eventos` es una lista de [tiempo, tls, tipo, resumen, latencia],
+    con tipo 'estado' (telemetría publicada) o 'comando' (aplicado al semáforo).
+    """
+    eventos = []
+    latencias = []
+    comandos = 0
+
+    with open(ruta_csv, "r", encoding="utf-8") as archivo:
+        lector = csv.DictReader(archivo)
+        for fila in lector:
+            es_comando = fila.get("tipo") == "recibe_comando"
+            tipo = "comando" if es_comando else "estado"
+            latencia = None
+            if es_comando:
+                comandos += 1
+                bruto = fila.get("latencia_ms") or ""
+                if bruto:
+                    latencia = round(float(bruto), 3)
+                    latencias.append(latencia)
+            eventos.append([
+                int(float(fila["tiempo"])),
+                fila["tls"],
+                tipo,
+                fila["resumen"],
+                latencia,
+            ])
+
+    resumen = {"mensajes": len(eventos), "comandos": comandos}
+    if latencias:
+        resumen["latencia_min_ms"] = round(min(latencias), 3)
+        resumen["latencia_prom_ms"] = round(sum(latencias) / len(latencias), 3)
+        resumen["latencia_max_ms"] = round(max(latencias), 3)
+
+    return {"archivo": os.path.basename(ruta_csv), "resumen": resumen, "eventos": eventos}
+
+
 def calcular_indices_libres(corridas, indices_enlace):
     """
     Detecta, por cada semaforo, los indices de enlace que estan en verde
@@ -261,6 +305,15 @@ def main():
             resumen = leer_resumen(ruta_resumen)
             comparativo[nivel][modo] = float(resumen.get("espera_promedio_por_vehiculo_s", 0))
     indices_libres = calcular_indices_libres(corridas, indices_enlace)
+
+    mqtt_datos = None
+    ruta_mqtt = os.path.join(CARPETA_RESULTADOS, f"{NOMBRE_MQTT}_mqtt.csv")
+    if os.path.exists(ruta_mqtt):
+        print("Procesando grabación MQTT...")
+        mqtt_datos = leer_mqtt(ruta_mqtt)
+    else:
+        print(f"AVISO: no hay grabación MQTT ('{ruta_mqtt}'); el panel quedará vacío.")
+
     datos = {
         "red": {
             "ancho": CANVAS_ANCHO,
@@ -274,6 +327,7 @@ def main():
         },
         "comparativo": comparativo,
         "corridas": corridas,
+        "mqtt": mqtt_datos,
     }
 
     os.makedirs(os.path.dirname(SALIDA_JS), exist_ok=True)

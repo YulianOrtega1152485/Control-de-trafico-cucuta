@@ -219,6 +219,25 @@
   .metrica .valor { font-size: 22px; font-weight: 600; }
   .metrica .valor.muted { color: var(--texto-tenue); font-weight: 400; }
 
+  .mqtt-cabecera { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--texto-tenue); margin-bottom: 12px; }
+  .registro-mqtt {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--panel-border);
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .registro-mqtt .msg { display: flex; gap: 6px; white-space: nowrap; }
+  .registro-mqtt .msg .t { color: var(--texto-tenue); min-width: 42px; }
+  .registro-mqtt .msg .tls { color: var(--texto); min-width: 44px; }
+  .registro-mqtt .msg .flecha { color: var(--texto-tenue); }
+  .registro-mqtt .msg.estado .senal { color: var(--verde); }
+  .registro-mqtt .msg.comando { color: var(--teal); }
+  .registro-mqtt .msg.comando .senal { color: var(--teal); }
+
   .comparativo {
     max-width: 1720px;
     margin: 20px auto 0;
@@ -323,6 +342,27 @@
         <div class="valor" id="metricaEspera">—</div>
       </div>
     </div>
+
+    <div class="panel">
+      <h2>INTEGRACIÓN MQTT (B10)</h2>
+      <div class="mqtt-cabecera">
+        <span class="punto" style="background: var(--verde)"></span>
+        broker local · grabación real (escenario alto)
+      </div>
+      <div class="metrica">
+        <div class="etiqueta">Mensajes publicados</div>
+        <div class="valor" id="mqttMensajes">0</div>
+      </div>
+      <div class="metrica">
+        <div class="etiqueta">Comandos aplicados</div>
+        <div class="valor" id="mqttComandos">0</div>
+      </div>
+      <div class="metrica">
+        <div class="etiqueta">Latencia publicar→actuar (promedio)</div>
+        <div class="valor" id="mqttLatencia">—</div>
+      </div>
+      <div class="registro-mqtt" id="registroMqtt"></div>
+    </div>
   </div>
 </div>
 
@@ -352,6 +392,10 @@
   const etiquetaTiempo = document.getElementById("etiquetaTiempo");
   const metricaVehiculos = document.getElementById("metricaVehiculos");
   const metricaEspera = document.getElementById("metricaEspera");
+  const mqttMensajes = document.getElementById("mqttMensajes");
+  const mqttComandos = document.getElementById("mqttComandos");
+  const mqttLatencia = document.getElementById("mqttLatencia");
+  const registroMqtt = document.getElementById("registroMqtt");
   const botonJugar = document.getElementById("botonJugar");
   const botonReiniciar = document.getElementById("botonReiniciar");
   const tooltipSemaforo = document.getElementById("tooltipSemaforo");
@@ -365,6 +409,14 @@
   let reproduciendo = false;
   let velocidad = 1;
   let temporizador = null;
+
+  // --- panel MQTT pregrabado (B10) ---
+  const mqtt = datos && datos.mqtt ? datos.mqtt : null;
+  let mqttPtr = 0;
+  let mqttNumMensajes = 0;
+  let mqttNumComandos = 0;
+  let mqttSumaLatencia = 0;
+  const MAX_FILAS_MQTT = 60;
 
   // --- estado de zoom / desplazamiento del mapa ---
   let zoom = 1;
@@ -594,6 +646,7 @@
       ctx.font = "14px sans-serif";
       ctx.fillText("No hay datos para esta combinación todavía.", 20, 30);
       ctx.restore();
+      actualizarPanelMQTT(0);
       return;
     }
 
@@ -609,11 +662,61 @@
     const tInterpolado = frame.t + (frameSiguiente ? (frameSiguiente.t - frame.t) * fraccion : 0);
     etiquetaTiempo.textContent = `t = ${tInterpolado.toFixed(1)} s`;
     metricaVehiculos.textContent = frame.v.length;
+    actualizarPanelMQTT(tInterpolado);
   }
 
   function actualizarMetricaEspera() {
     const valor = datos && datos.comparativo[nivel] ? datos.comparativo[nivel][modo] : null;
     metricaEspera.textContent = valor != null ? `${valor.toFixed(1)} s` : "—";
+  }
+
+  // --- panel MQTT pregrabado: revela los mensajes al ritmo del tiempo de reproducción ---
+  function reiniciarPanelMQTT() {
+    mqttPtr = 0;
+    mqttNumMensajes = 0;
+    mqttNumComandos = 0;
+    mqttSumaLatencia = 0;
+    if (mqttMensajes) mqttMensajes.textContent = "0";
+    if (mqttComandos) mqttComandos.textContent = "0";
+    if (mqttLatencia) mqttLatencia.textContent = "—";
+    if (registroMqtt) registroMqtt.innerHTML = "";
+  }
+
+  function agregarFilaMQTT(t, tls, tipo, resumen) {
+    if (!registroMqtt) return;
+    const fila = document.createElement("div");
+    fila.className = `msg ${tipo}`;
+    const flecha = tipo === "comando" ? "←" : "→";
+    fila.innerHTML =
+      `<span class="t">t=${String(t).padStart(4, "0")}</span>` +
+      `<span class="tls">${tls}</span>` +
+      `<span class="flecha">${flecha}</span>` +
+      `<span class="senal">${resumen}</span>`;
+    registroMqtt.appendChild(fila);
+    while (registroMqtt.childElementCount > MAX_FILAS_MQTT) {
+      registroMqtt.removeChild(registroMqtt.firstChild);
+    }
+    registroMqtt.scrollTop = registroMqtt.scrollHeight;
+  }
+
+  function actualizarPanelMQTT(t) {
+    if (!mqtt) return;
+    while (mqttPtr < mqtt.eventos.length && mqtt.eventos[mqttPtr][0] <= t) {
+      const [ti, tls, tipo, resumen, latencia] = mqtt.eventos[mqttPtr];
+      mqttNumMensajes += 1;
+      if (tipo === "comando") {
+        mqttNumComandos += 1;
+        if (latencia != null) mqttSumaLatencia += latencia;
+      }
+      agregarFilaMQTT(ti, tls, tipo, resumen);
+      mqttPtr += 1;
+    }
+    if (mqttMensajes) mqttMensajes.textContent = mqttNumMensajes;
+    if (mqttComandos) mqttComandos.textContent = mqttNumComandos;
+    if (mqttLatencia) {
+      mqttLatencia.textContent =
+        mqttNumComandos > 0 ? `${(mqttSumaLatencia / mqttNumComandos).toFixed(1)} ms` : "—";
+    }
   }
 
   const MS_POR_SEGUNDO_SIM = 220;
@@ -677,6 +780,7 @@
     indiceFrame = 0;
     posicionesAnteriores = new Map();
     anguloPorVehiculo.clear();
+    reiniciarPanelMQTT();
     dibujarFrame();
   }
 
