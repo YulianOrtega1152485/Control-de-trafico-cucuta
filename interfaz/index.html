@@ -454,6 +454,9 @@
   let mqttSumaLatencia = 0;
   const MAX_FILAS_MQTT = 60;
 
+  // --- seguridad y respaldo (B1 / B5) ---
+  let tlsRespaldoActual = new Set();
+
   // --- estado de zoom / desplazamiento del mapa ---
   let zoom = 1;
   let panX = 0;
@@ -549,8 +552,8 @@
     ctx.roundRect(-anchoPlaca / 2, -altoPlaca / 2, anchoPlaca, altoPlaca, 2 * esc);
     ctx.fillStyle = resaltar ? "#252d3d" : "#141820";
     ctx.fill();
-    ctx.strokeStyle = resaltar ? "#6b7890" : "#3a4356";
-    ctx.lineWidth = resaltar ? 1.2 : 0.75;
+    ctx.strokeStyle = enRespaldo ? "#e2963a" : (resaltar ? "#6b7890" : "#3a4356");
+    ctx.lineWidth = enRespaldo ? 1.8 : (resaltar ? 1.2 : 0.75);
     ctx.stroke();
 
     fases.forEach((nombre, i) => {
@@ -608,7 +611,7 @@
         const fase = fasePrioritaria(caracteres);
 
         const resaltar = semaforoHoverId === `${tlsId}:${indiceVia}`;
-        dibujarMiniSemaforo(x, y, angulo, fase, 0.95, resaltar);
+        dibujarMiniSemaforo(x, y, angulo, fase, 0.95, resaltar, tlsRespaldoActual.has(tlsId));
 
         semaforosParaHover.push({
           id: `${tlsId}:${indiceVia}`,
@@ -688,6 +691,7 @@
       ctx.fillText("No hay datos para esta combinación todavía.", 20, 30);
       ctx.restore();
       actualizarPanelMQTT(0);
+      actualizarSeguridad(0);
       return;
     }
 
@@ -704,10 +708,12 @@
     etiquetaTiempo.textContent = `t = ${tInterpolado.toFixed(1)} s`;
     metricaVehiculos.textContent = frame.v.length;
     actualizarPanelMQTT(tInterpolado);
+    actualizarSeguridad(tInterpolado);
   }
 
   function actualizarMetricaEspera() {
-    const valor = datos && datos.comparativo[nivel] ? datos.comparativo[nivel][modo] : null;
+    const clave = claveActual();
+    const valor = datos && datos.esperas ? datos.esperas[clave] : null;
     metricaEspera.textContent = valor != null ? `${valor.toFixed(1)} s` : "—";
   }
 
@@ -757,6 +763,40 @@
     if (mqttLatencia) {
       mqttLatencia.textContent =
         mqttNumComandos > 0 ? `${(mqttSumaLatencia / mqttNumComandos).toFixed(1)} ms` : "—";
+    }
+  }
+
+  // --- seguridad (B1) y respaldo (B5) ---
+  function tlsEnRespaldoEnTiempo(eventos, t) {
+    const estados = {};
+    for (const [ti, tls, ev] of eventos || []) {
+      if (ti > t) break;
+      estados[tls] = ev === "entra_respaldo";
+    }
+    return new Set(Object.keys(estados).filter((k) => estados[k]));
+  }
+
+  function actualizarSeguridad(t) {
+    const clave = claveActual();
+
+    const seg = datos && datos.seguridad ? datos.seguridad[clave] : null;
+    const violaciones = seg ? seg.violaciones : 0;
+    metricaViolaciones.textContent = violaciones;
+    metricaViolaciones.style.color = violaciones === 0 ? "var(--verde)" : "var(--rojo)";
+
+    const eventos = datos && datos.respaldo ? datos.respaldo[clave] : null;
+    tlsRespaldoActual = tlsEnRespaldoEnTiempo(eventos, t);
+    const huboFalla = eventos && eventos.length > 0 && t >= eventos[0][0];
+
+    if (tlsRespaldoActual.size > 0) {
+      metricaRespaldo.textContent = `⚠ ${[...tlsRespaldoActual].join(", ")} en plan fijo`;
+      metricaRespaldo.style.color = "var(--naranja)";
+    } else if (huboFalla) {
+      metricaRespaldo.textContent = "recuperado (adaptativo)";
+      metricaRespaldo.style.color = "var(--verde)";
+    } else {
+      metricaRespaldo.textContent = "sin fallas";
+      metricaRespaldo.style.color = "var(--texto-tenue)";
     }
   }
 
@@ -997,9 +1037,26 @@
       document.querySelectorAll("[data-modo]").forEach((b) => b.classList.remove("activo"));
       boton.classList.add("activo");
       modo = boton.dataset.modo;
+      actualizarDisponibilidadFalla();
       reiniciar();
       actualizarMetricaEspera();
     });
+  });
+
+  function actualizarDisponibilidadFalla() {
+    const disponible = modo === "adaptativo";
+    checkFalla.disabled = !disponible;
+    etiquetaFalla.classList.toggle("deshabilitado", !disponible);
+    if (!disponible) {
+      checkFalla.checked = false;
+      verFalla = false;
+    }
+  }
+
+  checkFalla.addEventListener("change", () => {
+    verFalla = checkFalla.checked;
+    reiniciar();
+    actualizarMetricaEspera();
   });
 
   function construirBarras() {
@@ -1044,6 +1101,7 @@
     console.warn("No se encontró DATOS_SIMULACION — corre combinar_datos.py primero.");
   }
 
+  actualizarDisponibilidadFalla();
   dibujarFrame();
   actualizarMetricaEspera();
   construirBarras();
