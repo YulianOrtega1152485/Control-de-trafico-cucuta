@@ -80,6 +80,25 @@ def construir_transformador(net):
     return transformar
 
 
+def angulo_giro(carril_entrada, carril_salida):
+    """
+    Magnitud del angulo (radianes) entre la direccion de llegada del carril de
+    entrada y la direccion de salida del carril de salida. ~0 = recto;
+    ~pi/2 = giro cerrado. Si no se puede calcular, devuelve pi (poco "recto")
+    para que no gane como movimiento principal salvo que sea el unico.
+    """
+    forma_in = carril_entrada.getShape()
+    forma_out = carril_salida.getShape() if carril_salida is not None else []
+    if len(forma_in) < 2 or len(forma_out) < 2:
+        return math.pi
+    (x0, y0), (x1, y1) = forma_in[-2], forma_in[-1]
+    (u0, v0), (u1, v1) = forma_out[0], forma_out[1]
+    ang_in = math.atan2(y1 - y0, x1 - x0)
+    ang_out = math.atan2(v1 - v0, u1 - u0)
+    diff = (ang_out - ang_in + math.pi) % (2 * math.pi) - math.pi
+    return abs(diff)
+
+
 def extraer_geometria_red(net, transformar):
     calles = []
     for edge in net.getEdges():
@@ -110,15 +129,17 @@ def extraer_geometria_red(net, transformar):
 
         for conexion in conexiones:
             carril_entrada = conexion[0]
+            carril_salida = conexion[1]
             indice_enlace = conexion[2]
             via_id = carril_entrada.getEdge().getID()
 
             nodos.add(carril_entrada.getEdge().getToNode())
             via = datos_por_via.setdefault(
                 via_id,
-                {"indices": [], "puntos": [], "forma_referencia": None},
+                {"indices": [], "giros": [], "puntos": [], "forma_referencia": None},
             )
             via["indices"].append(indice_enlace)
+            via["giros"].append(angulo_giro(carril_entrada, carril_salida))
 
             forma = carril_entrada.getShape()
             if len(forma) >= 2 and via["forma_referencia"] is None:
@@ -150,8 +171,15 @@ def extraer_geometria_red(net, transformar):
                 angulo = 0.0
             angulos_via.append(round(angulo, 4))
 
-            indices_unicos = sorted(set(via["indices"]))
-            indices_via.append(indices_unicos)
+            # Un solo movimiento por via: el mas "recto" (menor giro). Asi el
+            # color del semaforo refleja lo que hace la mayoria de los vehiculos
+            # en vez de mezclar recto+giro ("verde si alguno esta verde").
+            parejas = list(zip(via["indices"], via["giros"]))
+            if parejas:
+                idx_principal = min(parejas, key=lambda p: p[1])[0]
+                indices_via.append([idx_principal])
+            else:
+                indices_via.append([])
 
         enlaces[tls_id] = puntos_via
         angulos_enlace[tls_id] = angulos_via
