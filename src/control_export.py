@@ -4,7 +4,7 @@ import os
 import traci
 import xml.etree.ElementTree as ET
 
-from capa_integracion import ActuadorTraCI, FuenteTraCI, construir_fuente
+from capa_integracion import ActuadorTraCI, FuenteDetectoresE2, FuenteTraCI, construir_fuente
 from monitor_seguridad import (
     MonitorSeguridad,
     capturar_estados_legales,
@@ -141,7 +141,17 @@ class ControladorAdaptativo:
         self.estado_control = self.VERDE
         self.tiempo_en_estado = 0
         self.siguiente_verde = None
+        self.carriles_tls = sorted(set(self.carril_por_indice.values()))
+        self.en_respaldo = False
         self.actuador.aplicar_estado(tls_id, self.estados[self.fase_actual])
+
+    def _fuente_completa(self):
+        """True si TODOS los carriles del semáforo tienen datos válidos."""
+        return all(self.fuente.disponible(carril) for carril in self.carriles_tls)
+
+    def _siguiente_verde_ciclico(self):
+        posicion = self.verdes.index(self.fase_actual)
+        return self.verdes[(posicion + 1) % len(self.verdes)]
 
     def _amarillo_siguiente(self, verde):
         """Índice de la fase amarilla que sigue al verde dado (cíclico)."""
@@ -183,6 +193,10 @@ class ControladorAdaptativo:
 
     def paso(self):
         """Se llama una vez por segundo de simulación."""
+        # Modo respaldo (B5): si la fuente de este semáforo no está completa
+        # (algún detector caído), la intersección vuelve sola al plan fijo.
+        self.en_respaldo = not self._fuente_completa()
+
         if self.estado_control == self.AMARILLO:
             self.tiempo_en_estado += 1
             if self.tiempo_en_estado >= AMARILLA_FIJA:
@@ -195,8 +209,16 @@ class ControladorAdaptativo:
                 self._entrar_verde(self.siguiente_verde)
             return
 
-        # estado_control == VERDE: evaluar si extender o cambiar de fase
+        # estado_control == VERDE
         self.tiempo_en_estado += 1
+
+        if self.en_respaldo:
+            # Plan fijo: verde de duración fija y pasa al siguiente verde en orden.
+            if self.tiempo_en_estado >= VERDE_FIJO:
+                self._entrar_amarillo(self._siguiente_verde_ciclico())
+            return
+
+        # Adaptativo: evaluar si extender o cambiar de fase
         if self.tiempo_en_estado < VERDE_MIN:
             return
         if self.tiempo_en_estado % INTERVALO_DECISION != 0 and self.tiempo_en_estado < VERDE_MAX:
@@ -267,7 +289,8 @@ def calcular_metricas_por_vehiculo(ruta_tripinfo):
 
     return completados, espera_promedio, duracion_promedio
 
-def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42):
+def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
+           falla_tls=None, falla_desde=60, falla_hasta=120):
     ruta_rou = os.path.join(CARPETA_ESCENARIOS, f"{escenario}.rou.xml")
 
     # La fuente 'traci' conserva los nombres de archivo originales; las demas
@@ -280,6 +303,7 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
     ruta_resumen = os.path.join(CARPETA_RESULTADOS, f"{base}_resumen.csv")
     ruta_tripinfo = os.path.join(CARPETA_RESULTADOS, f"{base}_tripinfo.xml")
     ruta_seguridad = os.path.join(CARPETA_RESULTADOS, f"{base}_seguridad.csv")
+    ruta_respaldo = os.path.join(CARPETA_RESULTADOS, f"{base}_respaldo.csv")
 
     comando = [
         SUMO_BINARY, "-n", NET_FILE, "-r", ruta_rou, "--no-warnings", "true",
@@ -311,6 +335,8 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
 
     sumas_espera = []
     sumas_cola = []
+    eventos_respaldo = []
+    respaldo_prev = {tls_id: False for tls_id in controladores}
 
     with open(ruta_frames, "w", newline="", encoding="utf-8") as archivo_frames:
         escritor = csv.writer(archivo_frames)
@@ -321,6 +347,13 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
             traci.simulationStep()
             fuente.paso()
 
+            # Falla simulada de detectores (B5): entre falla_desde y falla_hasta
+            # se "caen" los detectores de la intersección elegida.
+            if falla_tls is not None and isinstance(fuente, FuenteDetectoresE2):
+                caido = falla_desde <= paso < falla_hasta
+                for carril in CARRILES[falla_tls]:
+                    fuente.marcar_falla(carril, caido)
+
             if modo == "adaptativo":
                 for controlador in controladores.values():
                     controlador.paso()
@@ -328,6 +361,13 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
             registrar_frame(escritor, paso)
             for tls_id in TLS_IDS:
                 monitor.paso(paso, tls_id, traci.trafficlight.getRedYellowGreenState(tls_id))
+
+            for tls_id, controlador in controladores.items():
+                if controlador.en_respaldo != respaldo_prev[tls_id]:
+                    evento = "entra_respaldo" if controlador.en_respaldo else "sale_respaldo"
+                    eventos_respaldo.append((paso, tls_id, evento))
+                    respaldo_prev[tls_id] = controlador.en_respaldo
+
             vehiculos, cola, espera = calcular_metricas_instantaneas()
             sumas_cola.append(cola)
             sumas_espera.append(espera)
@@ -344,6 +384,12 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
         for violacion in monitor.violaciones:
             escritor_seg.writerow(violacion)
 
+    with open(ruta_respaldo, "w", newline="", encoding="utf-8") as archivo_respaldo:
+        escritor_resp = csv.writer(archivo_respaldo)
+        escritor_resp.writerow(["tiempo", "tls", "evento"])
+        for evento in eventos_respaldo:
+            escritor_resp.writerow(evento)
+
     with open(ruta_resumen, "w", newline="", encoding="utf-8") as archivo_resumen:
         escritor = csv.writer(archivo_resumen)
         escritor.writerow(["metrica", "valor"])
@@ -358,13 +404,18 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
         escritor.writerow(["espera_promedio_por_vehiculo_s", espera_promedio_veh])
         escritor.writerow(["duracion_viaje_promedio_s", duracion_promedio_veh])
         escritor.writerow(["violaciones_seguridad", monitor.conteo])
+        escritor.writerow(["tls_con_falla", falla_tls if falla_tls else ""])
+        escritor.writerow(["eventos_respaldo", len(eventos_respaldo)])
 
     print(f"Listo: {ruta_frames}")
     print(f"Listo: {ruta_resumen}")
     print(f"Listo: {ruta_seguridad}")
+    print(f"Listo: {ruta_respaldo}")
     print(f"Violaciones de seguridad (B1): {monitor.conteo}")
     if monitor.por_tipo:
         print(f"  por tipo: {monitor.por_tipo}")
+    if eventos_respaldo:
+        print(f"Eventos de respaldo (B5): {eventos_respaldo}")
 
 
 if __name__ == "__main__":
@@ -376,6 +427,17 @@ if __name__ == "__main__":
     parser.add_argument("--semilla", type=int, default=42,
                         help="semilla aleatoria de SUMO para corridas reproducibles")
     parser.add_argument("--duracion", type=int, default=1800, help="segundos de simulación (no de generación de vehículos)")
+    parser.add_argument("--falla-tls", default=None, choices=TLS_IDS,
+                        help="TLS al que se le simula falla de detectores (B5)")
+    parser.add_argument("--falla-desde", type=int, default=60,
+                        help="segundo en que empieza la falla simulada")
+    parser.add_argument("--falla-hasta", type=int, default=120,
+                        help="segundo en que se repara la falla simulada")
     args = parser.parse_args()
 
-    correr(args.escenario, args.modo, args.duracion, args.fuente, args.semilla)
+    if args.falla_tls is not None and args.fuente != "detectores":
+        print("Aviso: --falla-tls solo aplica con --fuente detectores; se ignora.")
+        args.falla_tls = None
+
+    correr(args.escenario, args.modo, args.duracion, args.fuente, args.semilla,
+           args.falla_tls, args.falla_desde, args.falla_hasta)

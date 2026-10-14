@@ -42,6 +42,13 @@ class FuenteDeDatos(ABC):
     def espera(self, carril):
         """Medida de espera acumulada del carril."""
 
+    def disponible(self, carril):
+        """
+        True si la fuente tiene datos válidos para el carril. Base: siempre
+        disponible. Los detectores E2 la sobreescriben para señalar fallas.
+        """
+        return True
+
 
 class FuenteTraCI(FuenteDeDatos):
     """
@@ -80,6 +87,7 @@ class FuenteDetectoresE2(FuenteDeDatos):
         self.ventana = {
             carril: deque(maxlen=ventana_segundos) for carril in self.det_por_carril
         }
+        self.caidos = set()  # carriles cuyo detector está fallando (B5)
 
     def _detector(self, carril):
         det = self.det_por_carril.get(carril)
@@ -90,8 +98,20 @@ class FuenteDetectoresE2(FuenteDeDatos):
             )
         return det
 
+    def marcar_falla(self, carril, caido=True):
+        """Simula (o repara) la caída del detector de un carril (B5)."""
+        if caido:
+            self.caidos.add(carril)
+        else:
+            self.caidos.discard(carril)
+
+    def disponible(self, carril):
+        return carril not in self.caidos
+
     def paso(self):
         for carril, det in self.det_por_carril.items():
+            if carril in self.caidos:
+                continue  # detector caído: no aporta lecturas
             self.ventana[carril].append(traci.lanearea.getJamLengthVehicle(det))
 
     def cola(self, carril):
