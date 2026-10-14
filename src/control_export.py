@@ -5,6 +5,12 @@ import traci
 import xml.etree.ElementTree as ET
 
 from capa_integracion import ActuadorTraCI, FuenteTraCI, construir_fuente
+from monitor_seguridad import (
+    MonitorSeguridad,
+    capturar_estados_legales,
+    es_fase_amarilla,
+    es_fase_verde,
+)
 
 # ---------------------------------------------------------------------------
 # CONFIGURACIÓN — lo único que deberían tocar seguido
@@ -78,17 +84,6 @@ def construir_programa_fijo(tls_id):
         "fijo", 0, 0, phases=nuevas_fases
     )
     traci.trafficlight.setProgramLogic(tls_id, nueva_logica)
-
-
-def es_fase_verde(estado):
-    """Una fase es 'verde' si tiene algún verde ('G'/'g') y ningún amarillo."""
-    e = estado.lower()
-    return "g" in e and "y" not in e
-
-
-def es_fase_amarilla(estado):
-    """Una fase es de transición ('amarillo') si tiene algún 'y'."""
-    return "y" in estado.lower()
 
 
 def carriles_por_indice(tls_id):
@@ -284,6 +279,7 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
     ruta_frames = os.path.join(CARPETA_RESULTADOS, f"{base}_frames.csv")
     ruta_resumen = os.path.join(CARPETA_RESULTADOS, f"{base}_resumen.csv")
     ruta_tripinfo = os.path.join(CARPETA_RESULTADOS, f"{base}_tripinfo.xml")
+    ruta_seguridad = os.path.join(CARPETA_RESULTADOS, f"{base}_seguridad.csv")
 
     comando = [
         SUMO_BINARY, "-n", NET_FILE, "-r", ruta_rou, "--no-warnings", "true",
@@ -292,6 +288,11 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
     if fuente_datos == "detectores":
         comando += ["-a", ARCHIVO_DETECTORES]
     traci.start(comando)
+
+    # Monitor de seguridad (B1): se capturan los estados legales del programa
+    # ANTES de que el controlador adaptativo tome el control del semáforo.
+    estados_legales = {tls_id: capturar_estados_legales(tls_id) for tls_id in TLS_IDS}
+    monitor = MonitorSeguridad(estados_legales, VERDE_MIN, VERDE_MAX)
 
     # Capa de abstraccion (B8): una sola fuente, compartida por los 7 controladores.
     fuente = construir_fuente(fuente_datos, MAPA_DETECTORES)
@@ -325,6 +326,8 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
                     controlador.paso()
 
             registrar_frame(escritor, paso)
+            for tls_id in TLS_IDS:
+                monitor.paso(paso, tls_id, traci.trafficlight.getRedYellowGreenState(tls_id))
             vehiculos, cola, espera = calcular_metricas_instantaneas()
             sumas_cola.append(cola)
             sumas_espera.append(espera)
@@ -334,6 +337,12 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
     traci.close()
 
     completados, espera_promedio_veh, duracion_promedio_veh = calcular_metricas_por_vehiculo(ruta_tripinfo)
+
+    with open(ruta_seguridad, "w", newline="", encoding="utf-8") as archivo_seguridad:
+        escritor_seg = csv.writer(archivo_seguridad)
+        escritor_seg.writerow(["tiempo", "tls", "tipo", "detalle"])
+        for violacion in monitor.violaciones:
+            escritor_seg.writerow(violacion)
 
     with open(ruta_resumen, "w", newline="", encoding="utf-8") as archivo_resumen:
         escritor = csv.writer(archivo_resumen)
@@ -348,9 +357,14 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42)
         escritor.writerow(["vehiculos_completados", completados])
         escritor.writerow(["espera_promedio_por_vehiculo_s", espera_promedio_veh])
         escritor.writerow(["duracion_viaje_promedio_s", duracion_promedio_veh])
+        escritor.writerow(["violaciones_seguridad", monitor.conteo])
 
     print(f"Listo: {ruta_frames}")
     print(f"Listo: {ruta_resumen}")
+    print(f"Listo: {ruta_seguridad}")
+    print(f"Violaciones de seguridad (B1): {monitor.conteo}")
+    if monitor.por_tipo:
+        print(f"  por tipo: {monitor.por_tipo}")
 
 
 if __name__ == "__main__":
