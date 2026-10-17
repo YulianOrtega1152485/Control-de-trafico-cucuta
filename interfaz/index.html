@@ -349,7 +349,7 @@
       </div>
       <label class="toggle-falla" id="etiquetaFalla">
         <input type="checkbox" id="checkFalla">
-        <span><b>Simular falla de detector (B5)</b><br>
+        <span><b>Simular falla de detector</b><br>
         La intersección a9c2t cae y vuelve sola al plan fijo, luego se recupera.</span>
       </label>
     </div>
@@ -357,11 +357,11 @@
     <div class="panel">
       <h2>SEGURIDAD Y RESPALDO</h2>
       <div class="metrica">
-        <div class="etiqueta">Violaciones de seguridad (B1)</div>
+        <div class="etiqueta">Violaciones de seguridad</div>
         <div class="valor" id="metricaViolaciones">0</div>
       </div>
       <div class="metrica">
-        <div class="etiqueta">Estado de respaldo (B5)</div>
+        <div class="etiqueta">Estado de respaldo</div>
         <div class="valor muted" id="metricaRespaldo" style="font-size:15px">sin fallas</div>
       </div>
     </div>
@@ -379,7 +379,7 @@
     </div>
 
     <div class="panel">
-      <h2>INTEGRACIÓN MQTT (B10)</h2>
+      <h2>INTEGRACIÓN MQTT</h2>
       <div class="mqtt-cabecera">
         <span class="punto" style="background: var(--verde)"></span>
         broker local · grabación real (escenario alto)
@@ -450,7 +450,7 @@
   let velocidad = 1;
   let temporizador = null;
 
-  // --- panel MQTT pregrabado (B10) ---
+  // --- panel MQTT pregrabado ---
   const mqtt = datos && datos.mqtt ? datos.mqtt : null;
   let mqttPtr = 0;
   let mqttNumMensajes = 0;
@@ -458,7 +458,7 @@
   let mqttSumaLatencia = 0;
   const MAX_FILAS_MQTT = 60;
 
-  // --- seguridad y respaldo (B1 / B5) ---
+  // --- seguridad y respaldo ---
   let tlsRespaldoActual = new Set();
 
   // --- estado de zoom / desplazamiento del mapa ---
@@ -787,7 +787,7 @@
     }
   }
 
-  // --- seguridad (B1) y respaldo (B5) ---
+  // --- seguridad y respaldo ---
   function tlsEnRespaldoEnTiempo(eventos, t) {
     const estados = {};
     for (const [ti, tls, ev] of eventos || []) {
