@@ -13,15 +13,14 @@ from monitor_seguridad import (
 )
 
 # ---------------------------------------------------------------------------
-# CONFIGURACIÓN — lo único que deberían tocar seguido
+# CONFIGURACIÓN
 # ---------------------------------------------------------------------------
 
-SUMO_BINARY = "sumo"  # cambiar a "sumo-gui" para ver la simulación mientras corre
+SUMO_BINARY = "sumo"  # cambiar a "sumo-gui" para ver la simulación
 NET_FILE = os.path.join(os.path.dirname(__file__), "..", "sumo", "red_guaimaral_libertadores.net.xml.gz")
 CARPETA_ESCENARIOS = os.path.join(os.path.dirname(__file__), "..", "data", "escenarios")
 CARPETA_RESULTADOS = os.path.join(os.path.dirname(__file__), "..", "data", "resultados_demo")
 
-# Archivos de la capa de sensores (B3): detectores E2 y su mapa carril->detector
 ARCHIVO_DETECTORES = os.path.join(os.path.dirname(__file__), "..", "sumo", "detectores.add.xml")
 MAPA_DETECTORES = os.path.join(os.path.dirname(__file__), "..", "sumo", "mapa_detectores.json")
 
@@ -44,29 +43,91 @@ CARRILES = {
               "287901583#6_0", "287901583#6_1", "1050372500#3_0", "1050372500#3_1"],
 }
 
-# Tiempos fijos (segundos), aplicados por tipo de fase, línea base de comparación
 VERDE_FIJO = 25
 AMARILLA_FIJA = 3
 TODO_ROJO_FIJO = 2
 
-# Parámetros del algoritmo adaptativo (heurística cola + espera)
-VERDE_MIN = 10          # nunca corta una fase antes de esto
-VERDE_MAX = 45          # nunca extiende una fase más de esto
+# Parámetros Adaptativos
+VERDE_MIN = 10
+VERDE_MAX = 45
 PESO_COLA = 1.0
 PESO_ESPERA = 0.5
-INTERVALO_DECISION = 5  # cada cuántos segundos se reevalúa si extender/cambiar de fase
+INTERVALO_DECISION = 5
 
 # ---------------------------------------------------------------------------
-# UTILIDADES DE PROGRAMA DE SEMÁFORO (fijo)
+# LÓGICA PLAN DE WEBSTER (B2)
+# ---------------------------------------------------------------------------
+
+def calcular_tiempos_webster(tls_id, fuente):
+    """
+    Calcula el tiempo de ciclo óptimo y la distribución de verde según Webster.
+    C = (1.5L + 5) / (1 - Y)
+    """
+    # 1. Definir parámetros básicos
+    SATURACION = 1800 / 3600 # 1800 veh/hora = 0.5 veh/seg
+    L = (AMARILLA_FIJA + TODO_ROJO_FIJO) * 2 # Supuesto: 2 fases críticas
+
+    logica = traci.trafficlight.getAllProgramLogics(tls_id)[0]
+    verdes = [i for i, fase in enumerate(logica.phases) if es_fase_verde(fase.state)]
+
+    # 2. Estimar flujo crítico q por fase (usando la cola actual como proxy de demanda)
+    # En un caso real, q sería el volumen horario. Aquí usamos el estado actual del simulador.
+    flujos_criticos = []
+    for v in verdes:
+        # Sumamos la cola de los carriles de esa fase
+        cola_fase = 0
+        enlaces = traci.trafficlight.getControlledLinks(tls_id)
+        for indice, conexiones in enumerate(enlaces):
+            if conexiones and any(c in ("G", "g") for c in logica.phases[v].state[indice if indice < len(logica.phases[v].state) else 0]):
+                carril = conexiones[0][0]
+                cola_fase += fuente.cola(carril)
+
+        # Convertimos cola a un flujo estimado (simplificación para la demo)
+        q = max(0.01, cola_fase * 0.1)
+        flujos_criticos.append(q)
+
+    # 3. Calcular Y (Suma de razones de flujo crítico)
+    Y = sum([q / SATURACION for q in flujos_criticos])
+    Y = min(0.9, Y) # Evitar división por cero o ciclos infinitos
+
+    # 4. Ciclo Óptimo C
+    ciclo_optimo = (1.5 * L + 5) / (1 - Y)
+    ciclo_optimo = max(60, min(120, ciclo_optimo)) # Limitar entre 60s y 120s
+
+    # 5. Distribución del verde total
+    verde_total = ciclo_optimo - L
+    distribucion_verde = {}
+
+    for i, q in enumerate(flujos_criticos):
+        proporcion = q / sum(flujos_criticos)
+        distribucion_verde[verdes[i]] = int(proporcion * verde_total)
+
+    return distribucion_verde
+
+def construir_programa_webster(tls_id, fuente):
+    """Aplica los tiempos de Webster al semáforo."""
+    tiempos_verde = calcular_tiempos_webster(tls_id, fuente)
+    logica_actual = traci.trafficlight.getAllProgramLogics(tls_id)[0]
+    nuevas_fases = []
+
+    for i, fase in enumerate(logica_actual.phases):
+        estado = fase.state.lower()
+        if "g" in estado:
+            duracion = tiempos_verde.get(i, VERDE_FIJO)
+        elif "y" in estado:
+            duracion = AMARILLA_FIJA
+        else:
+            duracion = TODO_ROJO_FIJO
+        nuevas_fases.append(traci.trafficlight.Phase(duracion, fase.state, duracion, duracion))
+
+    nueva_logica = traci.trafficlight.Logic("webster", 0, 0, phases=nuevas_fases)
+    traci.trafficlight.setProgramLogic(tls_id, nueva_logica)
+
+# ---------------------------------------------------------------------------
+# UTILIDADES PROGRAMA FIJO
 # ---------------------------------------------------------------------------
 
 def construir_programa_fijo(tls_id):
-    """
-    Toma el programa de fases que ya existe en la red (los estados R/Y/G
-    generados por netconvert) y le impone las duraciones fijas definidas
-    arriba, según el tipo de cada fase (si tiene alguna 'G'/'g' es verde,
-    si solo tiene 'y' es amarilla, si es todo 'r' es de limpieza).
-    """
     logica_actual = traci.trafficlight.getAllProgramLogics(tls_id)[0]
     nuevas_fases = []
     for fase in logica_actual.phases:
@@ -77,20 +138,11 @@ def construir_programa_fijo(tls_id):
             duracion = AMARILLA_FIJA
         else:
             duracion = TODO_ROJO_FIJO
-        nuevas_fases.append(
-            traci.trafficlight.Phase(duracion, fase.state, duracion, duracion)
-        )
-    nueva_logica = traci.trafficlight.Logic(
-        "fijo", 0, 0, phases=nuevas_fases
-    )
+        nuevas_fases.append(traci.trafficlight.Phase(duracion, fase.state, duracion, duracion))
+    nueva_logica = traci.trafficlight.Logic("fijo", 0, 0, phases=nuevas_fases)
     traci.trafficlight.setProgramLogic(tls_id, nueva_logica)
 
-
 def carriles_por_indice(tls_id):
-    """
-    Mapea cada índice de link a su carril de entrada (para poder sumar
-    cola/espera por fase, no solo por carril suelto).
-    """
     enlaces = traci.trafficlight.getControlledLinks(tls_id)
     mapa = {}
     for indice, conexiones in enumerate(enlaces):
@@ -99,37 +151,19 @@ def carriles_por_indice(tls_id):
             mapa[indice] = carril_entrada
     return mapa
 
-
 # ---------------------------------------------------------------------------
 # CONTROL ADAPTATIVO
 # ---------------------------------------------------------------------------
 
 class ControladorAdaptativo:
-    """
-    Controlador por intersección (Opción A: sin coordinación entre semáforos).
-
-    Decisión: elige la fase verde con mayor demanda (cola + espera). Cuando
-    decide cambiar o se alcanza VERDE_MAX, el cambio NUNCA salta directo de un
-    verde a otro: pasa por AMARILLO y luego TODO-ROJO antes de abrir el
-    siguiente verde. Así no hay fases conflictivas (requisito de seguridad B1).
-
-    Escribe por ESTADO (string R/Y/G) usando el actuador, de modo que el
-    controlador es dueño total de la secuencia y el programa de la red no la
-    pisa.
-    """
-
     VERDE, AMARILLO, TODO_ROJO = "verde", "amarillo", "todo_rojo"
 
     def __init__(self, tls_id, fuente=None, actuador=None,
                  estados_programa=None, carril_por_indice=None):
         self.tls_id = tls_id
-        # Capa de abstraccion (B8): por defecto usa TraCI, igual que antes.
         self.fuente = fuente if fuente is not None else FuenteTraCI()
         self.actuador = actuador if actuador is not None else ActuadorTraCI()
 
-        # El programa de fases y el mapa link->carril se pueden inyectar (para
-        # correr el mismo controlador en el centro de control remoto por MQTT,
-        # donde no hay acceso a TraCI). Si no, se leen de TraCI.
         if estados_programa is None:
             logica = traci.trafficlight.getAllProgramLogics(tls_id)[0]
             estados_programa = [fase.state for fase in logica.phases]
@@ -152,7 +186,6 @@ class ControladorAdaptativo:
         self.actuador.aplicar_estado(tls_id, self.estados[self.fase_actual])
 
     def _fuente_completa(self):
-        """True si TODOS los carriles del semáforo tienen datos válidos."""
         return all(self.fuente.disponible(carril) for carril in self.carriles_tls)
 
     def _siguiente_verde_ciclico(self):
@@ -160,7 +193,6 @@ class ControladorAdaptativo:
         return self.verdes[(posicion + 1) % len(self.verdes)]
 
     def _amarillo_siguiente(self, verde):
-        """Índice de la fase amarilla que sigue al verde dado (cíclico)."""
         n = len(self.estados)
         for avance in range(1, n + 1):
             j = (verde + avance) % n
@@ -198,9 +230,6 @@ class ControladorAdaptativo:
         self.actuador.aplicar_estado(self.tls_id, self.estados[verde])
 
     def paso(self):
-        """Se llama una vez por segundo de simulación."""
-        # Modo respaldo (B5): si la fuente de este semáforo no está completa
-        # (algún detector caído), la intersección vuelve sola al plan fijo.
         self.en_respaldo = not self._fuente_completa()
 
         if self.estado_control == self.AMARILLO:
@@ -215,16 +244,13 @@ class ControladorAdaptativo:
                 self._entrar_verde(self.siguiente_verde)
             return
 
-        # estado_control == VERDE
         self.tiempo_en_estado += 1
 
         if self.en_respaldo:
-            # Plan fijo: verde de duración fija y pasa al siguiente verde en orden.
             if self.tiempo_en_estado >= VERDE_FIJO:
                 self._entrar_amarillo(self._siguiente_verde_ciclico())
             return
 
-        # Adaptativo: evaluar si extender o cambiar de fase
         if self.tiempo_en_estado < VERDE_MIN:
             return
         if self.tiempo_en_estado % INTERVALO_DECISION != 0 and self.tiempo_en_estado < VERDE_MAX:
@@ -243,7 +269,6 @@ class ControladorAdaptativo:
         if forzar_cambio or (mejor_verde != self.fase_actual and mejor_demanda > demanda_actual):
             self._entrar_amarillo(mejor_verde)
 
-
 # ---------------------------------------------------------------------------
 # MÉTRICAS Y EXPORTACIÓN
 # ---------------------------------------------------------------------------
@@ -257,7 +282,6 @@ def registrar_frame(escritor_frames, t):
         estado = traci.trafficlight.getRedYellowGreenState(tls_id)
         escritor_frames.writerow([t, "semaforo", tls_id, "", "", "", estado])
 
-
 def calcular_metricas_instantaneas():
     total_cola = 0
     total_espera = 0.0
@@ -268,39 +292,27 @@ def calcular_metricas_instantaneas():
             total_espera += traci.lane.getWaitingTime(carril)
     return total_vehiculos, total_cola, total_espera
 
-
-# ---------------------------------------------------------------------------
-# CORRIDA PRINCIPAL
-# ---------------------------------------------------------------------------
-
 def calcular_metricas_por_vehiculo(ruta_tripinfo):
-    """
-    Lee el archivo tripinfo que genera SUMO (uno por vehículo que
-    completó su viaje) y calcula el promedio real de espera y
-    duración por vehículo — a diferencia de la métrica de red que
-    ya teníamos, esta sí es comparable con la literatura de tránsito.
-    """
     arbol = ET.parse(ruta_tripinfo)
     raiz = arbol.getroot()
-
     esperas = []
     duraciones = []
     for info_viaje in raiz.findall("tripinfo"):
         esperas.append(float(info_viaje.get("waitingTime")))
         duraciones.append(float(info_viaje.get("duration")))
-
     completados = len(esperas)
     espera_promedio = sum(esperas) / completados if completados else 0
     duracion_promedio = sum(duraciones) / completados if completados else 0
-
     return completados, espera_promedio, duracion_promedio
+
+# ---------------------------------------------------------------------------
+# CORRIDA PRINCIPAL
+# ---------------------------------------------------------------------------
 
 def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
            falla_tls=None, falla_desde=60, falla_hasta=120):
     ruta_rou = os.path.join(CARPETA_ESCENARIOS, f"{escenario}.rou.xml")
 
-    # La fuente 'traci' conserva los nombres de archivo originales; las demas
-    # fuentes llevan sufijo para no pisar la linea base.
     sufijo = "" if fuente_datos == "traci" else f"_{fuente_datos}"
     base = f"{escenario}_{modo}{sufijo}"
 
@@ -319,17 +331,17 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
         comando += ["-a", ARCHIVO_DETECTORES]
     traci.start(comando)
 
-    # Monitor de seguridad (B1): se capturan los estados legales del programa
-    # ANTES de que el controlador adaptativo tome el control del semáforo.
     estados_legales = {tls_id: capturar_estados_legales(tls_id) for tls_id in TLS_IDS}
     monitor = MonitorSeguridad(estados_legales, VERDE_MIN, VERDE_MAX)
-
-    # Capa de abstraccion (B8): una sola fuente, compartida por los 7 controladores.
     fuente = construir_fuente(fuente_datos, MAPA_DETECTORES)
 
     if modo == "fijo":
         for tls_id in TLS_IDS:
             construir_programa_fijo(tls_id)
+        controladores = {}
+    elif modo == "webster":
+        for tls_id in TLS_IDS:
+            construir_programa_webster(tls_id, fuente)
         controladores = {}
     elif modo == "adaptativo":
         controladores = {
@@ -337,7 +349,7 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
             for tls_id in TLS_IDS
         }
     else:
-        raise ValueError("modo debe ser 'fijo' o 'adaptativo'")
+        raise ValueError("modo debe ser 'fijo', 'webster' o 'adaptativo'")
 
     sumas_espera = []
     sumas_cola = []
@@ -353,8 +365,6 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
             traci.simulationStep()
             fuente.paso()
 
-            # Falla simulada de detectores (B5): entre falla_desde y falla_hasta
-            # se "caen" los detectores de la intersección elegida.
             if falla_tls is not None and isinstance(fuente, FuenteDetectoresE2):
                 caido = falla_desde <= paso < falla_hasta
                 for carril in CARRILES[falla_tls]:
@@ -415,34 +425,24 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
 
     print(f"Listo: {ruta_frames}")
     print(f"Listo: {ruta_resumen}")
-    print(f"Listo: {ruta_seguridad}")
-    print(f"Listo: {ruta_respaldo}")
     print(f"Violaciones de seguridad (B1): {monitor.conteo}")
-    if monitor.por_tipo:
-        print(f"  por tipo: {monitor.por_tipo}")
-    if eventos_respaldo:
-        print(f"Eventos de respaldo (B5): {eventos_respaldo}")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--escenario", required=True, choices=["bajo", "medio", "alto"])
-    parser.add_argument("--modo", required=True, choices=["fijo", "adaptativo"])
+    parser.add_argument("--modo", required=True, choices=["fijo", "webster", "adaptativo"])
     parser.add_argument("--fuente", default="traci", choices=["traci", "detectores"],
                         help="origen de datos: 'traci' (perfecto) o 'detectores' (E2)")
     parser.add_argument("--semilla", type=int, default=42,
                         help="semilla aleatoria de SUMO para corridas reproducibles")
-    parser.add_argument("--duracion", type=int, default=1800, help="segundos de simulación (no de generación de vehículos)")
+    parser.add_argument("--duracion", type=int, default=1800, help="segundos de simulación")
     parser.add_argument("--falla-tls", default=None, choices=TLS_IDS,
                         help="TLS al que se le simula falla de detectores (B5)")
-    parser.add_argument("--falla-desde", type=int, default=60,
-                        help="segundo en que empieza la falla simulada")
-    parser.add_argument("--falla-hasta", type=int, default=120,
-                        help="segundo en que se repara la falla simulada")
+    parser.add_argument("--falla-desde", type=int, default=60)
+    parser.add_argument("--falla-hasta", type=int, default=120)
     args = parser.parse_args()
 
     if args.falla_tls is not None and args.fuente != "detectores":
-        print("Aviso: --falla-tls solo aplica con --fuente detectores; se ignora.")
         args.falla_tls = None
 
     correr(args.escenario, args.modo, args.duracion, args.fuente, args.semilla,
