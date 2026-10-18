@@ -1,0 +1,14 @@
+metrica,valor
+escenario,medio
+modo,webster
+fuente_datos,traci
+semilla,42
+duracion_simulada_s,1800
+cola_promedio_red,2.8833333333333333
+espera_acumulada_red_promedio,45.485
+vehiculos_completados,284
+espera_promedio_por_vehiculo_s,17.450704225352112
+duracion_viaje_promedio_s,107.66549295774648
+violaciones_seguridad,0
+tls_con_falla,
+eventos_respaldo,0

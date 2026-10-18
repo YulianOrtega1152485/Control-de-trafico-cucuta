@@ -32,7 +32,7 @@ MAPA_DETECTORES = os.path.join(RAIZ, "sumo", "mapa_detectores.json")
 
 TLS_IDS = ["a9c2t", "agc2t", "a9c5t", "agc5t", "alc8t", "alc4t", "alc2t"]
 NIVELES = ["bajo", "medio", "alto"]
-MODOS = ["fijo", "adaptativo"]
+MODOS = ["fijo", "webster", "adaptativo"]
 
 # Grabación del lazo MQTT (B10) que produce mqtt/demo.sh. Se incrusta en
 # datos.js para el panel "pregrabado" de la interfaz (funciona sin broker).

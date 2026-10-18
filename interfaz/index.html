@@ -17,6 +17,7 @@
     --amarillo: #e2b93a;
     --rojo: #e2543a;
     --azul: #4f8ef7;
+  --purpura: #a855f7;
   }
 
   * { box-sizing: border-box; }
@@ -212,6 +213,7 @@
   .opciones { display: flex; gap: 8px; }
   .opciones .boton { flex: 1; text-align: center; }
   .opciones .boton.nivel-bajo.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
+  .opciones .boton.modo-webster.activo { background: var(--purpura); border-color: var(--purpura); color: #ffffff; }
   .opciones .boton.modo-adaptativo.activo { background: var(--teal); border-color: var(--teal); color: #04211b; }
 
   .metrica { margin-bottom: 12px; }
@@ -268,6 +270,7 @@
   .par-barras { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
   .barra { width: 30px; border-radius: 4px 4px 0 0; position: relative; }
   .barra.fijo { background: #4d5568; }
+  .barra.webster { background: var(--purpura); }
   .barra.adaptativo { background: var(--teal); }
   .barra .num {
     position: absolute;
@@ -345,6 +348,7 @@
       <h2>MODO DE CONTROL</h2>
       <div class="opciones">
         <button class="boton modo-fijo" data-modo="fijo">Tiempo fijo</button>
+        <button class="boton modo-webster" data-modo="webster">Plan Webster</button>
         <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
       </div>
       <label class="toggle-falla" id="etiquetaFalla">
@@ -406,6 +410,7 @@
   <div class="barras" id="contenedorBarras"></div>
   <div class="clave-barras">
     <span><span class="punto" style="background:#4d5568"></span> Tiempo fijo</span>
+    <span><span class="punto" style="background:var(--purpura)"></span> Plan Webster</span>
     <span><span class="punto" style="background: var(--teal)"></span> Adaptativo</span>
   </div>
 </div>
@@ -1084,7 +1089,7 @@
     const contenedor = document.getElementById("contenedorBarras");
     if (!datos) return;
     const maxima = Math.max(
-      ...Object.values(datos.comparativo).flatMap((n) => [n.fijo || 0, n.adaptativo || 0])
+      ...Object.values(datos.comparativo).flatMap((n) => [n.fijo || 0, n.webster || 0, n.adaptativo || 0])
     );
 
     for (const nombreNivel of ["bajo", "medio", "alto"]) {
@@ -1097,11 +1102,15 @@
 
       const altoMaximo = 140;
       const alturaFijo = maxima ? (valores.fijo / maxima) * altoMaximo : 0;
+      const alturaWebster = maxima ? (valores.webster / maxima) * altoMaximo : 0;
       const alturaAdaptativo = maxima ? (valores.adaptativo / maxima) * altoMaximo : 0;
 
       par.innerHTML = `
         <div class="barra fijo" style="height:${alturaFijo}px">
           <span class="num">${(valores.fijo ?? 0).toFixed(1)}</span>
+        </div>
+        <div class="barra webster" style="height:${alturaWebster}px">
+          <span class="num">${(valores.webster ?? 0).toFixed(1)}</span>
         </div>
         <div class="barra adaptativo" style="height:${alturaAdaptativo}px">
           <span class="num">${(valores.adaptativo ?? 0).toFixed(1)}</span>

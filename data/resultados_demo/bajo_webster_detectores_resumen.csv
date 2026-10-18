@@ -1,0 +1,14 @@
+metrica,valor
+escenario,bajo
+modo,webster
+fuente_datos,detectores
+semilla,42
+duracion_simulada_s,1800
+cola_promedio_red,1.2066666666666668
+espera_acumulada_red_promedio,16.828333333333333
+vehiculos_completados,143
+espera_promedio_por_vehiculo_s,14.258741258741258
+duracion_viaje_promedio_s,107.58041958041959
+violaciones_seguridad,0
+tls_con_falla,
+eventos_respaldo,0
