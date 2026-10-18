@@ -17,7 +17,16 @@
     --amarillo: #e2b93a;
     --rojo: #e2543a;
     --azul: #4f8ef7;
-  --purpura: #a855f7;
+    --purpura: #a855f7;
+
+    /* escala de espaciado: todo el layout usa solo estos valores */
+    --e1: 6px;
+    --e2: 10px;
+    --e3: 16px;
+    --e4: 24px;
+    --e5: 32px;
+    --ancho-max: 1480px;
+    --ancho-lateral: 320px;
   }
 
   * { box-sizing: border-box; }
@@ -27,44 +36,51 @@
     background: var(--bg);
     color: var(--texto);
     font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    padding: 28px;
   }
 
-  .encabezado { max-width: 1720px; margin: 0 auto 20px; }
-  .encabezado .rotulo {
-    color: var(--naranja);
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    margin-bottom: 8px;
+  /* ---------- estructura general ---------- */
+  .pagina {
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    padding: var(--e5) var(--e4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--e4);
   }
-  .encabezado h1 { font-size: 26px; margin: 0 0 10px; }
-  .encabezado p { color: var(--texto-tenue); max-width: 680px; line-height: 1.5; margin: 0; }
 
-  .cuerpo {
-    max-width: 1520px;
-    margin: 24px auto 0;
+  .encabezado { display: flex; flex-direction: column; gap: var(--e2); }
+  .encabezado .rotulo { color: var(--naranja); font-size: 13px; letter-spacing: 0.04em; }
+  .encabezado h1 { font-size: 26px; line-height: 1.2; margin: 0; }
+  .encabezado p { color: var(--texto-tenue); max-width: 720px; line-height: 1.55; margin: 0; }
+
+  .rejilla {
     display: grid;
-    grid-template-columns: 1fr 260px;
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) var(--ancho-lateral);
+    gap: var(--e4);
+    align-items: stretch;
   }
+  .principal, .lateral { display: flex; flex-direction: column; gap: var(--e3); min-width: 0; }
 
+  /* ---------- panel base ---------- */
   .panel {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 10px;
-    padding: 18px;
+    padding: var(--e3) var(--e4) var(--e4);
   }
-
   .panel h2 {
     font-size: 13px;
     color: var(--texto-tenue);
-    margin: 0 0 14px;
+    margin: 0 0 var(--e3);
     font-weight: 600;
+    letter-spacing: 0.02em;
   }
 
+  /* ---------- simulación ---------- */
   .lienzo-envoltura { position: relative; }
   canvas {
     width: 100%;
+    aspect-ratio: 12 / 7;
     background: #05070a;
     border-radius: 8px;
     display: block;
@@ -73,18 +89,22 @@
   canvas:active { cursor: grabbing; }
   .tiempo-actual {
     position: absolute;
-    top: 10px;
-    right: 14px;
+    top: var(--e2);
+    right: var(--e3);
     color: var(--naranja);
     font-size: 13px;
   }
 
-  .controles-reproduccion {
+  .barra-herramientas {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    margin-top: 12px;
+    gap: var(--e2) var(--e3);
+    margin-top: var(--e3);
   }
+  .grupo-herramientas { display: flex; align-items: center; gap: var(--e1); }
+  .grupo-herramientas.derecha { margin-left: auto; }
+
   .boton {
     background: #1c2330;
     border: 1px solid var(--panel-border);
@@ -93,22 +113,33 @@
     padding: 8px 14px;
     cursor: pointer;
     font-size: 14px;
+    line-height: 1.2;
   }
   .boton:hover { background: #262e3d; }
   .boton.activo { background: var(--naranja); color: #201203; border-color: var(--naranja); }
 
-  .grupo-velocidad { display: flex; gap: 6px; margin-left: auto; }
-  .grupo-velocidad .boton { padding: 6px 10px; font-size: 12px; }
+  .grupo-velocidad { display: flex; gap: var(--e1); }
+  .grupo-velocidad .boton { padding: 8px 12px; font-size: 13px; min-width: 44px; }
+  .etiqueta-grupo { font-size: 12px; color: var(--texto-tenue); margin-right: 2px; }
+
+  .ayuda {
+    color: var(--texto-tenue);
+    font-size: 12px;
+    line-height: 1.5;
+    margin: var(--e2) 0 0;
+  }
 
   .leyenda {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 14px;
+    gap: var(--e2) var(--e4);
+    margin-top: var(--e3);
+    padding-top: var(--e3);
+    border-top: 1px solid var(--panel-border);
     font-size: 12px;
     color: var(--texto-tenue);
   }
-  .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+  .leyenda span { display: inline-flex; align-items: center; gap: var(--e1); }
   .punto { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 
   .icono-semaforo {
@@ -121,23 +152,25 @@
     border-radius: 4px;
     vertical-align: middle;
   }
-  .icono-semaforo i {
-    display: block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    opacity: 0.35;
-  }
+  .icono-semaforo i { display: block; width: 7px; height: 7px; border-radius: 50%; opacity: 0.35; }
   .icono-semaforo i.rojo { background: var(--rojo); opacity: 1; }
   .icono-semaforo i.amarillo { background: var(--amarillo); }
   .icono-semaforo i.verde { background: var(--verde); }
+  .linea-sensor {
+    display: inline-block;
+    width: 16px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(53, 201, 173, 0.6);
+  }
 
+  /* ---------- tooltip ---------- */
   .tooltip-semaforo {
     position: absolute;
     pointer-events: none;
     z-index: 5;
     max-width: 220px;
-    padding: 10px 12px;
+    padding: var(--e2) 12px;
     background: #1c2330;
     border: 1px solid var(--panel-border);
     border-radius: 8px;
@@ -149,17 +182,8 @@
     transition: opacity 0.12s ease;
   }
   .tooltip-semaforo.visible { opacity: 1; }
-  .tooltip-semaforo .titulo {
-    font-weight: 600;
-    color: var(--texto);
-    margin-bottom: 6px;
-  }
-  .tooltip-semaforo .fase {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 4px;
-  }
+  .tooltip-semaforo .titulo { font-weight: 600; color: var(--texto); margin-bottom: var(--e1); }
+  .tooltip-semaforo .fase { display: inline-flex; align-items: center; gap: var(--e1); margin-top: 4px; }
   .tooltip-semaforo .lampara-mini {
     width: 10px;
     height: 10px;
@@ -167,6 +191,7 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
 
+  /* ---------- modal del mapa ---------- */
   .modal-mapa {
     display: none;
     position: fixed;
@@ -175,14 +200,10 @@
     z-index: 50;
     align-items: center;
     justify-content: center;
-    padding: 30px;
+    padding: var(--e5);
   }
   .modal-mapa.visible { display: flex; }
-  .modal-mapa .contenido {
-    position: relative;
-    max-width: 95vw;
-    max-height: 95vh;
-  }
+  .modal-mapa .contenido { position: relative; max-width: 95vw; max-height: 95vh; }
   .modal-mapa img {
     max-width: 95vw;
     max-height: 90vh;
@@ -208,34 +229,28 @@
     justify-content: center;
   }
 
-  .lateral { display: flex; flex-direction: column; gap: 16px; }
+  /* ---------- columna lateral ---------- */
+  .sub-etiqueta { font-size: 12px; color: var(--texto-tenue); margin-bottom: var(--e1); }
+  .bloque + .bloque { margin-top: var(--e3); }
 
-  .opciones {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .opciones .boton {
-    flex: 1 1 auto;
-    text-align: center;
-    font-size: 13px;
-  }
+  .opciones { display: flex; gap: var(--e1); }
+  .opciones .boton { flex: 1 1 0; text-align: center; font-size: 13px; padding: 8px 6px; }
   .opciones .boton.nivel-bajo.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
+  .opciones .boton.nivel-medio.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
+  .opciones .boton.nivel-alto.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
+  .opciones .boton.modo-fijo.activo { background: #4d5568; border-color: #4d5568; color: #ffffff; }
   .opciones .boton.modo-webster.activo { background: var(--purpura); border-color: var(--purpura); color: #ffffff; }
   .opciones .boton.modo-adaptativo.activo { background: var(--teal); border-color: var(--teal); color: #04211b; }
 
-  .metrica { margin-bottom: 12px; }
-  .metrica .etiqueta { font-size: 12px; color: var(--texto-tenue); margin-bottom: 4px; }
-  .metrica .valor { font-size: 22px; font-weight: 600; }
-  .metrica .valor.muted { color: var(--texto-tenue); font-weight: 400; }
-
   .toggle-falla {
     display: flex;
-    gap: 8px;
+    gap: var(--e2);
     align-items: flex-start;
-    margin-top: 12px;
+    margin-top: var(--e3);
+    padding-top: var(--e3);
+    border-top: 1px solid var(--panel-border);
     font-size: 12px;
-    line-height: 1.45;
+    line-height: 1.5;
     color: var(--texto-tenue);
     cursor: pointer;
   }
@@ -243,18 +258,41 @@
   .toggle-falla b { color: var(--texto); }
   .toggle-falla.deshabilitado { opacity: 0.45; cursor: not-allowed; }
 
-  .mqtt-cabecera { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--texto-tenue); margin-bottom: 12px; }
+  /* filas etiqueta / valor alineadas */
+  .metrica {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--e3);
+    padding: var(--e2) 0;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .metrica:first-of-type { padding-top: 0; }
+  .metrica:last-of-type { border-bottom: none; padding-bottom: 0; }
+  .metrica .etiqueta { font-size: 12px; color: var(--texto-tenue); line-height: 1.4; }
+  .metrica .valor { font-size: 20px; font-weight: 600; text-align: right; white-space: nowrap; }
+  .metrica .valor.muted { color: var(--texto-tenue); font-weight: 400; }
+  .metrica .valor.pequeno { font-size: 14px; white-space: normal; }
+
+  .mqtt-cabecera {
+    display: flex;
+    align-items: center;
+    gap: var(--e1);
+    font-size: 12px;
+    color: var(--texto-tenue);
+    margin-bottom: var(--e3);
+  }
   .registro-mqtt {
-    margin-top: 10px;
-    padding-top: 8px;
+    margin-top: var(--e3);
+    padding-top: var(--e2);
     border-top: 1px solid var(--panel-border);
-    max-height: 200px;
+    height: 200px;
     overflow-y: auto;
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
     font-size: 11px;
     line-height: 1.7;
   }
-  .registro-mqtt .msg { display: flex; gap: 6px; white-space: nowrap; }
+  .registro-mqtt .msg { display: flex; gap: var(--e1); white-space: nowrap; }
   .registro-mqtt .msg .t { color: var(--texto-tenue); min-width: 42px; }
   .registro-mqtt .msg .tls { color: var(--texto); min-width: 44px; }
   .registro-mqtt .msg .flecha { color: var(--texto-tenue); }
@@ -262,20 +300,16 @@
   .registro-mqtt .msg.comando { color: var(--teal); }
   .registro-mqtt .msg.comando .senal { color: var(--teal); }
 
-  .comparativo {
-    max-width: 1520px;
-    margin: 20px auto 0;
-  }
+  /* ---------- comparativo ---------- */
   .barras {
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
-    height: 180px;
-    margin-top: 18px;
-    padding: 0 20px;
+    height: 190px;
+    padding: var(--e4) var(--e4) 0;
   }
-  .grupo-barra { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 90px; }
-  .par-barras { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
+  .grupo-barra { display: flex; flex-direction: column; align-items: center; gap: var(--e2); width: 110px; }
+  .par-barras { display: flex; align-items: flex-end; gap: var(--e1); height: 140px; }
   .barra { width: 30px; border-radius: 4px 4px 0 0; position: relative; }
   .barra.fijo { background: #4d5568; }
   .barra.webster { background: var(--purpura); }
@@ -290,136 +324,173 @@
     white-space: nowrap;
   }
   .grupo-barra .etiqueta-nivel { font-size: 13px; color: var(--texto); text-transform: capitalize; }
-  .clave-barras { display: flex; gap: 18px; justify-content: center; margin-top: 8px; font-size: 12px; color: var(--texto-tenue); }
+  .clave-barras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e2) var(--e4);
+    justify-content: center;
+    margin-top: var(--e3);
+    padding-top: var(--e3);
+    border-top: 1px solid var(--panel-border);
+    font-size: 12px;
+    color: var(--texto-tenue);
+  }
+  .clave-barras span { display: inline-flex; align-items: center; gap: var(--e1); }
 
-  @media (max-width: 860px) {
-    .cuerpo { grid-template-columns: 1fr; }
+  /* ---------- adaptable ---------- */
+  @media (max-width: 1100px) {
+    .rejilla { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .pagina { padding: var(--e3); }
+    .panel { padding: var(--e3); }
+    .grupo-herramientas.derecha { margin-left: 0; }
+    .barras { padding-left: 0; padding-right: 0; }
   }
 </style>
 </head>
 <body>
 
-<div class="encabezado">
-  <div class="rotulo">SEMINARIO INTEGRADOR — UFPS · SIMULACIÓN EN SUMO</div>
-  <h1>Control de tráfico del corredor Guaimaral / Libertadores, Cúcuta</h1>
-  <p>Simulación real de 7 intersecciones semaforizadas. Elige un nivel de tráfico y compara, en la misma corrida, cómo se comporta un esquema de tiempo fijo frente al algoritmo de control adaptativo propuesto en este proyecto.</p>
-</div>
+<div class="pagina">
 
-<div class="cuerpo">
-  <div class="panel">
-    <h2>SIMULACIÓN EN VIVO</h2>
-    <div class="lienzo-envoltura">
-      <canvas id="lienzo" width="1200" height="700"></canvas>
-      <div class="tiempo-actual" id="etiquetaTiempo">t = 0 s</div>
-      <div class="tooltip-semaforo" id="tooltipSemaforo" aria-hidden="true"></div>
-    </div>
-    <div class="controles-reproduccion">
-      <button class="boton" id="botonJugar">▶ Reproducir</button>
-      <button class="boton" id="botonReiniciar">↺ Reiniciar</button>
-      <div class="grupo-velocidad">
-        <button class="boton velocidad activo" data-velocidad="1">1×</button>
-        <button class="boton velocidad" data-velocidad="2">2×</button>
-        <button class="boton velocidad" data-velocidad="4">4×</button>
-        <button class="boton" id="botonResetZoom">🔍 Restablecer zoom</button>
-        <button class="boton" id="botonVerMapa">🗺️ Ver en Maps</button>
-      </div>
-    </div>
-    <p style="color: var(--texto-tenue); font-size: 12px; margin: 8px 0 0;">
-      Rueda del mouse para zoom · arrastrar para mover · pasa el cursor sobre un semáforo para ver su estado
-    </p>
-    <div class="leyenda">
-      <span><span class="punto" style="background: var(--azul)"></span> Carro</span>
-      <span><span class="punto" style="background: var(--naranja)"></span> Moto</span>
-      <span><span class="punto" style="background: #b06fe0"></span> Bus</span>
-      <span>
-        <span class="icono-semaforo" aria-hidden="true"><i class="rojo"></i><i class="amarillo"></i><i class="verde"></i></span>
-        Semáforo (luz encendida = paso del carril)
-      </span>
-      <span>
-        <span style="display:inline-block;width:16px;height:3px;border-radius:2px;background:rgba(53,201,173,0.6);vertical-align:middle"></span>
-        Sensor E2 (detector de carril)
-      </span>
-    </div>
+  <header class="encabezado">
+    <div class="rotulo">SEMINARIO INTEGRADOR — UFPS · SIMULACIÓN EN SUMO</div>
+    <h1>Control de tráfico del corredor Guaimaral / Libertadores, Cúcuta</h1>
+    <p>Simulación real de 7 intersecciones semaforizadas. Elige un nivel de tráfico y compara, en la misma corrida, cómo se comporta un esquema de tiempo fijo frente al algoritmo de control adaptativo propuesto en este proyecto.</p>
+  </header>
+
+  <div class="rejilla">
+
+    <!-- Columna principal: simulación + comparativo -->
+    <main class="principal">
+      <section class="panel">
+        <h2>SIMULACIÓN EN VIVO</h2>
+        <div class="lienzo-envoltura">
+          <canvas id="lienzo" width="1200" height="700"></canvas>
+          <div class="tiempo-actual" id="etiquetaTiempo">t = 0 s</div>
+          <div class="tooltip-semaforo" id="tooltipSemaforo" aria-hidden="true"></div>
+        </div>
+
+        <div class="barra-herramientas">
+          <div class="grupo-herramientas">
+            <button class="boton" id="botonJugar">▶ Reproducir</button>
+            <button class="boton" id="botonReiniciar">↺ Reiniciar</button>
+          </div>
+          <div class="grupo-herramientas">
+            <span class="etiqueta-grupo">Velocidad</span>
+            <div class="grupo-velocidad">
+              <button class="boton velocidad activo" data-velocidad="1">1×</button>
+              <button class="boton velocidad" data-velocidad="2">2×</button>
+              <button class="boton velocidad" data-velocidad="4">4×</button>
+            </div>
+          </div>
+          <div class="grupo-herramientas derecha">
+            <button class="boton" id="botonResetZoom">🔍 Restablecer zoom</button>
+            <button class="boton" id="botonVerMapa">🗺️ Ver en Maps</button>
+          </div>
+        </div>
+        <p class="ayuda">Rueda del mouse para zoom · arrastrar para mover · pasa el cursor sobre un semáforo para ver su estado</p>
+
+        <div class="leyenda">
+          <span><span class="punto" style="background: var(--azul)"></span> Carro</span>
+          <span><span class="punto" style="background: var(--naranja)"></span> Moto</span>
+          <span><span class="punto" style="background: #b06fe0"></span> Bus</span>
+          <span>
+            <span class="icono-semaforo" aria-hidden="true"><i class="rojo"></i><i class="amarillo"></i><i class="verde"></i></span>
+            Semáforo (luz encendida = paso del carril)
+          </span>
+          <span>
+            <span class="linea-sensor"></span>
+            Sensor E2 (detector de carril)
+          </span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>COMPARATIVO — tiempo de espera promedio por vehículo (segundos), datos reales de esta simulación</h2>
+        <div class="barras" id="contenedorBarras"></div>
+        <div class="clave-barras">
+          <span><span class="punto" style="background:#4d5568"></span> Tiempo fijo</span>
+          <span><span class="punto" style="background:var(--purpura)"></span> Plan Webster</span>
+          <span><span class="punto" style="background: var(--teal)"></span> Adaptativo</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- Columna lateral: escenario y resultados -->
+    <aside class="lateral">
+      <section class="panel">
+        <h2>ESCENARIO</h2>
+        <div class="bloque">
+          <div class="sub-etiqueta">Nivel de tráfico</div>
+          <div class="opciones">
+            <button class="boton nivel-bajo activo" data-nivel="bajo">Bajo</button>
+            <button class="boton nivel-medio" data-nivel="medio">Medio</button>
+            <button class="boton nivel-alto" data-nivel="alto">Alto</button>
+          </div>
+        </div>
+        <div class="bloque">
+          <div class="sub-etiqueta">Modo de control</div>
+          <div class="opciones">
+            <button class="boton modo-fijo" data-modo="fijo">Fijo</button>
+            <button class="boton modo-webster" data-modo="webster">Webster</button>
+            <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
+          </div>
+        </div>
+        <label class="toggle-falla" id="etiquetaFalla">
+          <input type="checkbox" id="checkFalla">
+          <span><b>Simular falla de detector</b><br>
+          La intersección a9c2t cae y vuelve sola al plan fijo, luego se recupera.</span>
+        </label>
+      </section>
+
+      <section class="panel">
+        <h2>MÉTRICAS</h2>
+        <div class="metrica">
+          <div class="etiqueta">Vehículos activos</div>
+          <div class="valor" id="metricaVehiculos">—</div>
+        </div>
+        <div class="metrica">
+          <div class="etiqueta">Espera promedio por vehículo (corrida completa)</div>
+          <div class="valor" id="metricaEspera">—</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>SEGURIDAD Y RESPALDO</h2>
+        <div class="metrica">
+          <div class="etiqueta">Violaciones de seguridad</div>
+          <div class="valor" id="metricaViolaciones">0</div>
+        </div>
+        <div class="metrica">
+          <div class="etiqueta">Estado de respaldo</div>
+          <div class="valor muted pequeno" id="metricaRespaldo">sin fallas</div>
+        </div>
+      </section>
+
+      <section class="panel" style="flex: 1; display: flex; flex-direction: column;">
+        <h2>INTEGRACIÓN MQTT</h2>
+        <div class="mqtt-cabecera">
+          <span class="punto" style="background: var(--verde)"></span>
+          broker local · grabación real (escenario alto)
+        </div>
+        <div class="metrica">
+          <div class="etiqueta">Mensajes publicados</div>
+          <div class="valor" id="mqttMensajes">0</div>
+        </div>
+        <div class="metrica">
+          <div class="etiqueta">Comandos aplicados</div>
+          <div class="valor" id="mqttComandos">0</div>
+        </div>
+        <div class="metrica">
+          <div class="etiqueta">Latencia publicar→actuar (promedio)</div>
+          <div class="valor" id="mqttLatencia">—</div>
+        </div>
+        <div class="registro-mqtt" id="registroMqtt" style="flex: 1;"></div>
+      </section>
+    </aside>
   </div>
 
-  <div class="lateral">
-    <div class="panel">
-      <h2>NIVEL DE TRÁFICO</h2>
-      <div class="opciones">
-        <button class="boton nivel-bajo activo" data-nivel="bajo">Bajo</button>
-        <button class="boton nivel-medio" data-nivel="medio">Medio</button>
-        <button class="boton nivel-alto" data-nivel="alto">Alto</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>MODO DE CONTROL</h2>
-      <div class="opciones">
-        <button class="boton modo-fijo" data-modo="fijo">Tiempo fijo</button>
-        <button class="boton modo-webster" data-modo="webster">Plan Webster</button>
-        <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
-      </div>
-      <label class="toggle-falla" id="etiquetaFalla">
-        <input type="checkbox" id="checkFalla">
-        <span><b>Simular falla de detector</b><br>
-        La intersección a9c2t cae y vuelve sola al plan fijo, luego se recupera.</span>
-      </label>
-    </div>
-
-    <div class="panel">
-      <h2>SEGURIDAD Y RESPALDO</h2>
-      <div class="metrica">
-        <div class="etiqueta">Violaciones de seguridad</div>
-        <div class="valor" id="metricaViolaciones">0</div>
-      </div>
-      <div class="metrica">
-        <div class="etiqueta">Estado de respaldo</div>
-        <div class="valor muted" id="metricaRespaldo" style="font-size:15px">sin fallas</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>MÉTRICAS</h2>
-      <div class="metrica">
-        <div class="etiqueta">Vehículos activos</div>
-        <div class="valor" id="metricaVehiculos">—</div>
-      </div>
-      <div class="metrica">
-        <div class="etiqueta">Espera promedio por vehículo (corrida completa)</div>
-        <div class="valor" id="metricaEspera">—</div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2>INTEGRACIÓN MQTT</h2>
-      <div class="mqtt-cabecera">
-        <span class="punto" style="background: var(--verde)"></span>
-        broker local · grabación real (escenario alto)
-      </div>
-      <div class="metrica">
-        <div class="etiqueta">Mensajes publicados</div>
-        <div class="valor" id="mqttMensajes">0</div>
-      </div>
-      <div class="metrica">
-        <div class="etiqueta">Comandos aplicados</div>
-        <div class="valor" id="mqttComandos">0</div>
-      </div>
-      <div class="metrica">
-        <div class="etiqueta">Latencia publicar→actuar (promedio)</div>
-        <div class="valor" id="mqttLatencia">—</div>
-      </div>
-      <div class="registro-mqtt" id="registroMqtt"></div>
-    </div>
-  </div>
-</div>
-
-<div class="panel comparativo">
-  <h2>COMPARATIVO — tiempo de espera promedio por vehículo (segundos), datos reales de esta simulación</h2>
-  <div class="barras" id="contenedorBarras"></div>
-  <div class="clave-barras">
-    <span><span class="punto" style="background:#4d5568"></span> Tiempo fijo</span>
-    <span><span class="punto" style="background:var(--purpura)"></span> Plan Webster</span>
-    <span><span class="punto" style="background: var(--teal)"></span> Adaptativo</span>
   </div>
 </div>
 
