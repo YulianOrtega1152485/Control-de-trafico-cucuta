@@ -4,11 +4,11 @@ modo,adaptativo
 fuente_datos,detectores
 semilla,42
 duracion_simulada_s,1800
-cola_promedio_red,8.305
-espera_acumulada_red_promedio,608.2188888888888
+cola_promedio_red,8.24611111111111
+espera_acumulada_red_promedio,605.1822222222222
 vehiculos_completados,280
-espera_promedio_por_vehiculo_s,51.253571428571426
-duracion_viaje_promedio_s,142.3
+espera_promedio_por_vehiculo_s,51.03214285714286
+duracion_viaje_promedio_s,142.1392857142857
 violaciones_seguridad,0
-tls_con_falla,
-eventos_respaldo,0
+tls_con_falla,a9c2t
+eventos_respaldo,2

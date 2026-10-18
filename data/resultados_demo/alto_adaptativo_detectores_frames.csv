@@ -1561,7 +1561,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 74,vehiculo,moto_7,moto__motorcycle,1180.64,935.67,
 74,vehiculo,moto_8,moto__motorcycle,981.8,931.97,
 74,vehiculo,moto_9,moto__motorcycle,895.35,847.51,
-74,semaforo,a9c2t,,,,GGGgGGggrrr
+74,semaforo,a9c2t,,,,Gyyyyyyyrrr
 74,semaforo,agc2t,,,,GGGgGGggrrr
 74,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 74,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1595,7 +1595,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 75,vehiculo,moto_7,moto__motorcycle,1180.66,931.22,
 75,vehiculo,moto_8,moto__motorcycle,1006.68,937.15,
 75,vehiculo,moto_9,moto__motorcycle,897.18,846.33,
-75,semaforo,a9c2t,,,,GGGgGGggrrr
+75,semaforo,a9c2t,,,,Gyyyyyyyrrr
 75,semaforo,agc2t,,,,GGGgGGggrrr
 75,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 75,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1629,7 +1629,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 76,vehiculo,moto_7,moto__motorcycle,1177.33,928.2,
 76,vehiculo,moto_8,moto__motorcycle,1031.19,942.26,
 76,vehiculo,moto_9,moto__motorcycle,898.35,848.56,
-76,semaforo,a9c2t,,,,GGGgGGggrrr
+76,semaforo,a9c2t,,,,Gyyyyyyyrrr
 76,semaforo,agc2t,,,,GGGgGGggrrr
 76,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 76,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1663,7 +1663,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 77,vehiculo,moto_7,moto__motorcycle,1173.21,927.16,
 77,vehiculo,moto_8,moto__motorcycle,1055.21,947.29,
 77,vehiculo,moto_9,moto__motorcycle,897.08,855.08,
-77,semaforo,a9c2t,,,,GGGgGGggrrr
+77,semaforo,a9c2t,,,,rrrrrrrrrrr
 77,semaforo,agc2t,,,,GGGgGGggrrr
 77,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 77,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1698,7 +1698,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 78,vehiculo,moto_7,moto__motorcycle,1164.8,925.34,
 78,vehiculo,moto_8,moto__motorcycle,1079.45,952.41,
 78,vehiculo,moto_9,moto__motorcycle,895.08,865.39,
-78,semaforo,a9c2t,,,,GGGgGGggrrr
+78,semaforo,a9c2t,,,,rrrrrrrrrrr
 78,semaforo,agc2t,,,,GGGgGGggrrr
 78,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 78,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1733,7 +1733,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 79,vehiculo,moto_7,moto__motorcycle,1154.56,923.12,
 79,vehiculo,moto_8,moto__motorcycle,1104.32,957.66,
 79,vehiculo,moto_9,moto__motorcycle,892.83,876.97,
-79,semaforo,a9c2t,,,,GGGgGGggrrr
+79,semaforo,a9c2t,,,,GrrrrrrrGGg
 79,semaforo,agc2t,,,,GGGgGGggrrr
 79,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 79,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1769,7 +1769,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 80,vehiculo,moto_7,moto__motorcycle,1146.31,921.33,
 80,vehiculo,moto_8,moto__motorcycle,1129.05,962.43,
 80,vehiculo,moto_9,moto__motorcycle,890.69,888.01,
-80,semaforo,a9c2t,,,,GGGgGGggrrr
+80,semaforo,a9c2t,,,,GrrrrrrrGGg
 80,semaforo,agc2t,,,,GGGgGGggrrr
 80,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 80,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1804,7 +1804,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 81,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 81,vehiculo,moto_7,moto__motorcycle,1138.03,919.53,
 81,vehiculo,moto_8,moto__motorcycle,1151.95,967.13,
-81,semaforo,a9c2t,,,,GGGgGGggrrr
+81,semaforo,a9c2t,,,,GrrrrrrrGGg
 81,semaforo,agc2t,,,,GGGgGGggrrr
 81,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 81,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1839,7 +1839,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 82,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 82,vehiculo,moto_7,moto__motorcycle,1128.44,917.59,
 82,vehiculo,moto_8,moto__motorcycle,1175.68,972.08,
-82,semaforo,a9c2t,,,,GGGgGGggrrr
+82,semaforo,a9c2t,,,,GrrrrrrrGGg
 82,semaforo,agc2t,,,,GGGgGGggrrr
 82,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 82,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1874,7 +1874,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 83,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 83,vehiculo,moto_7,moto__motorcycle,1117.77,915.63,
 83,vehiculo,moto_8,moto__motorcycle,1199.95,977.0,
-83,semaforo,a9c2t,,,,GGGgGGggrrr
+83,semaforo,a9c2t,,,,GrrrrrrrGGg
 83,semaforo,agc2t,,,,GGGgGGggrrr
 83,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 83,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1909,7 +1909,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 84,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 84,vehiculo,moto_7,moto__motorcycle,1107.78,913.8,
 84,vehiculo,moto_8,moto__motorcycle,1223.57,981.75,
-84,semaforo,a9c2t,,,,GGGgGGggrrr
+84,semaforo,a9c2t,,,,GrrrrrrrGGg
 84,semaforo,agc2t,,,,GGGgGGggrrr
 84,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 84,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1945,7 +1945,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 85,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 85,vehiculo,moto_7,moto__motorcycle,1098.39,912.08,
 85,vehiculo,moto_8,moto__motorcycle,1246.98,986.18,
-85,semaforo,a9c2t,,,,GGGgGGggrrr
+85,semaforo,a9c2t,,,,GrrrrrrrGGg
 85,semaforo,agc2t,,,,GGGgGGggrrr
 85,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 85,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -1982,7 +1982,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 86,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 86,vehiculo,moto_7,moto__motorcycle,1088.69,910.3,
 86,vehiculo,moto_8,moto__motorcycle,1271.99,990.63,
-86,semaforo,a9c2t,,,,GGGgGGggrrr
+86,semaforo,a9c2t,,,,GrrrrrrrGGg
 86,semaforo,agc2t,,,,GGGgGGggrrr
 86,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 86,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -2019,7 +2019,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 87,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 87,vehiculo,moto_7,moto__motorcycle,1078.07,908.35,
 87,vehiculo,moto_8,moto__motorcycle,1295.66,994.83,
-87,semaforo,a9c2t,,,,GGGgGGggrrr
+87,semaforo,a9c2t,,,,GrrrrrrrGGg
 87,semaforo,agc2t,,,,GGGgGGggrrr
 87,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 87,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -2056,7 +2056,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 88,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 88,vehiculo,moto_7,moto__motorcycle,1067.57,906.42,
 88,vehiculo,moto_8,moto__motorcycle,1319.54,999.07,
-88,semaforo,a9c2t,,,,GGGgGGggrrr
+88,semaforo,a9c2t,,,,GrrrrrrrGGg
 88,semaforo,agc2t,,,,GGGgGGggrrr
 88,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 88,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -2092,7 +2092,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 89,vehiculo,moto_5,moto__motorcycle,1003.35,1074.47,
 89,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 89,vehiculo,moto_8,moto__motorcycle,1340.72,1002.83,
-89,semaforo,a9c2t,,,,GGGgGGggrrr
+89,semaforo,a9c2t,,,,GrrrrrrrGGg
 89,semaforo,agc2t,,,,GGGgGGggrrr
 89,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 89,semaforo,agc5t,,,,rryyyrrrrrryrryyyrrrrrr
@@ -2129,7 +2129,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 90,vehiculo,moto_5,moto__motorcycle,992.79,1072.73,
 90,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 90,vehiculo,moto_8,moto__motorcycle,1362.01,1006.61,
-90,semaforo,a9c2t,,,,GGGgGGggrrr
+90,semaforo,a9c2t,,,,GrrrrrrrGGg
 90,semaforo,agc2t,,,,GGGgGGggrrr
 90,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 90,semaforo,agc5t,,,,rryyyrrrrrryrryyyrrrrrr
@@ -2166,7 +2166,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 91,vehiculo,moto_5,moto__motorcycle,982.58,1071.04,
 91,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 91,vehiculo,moto_8,moto__motorcycle,1383.61,1010.56,
-91,semaforo,a9c2t,,,,GGGgGGggrrr
+91,semaforo,a9c2t,,,,GrrrrrrrGGg
 91,semaforo,agc2t,,,,GGGgGGggrrr
 91,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 91,semaforo,agc5t,,,,rryyyrrrrrryrryyyrrrrrr
@@ -2203,7 +2203,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 92,vehiculo,moto_5,moto__motorcycle,976.91,1070.1,
 92,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 92,vehiculo,moto_8,moto__motorcycle,1401.5,1013.83,
-92,semaforo,a9c2t,,,,GGGgGGggrrr
+92,semaforo,a9c2t,,,,GrrrrrrrGGg
 92,semaforo,agc2t,,,,GGGgGGggrrr
 92,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 92,semaforo,agc5t,,,,rrrrrrrrrrrrrrrrrrrrrrr
@@ -2240,7 +2240,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 93,vehiculo,moto_5,moto__motorcycle,973.36,1069.7,
 93,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 93,vehiculo,moto_8,moto__motorcycle,1415.75,1016.17,
-93,semaforo,a9c2t,,,,GGGgGGggrrr
+93,semaforo,a9c2t,,,,GrrrrrrrGGg
 93,semaforo,agc2t,,,,GGGgGGggrrr
 93,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 93,semaforo,agc5t,,,,rrrrrrrrrrrrrrrrrrrrrrr
@@ -2276,7 +2276,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 94,vehiculo,moto_5,moto__motorcycle,969.57,1071.23,
 94,vehiculo,moto_6,moto__motorcycle,1045.47,409.42,
 94,vehiculo,moto_8,moto__motorcycle,1425.38,1017.56,
-94,semaforo,a9c2t,,,,Gyyyyyyyrrr
+94,semaforo,a9c2t,,,,GrrrrrrrGGg
 94,semaforo,agc2t,,,,Gyyyyyyyrrr
 94,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 94,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2313,7 +2313,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 95,vehiculo,moto_5,moto__motorcycle,967.84,1075.77,
 95,vehiculo,moto_6,moto__motorcycle,1045.55,414.0,
 95,vehiculo,moto_8,moto__motorcycle,1434.84,1018.93,
-95,semaforo,a9c2t,,,,Gyyyyyyyrrr
+95,semaforo,a9c2t,,,,GrrrrrrrGGg
 95,semaforo,agc2t,,,,Gyyyyyyyrrr
 95,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 95,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2350,7 +2350,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 96,vehiculo,moto_5,moto__motorcycle,965.93,1085.74,
 96,vehiculo,moto_6,moto__motorcycle,1050.79,417.21,
 96,vehiculo,moto_8,moto__motorcycle,1440.35,1019.72,
-96,semaforo,a9c2t,,,,Gyyyyyyyrrr
+96,semaforo,a9c2t,,,,GrrrrrrrGGg
 96,semaforo,agc2t,,,,Gyyyyyyyrrr
 96,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 96,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2387,7 +2387,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 97,vehiculo,moto_5,moto__motorcycle,963.95,1096.03,
 97,vehiculo,moto_6,moto__motorcycle,1061.35,419.35,
 97,vehiculo,moto_8,moto__motorcycle,1443.09,1020.12,
-97,semaforo,a9c2t,,,,rrrrrrrrrrr
+97,semaforo,a9c2t,,,,GrrrrrrrGGg
 97,semaforo,agc2t,,,,rrrrrrrrrrr
 97,semaforo,a9c5t,,,,rrrrrrrrrrrrrrrrrr
 97,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2423,7 +2423,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 98,vehiculo,moto_5,moto__motorcycle,961.73,1107.61,
 98,vehiculo,moto_6,moto__motorcycle,1074.87,422.08,
 98,vehiculo,moto_8,moto__motorcycle,1446.82,1020.66,
-98,semaforo,a9c2t,,,,rrrrrrrrrrr
+98,semaforo,a9c2t,,,,GrrrrrrrGGg
 98,semaforo,agc2t,,,,rrrrrrrrrrr
 98,semaforo,a9c5t,,,,rrrrrrrrrrrrrrrrrr
 98,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2459,7 +2459,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 99,vehiculo,moto_5,moto__motorcycle,959.41,1119.51,
 99,vehiculo,moto_6,moto__motorcycle,1093.77,425.9,
 99,vehiculo,moto_8,moto__motorcycle,1452.43,1021.47,
-99,semaforo,a9c2t,,,,GGGgGGggrrr
+99,semaforo,a9c2t,,,,GrrrrrrrGGg
 99,semaforo,agc2t,,,,GGGgGGggrrr
 99,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 99,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2495,7 +2495,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 100,vehiculo,moto_5,moto__motorcycle,957.23,1130.44,
 100,vehiculo,moto_6,moto__motorcycle,1115.38,430.27,
 100,vehiculo,moto_8,moto__motorcycle,1455.99,1021.98,
-100,semaforo,a9c2t,,,,GGGgGGggrrr
+100,semaforo,a9c2t,,,,GrrrrrrrGGg
 100,semaforo,agc2t,,,,GGGgGGggrrr
 100,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 100,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2531,7 +2531,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 101,vehiculo,moto_5,moto__motorcycle,955.25,1140.38,
 101,vehiculo,moto_6,moto__motorcycle,1135.98,434.44,
 101,vehiculo,moto_8,moto__motorcycle,1463.03,1022.96,
-101,semaforo,a9c2t,,,,GGGgGGggrrr
+101,semaforo,a9c2t,,,,GrrrrrrrGGg
 101,semaforo,agc2t,,,,GGGgGGggrrr
 101,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 101,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2567,7 +2567,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 102,vehiculo,moto_5,moto__motorcycle,953.25,1150.46,
 102,vehiculo,moto_6,moto__motorcycle,1156.33,438.55,
 102,vehiculo,moto_8,moto__motorcycle,1474.1,1024.48,
-102,semaforo,a9c2t,,,,GGGgGGggrrr
+102,semaforo,a9c2t,,,,GrrrrrrrGGg
 102,semaforo,agc2t,,,,GGGgGGggrrr
 102,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 102,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2603,7 +2603,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 103,vehiculo,moto_5,moto__motorcycle,950.99,1161.94,
 103,vehiculo,moto_6,moto__motorcycle,1177.47,442.83,
 103,vehiculo,moto_8,moto__motorcycle,1488.68,1027.33,
-103,semaforo,a9c2t,,,,GGGgGGggrrr
+103,semaforo,a9c2t,,,,GrrrrrrrGGg
 103,semaforo,agc2t,,,,GGGgGGggrrr
 103,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 103,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2638,7 +2638,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 104,vehiculo,moto_5,moto__motorcycle,948.94,1172.45,
 104,vehiculo,moto_6,moto__motorcycle,1197.54,446.88,
 104,vehiculo,moto_8,moto__motorcycle,1508.19,1031.2,
-104,semaforo,a9c2t,,,,GGGgGGggrrr
+104,semaforo,a9c2t,,,,Grrrrrrryyy
 104,semaforo,agc2t,,,,GGGgGGggrrr
 104,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 104,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2674,7 +2674,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 105,vehiculo,moto_5,moto__motorcycle,946.98,1182.46,
 105,vehiculo,moto_6,moto__motorcycle,1216.59,450.72,
 105,vehiculo,moto_8,moto__motorcycle,1517.89,1033.13,
-105,semaforo,a9c2t,,,,GGGgGGggrrr
+105,semaforo,a9c2t,,,,Grrrrrrryyy
 105,semaforo,agc2t,,,,GGGgGGggrrr
 105,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 105,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2710,7 +2710,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 106,vehiculo,moto_5,moto__motorcycle,944.88,1193.26,
 106,vehiculo,moto_6,moto__motorcycle,1236.83,454.81,
 106,vehiculo,moto_8,moto__motorcycle,1518.77,1033.31,
-106,semaforo,a9c2t,,,,GGGgGGggrrr
+106,semaforo,a9c2t,,,,Grrrrrrryyy
 106,semaforo,agc2t,,,,GGGgGGggrrr
 106,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 106,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2745,7 +2745,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 107,vehiculo,moto_4,moto__motorcycle,483.78,508.47,
 107,vehiculo,moto_6,moto__motorcycle,1256.19,458.73,
 107,vehiculo,moto_8,moto__motorcycle,1519.24,1033.4,
-107,semaforo,a9c2t,,,,GGGgGGggrrr
+107,semaforo,a9c2t,,,,rrrrrrrrrrr
 107,semaforo,agc2t,,,,GGGgGGggrrr
 107,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 107,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -2780,7 +2780,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 108,vehiculo,moto_4,moto__motorcycle,470.47,508.44,
 108,vehiculo,moto_6,moto__motorcycle,1276.82,462.9,
 108,vehiculo,moto_8,moto__motorcycle,1519.42,1033.44,
-108,semaforo,a9c2t,,,,GGGgGGggrrr
+108,semaforo,a9c2t,,,,rrrrrrrrrrr
 108,semaforo,agc2t,,,,GGGgGGggrrr
 108,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 108,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -3981,7 +3981,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 144,vehiculo,moto_28,moto__motorcycle,1630.54,1055.79,
 144,vehiculo,moto_6,moto__motorcycle,1617.79,369.68,
 144,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-144,semaforo,a9c2t,,,,Gyyyyyyyrrr
+144,semaforo,a9c2t,,,,GGGgGGggrrr
 144,semaforo,agc2t,,,,Gyyyyyyyrrr
 144,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 144,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4015,7 +4015,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 145,vehiculo,moto_29,moto__motorcycle,422.24,1030.18,
 145,vehiculo,moto_6,moto__motorcycle,1629.24,371.82,
 145,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-145,semaforo,a9c2t,,,,Gyyyyyyyrrr
+145,semaforo,a9c2t,,,,GGGgGGggrrr
 145,semaforo,agc2t,,,,Gyyyyyyyrrr
 145,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 145,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4049,7 +4049,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 146,vehiculo,moto_29,moto__motorcycle,432.63,1031.28,
 146,vehiculo,moto_6,moto__motorcycle,1639.98,373.85,
 146,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-146,semaforo,a9c2t,,,,Gyyyyyyyrrr
+146,semaforo,a9c2t,,,,GGGgGGggrrr
 146,semaforo,agc2t,,,,Gyyyyyyyrrr
 146,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 146,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4083,7 +4083,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 147,vehiculo,moto_28,moto__motorcycle,1666.33,1062.54,
 147,vehiculo,moto_29,moto__motorcycle,442.8,1031.35,
 147,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-147,semaforo,a9c2t,,,,rrrrrrrrrrr
+147,semaforo,a9c2t,,,,GGGgGGggrrr
 147,semaforo,agc2t,,,,rrrrrrrrrrr
 147,semaforo,a9c5t,,,,rrrrrrrrrrrrrrrrrr
 147,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4117,7 +4117,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 148,vehiculo,moto_28,moto__motorcycle,1668.52,1064.18,
 148,vehiculo,moto_29,moto__motorcycle,454.24,1031.44,
 148,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-148,semaforo,a9c2t,,,,rrrrrrrrrrr
+148,semaforo,a9c2t,,,,GGGgGGggrrr
 148,semaforo,agc2t,,,,rrrrrrrrrrr
 148,semaforo,a9c5t,,,,rrrrrrrrrrrrrrrrrr
 148,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4326,7 +4326,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 154,vehiculo,moto_29,moto__motorcycle,515.27,1031.67,
 154,vehiculo,moto_30,moto__motorcycle,1715.2,924.47,
 154,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-154,semaforo,a9c2t,,,,GGGgGGggrrr
+154,semaforo,a9c2t,,,,Gyyyyyyyrrr
 154,semaforo,agc2t,,,,GGGgGGggrrr
 154,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 154,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4363,7 +4363,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 155,vehiculo,moto_30,moto__motorcycle,1717.07,913.73,
 155,vehiculo,moto_31,moto__motorcycle,997.44,253.27,
 155,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-155,semaforo,a9c2t,,,,GGGgGGggrrr
+155,semaforo,a9c2t,,,,Gyyyyyyyrrr
 155,semaforo,agc2t,,,,GGGgGGggrrr
 155,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 155,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4400,7 +4400,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 156,vehiculo,moto_30,moto__motorcycle,1718.85,903.51,
 156,vehiculo,moto_31,moto__motorcycle,986.0,251.01,
 156,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-156,semaforo,a9c2t,,,,GGGgGGggrrr
+156,semaforo,a9c2t,,,,Gyyyyyyyrrr
 156,semaforo,agc2t,,,,GGGgGGggrrr
 156,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 156,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4437,7 +4437,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 157,vehiculo,moto_30,moto__motorcycle,1712.5,897.08,
 157,vehiculo,moto_31,moto__motorcycle,973.48,248.52,
 157,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-157,semaforo,a9c2t,,,,GGGgGGggrrr
+157,semaforo,a9c2t,,,,rrrrrrrrrrr
 157,semaforo,agc2t,,,,GGGgGGggrrr
 157,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 157,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -4474,7 +4474,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 158,vehiculo,moto_30,moto__motorcycle,1700.14,894.36,
 158,vehiculo,moto_31,moto__motorcycle,962.11,246.27,
 158,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-158,semaforo,a9c2t,,,,GGGgGGggrrr
+158,semaforo,a9c2t,,,,rrrrrrrrrrr
 158,semaforo,agc2t,,,,GGGgGGggrrr
 158,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 158,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -5872,7 +5872,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 194,vehiculo,moto_37,moto__motorcycle,302.33,694.61,
 194,vehiculo,moto_38,moto__motorcycle,1714.82,926.64,
 194,vehiculo,moto_8,moto__motorcycle,1625.07,554.38,
-194,semaforo,a9c2t,,,,Gyyyyyyyrrr
+194,semaforo,a9c2t,,,,GGGgGGggrrr
 194,semaforo,agc2t,,,,Gyyyyyyyrrr
 194,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 194,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -5915,7 +5915,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 195,vehiculo,moto_38,moto__motorcycle,1716.64,916.23,
 195,vehiculo,moto_39,moto__motorcycle,1719.82,594.29,
 195,vehiculo,moto_8,moto__motorcycle,1627.77,551.17,
-195,semaforo,a9c2t,,,,Gyyyyyyyrrr
+195,semaforo,a9c2t,,,,GGGgGGggrrr
 195,semaforo,agc2t,,,,Gyyyyyyyrrr
 195,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 195,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -5958,7 +5958,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 196,vehiculo,moto_38,moto__motorcycle,1718.43,905.93,
 196,vehiculo,moto_39,moto__motorcycle,1708.03,592.23,
 196,vehiculo,moto_8,moto__motorcycle,1630.2,551.71,
-196,semaforo,a9c2t,,,,Gyyyyyyyrrr
+196,semaforo,a9c2t,,,,GGGgGGggrrr
 196,semaforo,agc2t,,,,Gyyyyyyyrrr
 196,semaforo,a9c5t,,,,yyyyyrrrryyyyyrrrr
 196,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6001,7 +6001,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 197,vehiculo,moto_38,moto__motorcycle,1717.19,898.11,
 197,vehiculo,moto_39,moto__motorcycle,1696.28,590.19,
 197,vehiculo,moto_8,moto__motorcycle,1631.38,555.77,
-197,semaforo,a9c2t,,,,rrrrrrrrrrr
+197,semaforo,a9c2t,,,,GGGgGGggrrr
 197,semaforo,agc2t,,,,rrrrrrrrrrr
 197,semaforo,a9c5t,,,,rrrrrrrrrrrrrrrrrr
 197,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6045,7 +6045,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 198,vehiculo,moto_38,moto__motorcycle,1705.77,895.59,
 198,vehiculo,moto_39,moto__motorcycle,1686.48,588.48,
 198,vehiculo,moto_8,moto__motorcycle,1629.73,564.53,
-198,semaforo,a9c2t,,,,rrrrrrrrrrr
+198,semaforo,a9c2t,,,,GGGgGGggrrr
 198,semaforo,agc2t,,,,rrrrrrrrrrr
 198,semaforo,a9c5t,,,,rrrrrrrrrrrrrrrrrr
 198,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6310,7 +6310,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 204,vehiculo,moto_39,moto__motorcycle,1636.69,579.81,
 204,vehiculo,moto_40,moto__motorcycle,1574.46,900.57,
 204,vehiculo,moto_8,moto__motorcycle,1606.77,704.65,
-204,semaforo,a9c2t,,,,GGGgGGggrrr
+204,semaforo,a9c2t,,,,Gyyyyyyyrrr
 204,semaforo,agc2t,,,,GGGgGGggrrr
 204,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 204,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6355,7 +6355,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 205,vehiculo,moto_40,moto__motorcycle,1570.64,903.78,
 205,vehiculo,moto_41,moto__motorcycle,739.6,928.64,
 205,vehiculo,moto_8,moto__motorcycle,1601.93,729.67,
-205,semaforo,a9c2t,,,,GGGgGGggrrr
+205,semaforo,a9c2t,,,,Gyyyyyyyrrr
 205,semaforo,agc2t,,,,GGGgGGggrrr
 205,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 205,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6400,7 +6400,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 206,vehiculo,moto_40,moto__motorcycle,1568.49,906.95,
 206,vehiculo,moto_41,moto__motorcycle,752.47,931.24,
 206,vehiculo,moto_8,moto__motorcycle,1598.72,746.33,
-206,semaforo,a9c2t,,,,GGGgGGggrrr
+206,semaforo,a9c2t,,,,Gyyyyyyyrrr
 206,semaforo,agc2t,,,,GGGgGGggrrr
 206,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 206,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6446,7 +6446,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 207,vehiculo,moto_40,moto__motorcycle,1567.47,911.67,
 207,vehiculo,moto_41,moto__motorcycle,766.43,934.06,
 207,vehiculo,moto_8,moto__motorcycle,1597.57,753.19,
-207,semaforo,a9c2t,,,,GGGgGGggrrr
+207,semaforo,a9c2t,,,,rrrrrrrrrrr
 207,semaforo,agc2t,,,,GGGgGGggrrr
 207,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 207,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -6492,7 +6492,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 208,vehiculo,moto_40,moto__motorcycle,1562.53,920.6,
 208,vehiculo,moto_41,moto__motorcycle,778.62,936.53,
 208,vehiculo,moto_8,moto__motorcycle,1599.16,757.21,
-208,semaforo,a9c2t,,,,GGGgGGggrrr
+208,semaforo,a9c2t,,,,rrrrrrrrrrr
 208,semaforo,agc2t,,,,GGGgGGggrrr
 208,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 208,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8236,7 +8236,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 244,vehiculo,moto_46,moto__motorcycle,887.23,421.47,
 244,vehiculo,moto_47,moto__motorcycle,1728.32,798.1,
 244,vehiculo,moto_48,moto__motorcycle,763.06,1071.17,
-244,semaforo,a9c2t,,,,Gyyyyyyyrrr
+244,semaforo,a9c2t,,,,GGGgGGggrrr
 244,semaforo,agc2t,,,,Gyyyyyyyrrr
 244,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 244,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8286,7 +8286,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 245,vehiculo,moto_47,moto__motorcycle,1724.6,785.59,
 245,vehiculo,moto_48,moto__motorcycle,770.3,1072.49,
 245,vehiculo,moto_49,moto__motorcycle,191.05,693.89,
-245,semaforo,a9c2t,,,,Gyyyyyyyrrr
+245,semaforo,a9c2t,,,,GGGgGGggrrr
 245,semaforo,agc2t,,,,Gyyyyyyyrrr
 245,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 245,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8336,7 +8336,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 246,vehiculo,moto_47,moto__motorcycle,1721.21,774.18,
 246,vehiculo,moto_48,moto__motorcycle,783.17,1075.24,
 246,vehiculo,moto_49,moto__motorcycle,202.26,693.97,
-246,semaforo,a9c2t,,,,Gyyyyyyyrrr
+246,semaforo,a9c2t,,,,GGGgGGggrrr
 246,semaforo,agc2t,,,,Gyyyyyyyrrr
 246,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 246,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8386,7 +8386,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 247,vehiculo,moto_47,moto__motorcycle,1717.92,763.11,
 247,vehiculo,moto_48,moto__motorcycle,797.84,1078.38,
 247,vehiculo,moto_49,moto__motorcycle,215.86,694.06,
-247,semaforo,a9c2t,,,,rrrrrrrrrrr
+247,semaforo,a9c2t,,,,GGGgGGggrrr
 247,semaforo,agc2t,,,,rrrrrrrrrrr
 247,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 247,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8436,7 +8436,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 248,vehiculo,moto_47,moto__motorcycle,1714.97,752.07,
 248,vehiculo,moto_48,moto__motorcycle,814.31,1081.9,
 248,vehiculo,moto_49,moto__motorcycle,229.35,694.14,
-248,semaforo,a9c2t,,,,rrrrrrrrrrr
+248,semaforo,a9c2t,,,,GGGgGGggrrr
 248,semaforo,agc2t,,,,rrrrrrrrrrr
 248,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 248,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8738,7 +8738,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 254,vehiculo,moto_48,moto__motorcycle,852.67,1067.07,
 254,vehiculo,moto_49,moto__motorcycle,306.21,694.64,
 254,vehiculo,moto_50,moto__motorcycle,1191.34,883.54,
-254,semaforo,a9c2t,,,,GGGgGGggrrr
+254,semaforo,a9c2t,,,,Gyyyyyyyrrr
 254,semaforo,agc2t,,,,GGGgGGggrrr
 254,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 254,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8789,7 +8789,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 255,vehiculo,moto_49,moto__motorcycle,319.89,694.73,
 255,vehiculo,moto_50,moto__motorcycle,1193.26,874.3,
 255,vehiculo,moto_51,moto__motorcycle,1445.84,291.03,
-255,semaforo,a9c2t,,,,GGGgGGggrrr
+255,semaforo,a9c2t,,,,Gyyyyyyyrrr
 255,semaforo,agc2t,,,,GGGgGGggrrr
 255,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 255,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8840,7 +8840,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 256,vehiculo,moto_49,moto__motorcycle,332.74,694.81,
 256,vehiculo,moto_50,moto__motorcycle,1193.83,871.55,
 256,vehiculo,moto_51,moto__motorcycle,1457.92,293.34,
-256,semaforo,a9c2t,,,,GGGgGGggrrr
+256,semaforo,a9c2t,,,,Gyyyyyyyrrr
 256,semaforo,agc2t,,,,GGGgGGggrrr
 256,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 256,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8891,7 +8891,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 257,vehiculo,moto_49,moto__motorcycle,345.37,694.89,
 257,vehiculo,moto_50,moto__motorcycle,1194.39,866.97,
 257,vehiculo,moto_51,moto__motorcycle,1472.04,296.23,
-257,semaforo,a9c2t,,,,GGGgGGggrrr
+257,semaforo,a9c2t,,,,rrrrrrrrrrr
 257,semaforo,agc2t,,,,GGGgGGggrrr
 257,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 257,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -8942,7 +8942,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 258,vehiculo,moto_49,moto__motorcycle,357.65,694.97,
 258,vehiculo,moto_50,moto__motorcycle,1191.75,863.59,
 258,vehiculo,moto_51,moto__motorcycle,1485.9,299.21,
-258,semaforo,a9c2t,,,,GGGgGGggrrr
+258,semaforo,a9c2t,,,,rrrrrrrrrrr
 258,semaforo,agc2t,,,,GGGgGGggrrr
 258,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 258,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -10665,7 +10665,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 294,vehiculo,moto_56,moto__motorcycle,926.08,976.11,
 294,vehiculo,moto_57,moto__motorcycle,826.42,702.02,
 294,vehiculo,moto_58,moto__motorcycle,1417.42,911.04,
-294,semaforo,a9c2t,,,,Gyyyyyyyrrr
+294,semaforo,a9c2t,,,,GGGgGGggrrr
 294,semaforo,agc2t,,,,Gyyyyyyyrrr
 294,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 294,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -10715,7 +10715,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 295,vehiculo,moto_57,moto__motorcycle,830.62,680.82,
 295,vehiculo,moto_58,moto__motorcycle,1411.33,907.94,
 295,vehiculo,moto_59,moto__motorcycle,1711.79,698.81,
-295,semaforo,a9c2t,,,,Gyyyyyyyrrr
+295,semaforo,a9c2t,,,,GGGgGGggrrr
 295,semaforo,agc2t,,,,Gyyyyyyyrrr
 295,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 295,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -10765,7 +10765,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 296,vehiculo,moto_57,moto__motorcycle,834.52,661.34,
 296,vehiculo,moto_58,moto__motorcycle,1401.32,904.84,
 296,vehiculo,moto_59,moto__motorcycle,1713.65,688.86,
-296,semaforo,a9c2t,,,,Gyyyyyyyrrr
+296,semaforo,a9c2t,,,,GGGgGGggrrr
 296,semaforo,agc2t,,,,Gyyyyyyyrrr
 296,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 296,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -10815,7 +10815,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 297,vehiculo,moto_57,moto__motorcycle,838.6,639.99,
 297,vehiculo,moto_58,moto__motorcycle,1396.4,903.76,
 297,vehiculo,moto_59,moto__motorcycle,1715.9,676.84,
-297,semaforo,a9c2t,,,,rrrrrrrrrrr
+297,semaforo,a9c2t,,,,GGGgGGggrrr
 297,semaforo,agc2t,,,,rrrrrrrrrrr
 297,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 297,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -10864,7 +10864,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 298,vehiculo,moto_57,moto__motorcycle,842.26,620.2,
 298,vehiculo,moto_58,moto__motorcycle,1392.87,904.86,
 298,vehiculo,moto_59,moto__motorcycle,1718.09,665.12,
-298,semaforo,a9c2t,,,,rrrrrrrrrrr
+298,semaforo,a9c2t,,,,GGGgGGggrrr
 298,semaforo,agc2t,,,,rrrrrrrrrrr
 298,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 298,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -11161,7 +11161,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 304,vehiculo,moto_57,moto__motorcycle,882.27,527.27,
 304,vehiculo,moto_59,moto__motorcycle,1732.01,595.95,
 304,vehiculo,moto_60,moto__motorcycle,475.59,943.72,
-304,semaforo,a9c2t,,,,GGGgGGggrrr
+304,semaforo,a9c2t,,,,Gyyyyyyyrrr
 304,semaforo,agc2t,,,,GGGgGGggrrr
 304,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 304,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -11211,7 +11211,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 305,vehiculo,moto_59,moto__motorcycle,1734.34,584.96,
 305,vehiculo,moto_60,moto__motorcycle,487.18,943.79,
 305,vehiculo,moto_61,moto__motorcycle,1724.99,645.64,
-305,semaforo,a9c2t,,,,GGGgGGggrrr
+305,semaforo,a9c2t,,,,Gyyyyyyyrrr
 305,semaforo,agc2t,,,,GGGgGGggrrr
 305,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 305,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -11261,7 +11261,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 306,vehiculo,moto_59,moto__motorcycle,1735.99,577.17,
 306,vehiculo,moto_60,moto__motorcycle,497.21,943.86,
 306,vehiculo,moto_61,moto__motorcycle,1722.34,659.82,
-306,semaforo,a9c2t,,,,GGGgGGggrrr
+306,semaforo,a9c2t,,,,Gyyyyyyyrrr
 306,semaforo,agc2t,,,,GGGgGGggrrr
 306,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 306,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -11311,7 +11311,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 307,vehiculo,moto_59,moto__motorcycle,1736.77,573.45,
 307,vehiculo,moto_60,moto__motorcycle,507.15,943.92,
 307,vehiculo,moto_61,moto__motorcycle,1719.79,673.48,
-307,semaforo,a9c2t,,,,GGGgGGggrrr
+307,semaforo,a9c2t,,,,rrrrrrrrrrr
 307,semaforo,agc2t,,,,GGGgGGggrrr
 307,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 307,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -11361,7 +11361,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 308,vehiculo,moto_59,moto__motorcycle,1735.42,568.42,
 308,vehiculo,moto_60,moto__motorcycle,518.47,943.99,
 308,vehiculo,moto_61,moto__motorcycle,1717.11,687.78,
-308,semaforo,a9c2t,,,,GGGgGGggrrr
+308,semaforo,a9c2t,,,,rrrrrrrrrrr
 308,semaforo,agc2t,,,,GGGgGGggrrr
 308,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 308,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -13239,7 +13239,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 344,vehiculo,moto_66,moto__motorcycle,1603.47,411.05,
 344,vehiculo,moto_67,moto__motorcycle,301.11,694.61,
 344,vehiculo,moto_68,moto__motorcycle,1553.41,964.93,
-344,semaforo,a9c2t,,,,Gyyyyyyyrrr
+344,semaforo,a9c2t,,,,GGGgGGggrrr
 344,semaforo,agc2t,,,,Gyyyyyyyrrr
 344,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 344,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13293,7 +13293,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 345,vehiculo,moto_67,moto__motorcycle,313.52,694.69,
 345,vehiculo,moto_68,moto__motorcycle,1549.93,981.36,
 345,vehiculo,moto_69,moto__motorcycle,1810.79,751.88,
-345,semaforo,a9c2t,,,,Gyyyyyyyrrr
+345,semaforo,a9c2t,,,,GGGgGGggrrr
 345,semaforo,agc2t,,,,Gyyyyyyyrrr
 345,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 345,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13347,7 +13347,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 346,vehiculo,moto_67,moto__motorcycle,325.37,694.76,
 346,vehiculo,moto_68,moto__motorcycle,1545.57,1001.96,
 346,vehiculo,moto_69,moto__motorcycle,1797.35,749.12,
-346,semaforo,a9c2t,,,,Gyyyyyyyrrr
+346,semaforo,a9c2t,,,,GGGgGGggrrr
 346,semaforo,agc2t,,,,Gyyyyyyyrrr
 346,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 346,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13400,7 +13400,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 347,vehiculo,moto_67,moto__motorcycle,336.86,694.84,
 347,vehiculo,moto_68,moto__motorcycle,1542.49,1016.5,
 347,vehiculo,moto_69,moto__motorcycle,1785.77,746.75,
-347,semaforo,a9c2t,,,,rrrrrrrrrrr
+347,semaforo,a9c2t,,,,GGGgGGggrrr
 347,semaforo,agc2t,,,,rrrrrrrrrrr
 347,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 347,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13452,7 +13452,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 348,vehiculo,moto_67,moto__motorcycle,349.03,694.92,
 348,vehiculo,moto_68,moto__motorcycle,1541.48,1021.26,
 348,vehiculo,moto_69,moto__motorcycle,1773.67,744.26,
-348,semaforo,a9c2t,,,,rrrrrrrrrrr
+348,semaforo,a9c2t,,,,GGGgGGggrrr
 348,semaforo,agc2t,,,,rrrrrrrrrrr
 348,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 348,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13767,7 +13767,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 354,vehiculo,moto_68,moto__motorcycle,1541.34,1021.91,
 354,vehiculo,moto_69,moto__motorcycle,1731.2,714.15,
 354,vehiculo,moto_70,moto__motorcycle,1024.3,827.51,
-354,semaforo,a9c2t,,,,GGGgGGggrrr
+354,semaforo,a9c2t,,,,Gyyyyyyyrrr
 354,semaforo,agc2t,,,,GGGgGGggrrr
 354,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 354,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13820,7 +13820,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 355,vehiculo,moto_69,moto__motorcycle,1719.79,711.75,
 355,vehiculo,moto_70,moto__motorcycle,1035.82,829.76,
 355,vehiculo,moto_71,moto__motorcycle,974.02,370.98,
-355,semaforo,a9c2t,,,,GGGgGGggrrr
+355,semaforo,a9c2t,,,,Gyyyyyyyrrr
 355,semaforo,agc2t,,,,GGGgGGggrrr
 355,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 355,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13872,7 +13872,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 356,vehiculo,moto_69,moto__motorcycle,1706.18,709.13,
 356,vehiculo,moto_70,moto__motorcycle,1047.38,832.01,
 356,vehiculo,moto_71,moto__motorcycle,960.72,368.17,
-356,semaforo,a9c2t,,,,GGGgGGggrrr
+356,semaforo,a9c2t,,,,Gyyyyyyyrrr
 356,semaforo,agc2t,,,,GGGgGGggrrr
 356,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 356,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13924,7 +13924,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 357,vehiculo,moto_69,moto__motorcycle,1692.63,706.79,
 357,vehiculo,moto_70,moto__motorcycle,1060.57,834.59,
 357,vehiculo,moto_71,moto__motorcycle,947.17,365.31,
-357,semaforo,a9c2t,,,,GGGgGGggrrr
+357,semaforo,a9c2t,,,,rrrrrrrrrrr
 357,semaforo,agc2t,,,,GGGgGGggrrr
 357,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 357,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -13976,7 +13976,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 358,vehiculo,moto_69,moto__motorcycle,1681.77,704.95,
 358,vehiculo,moto_70,moto__motorcycle,1065.92,835.78,
 358,vehiculo,moto_71,moto__motorcycle,933.37,362.4,
-358,semaforo,a9c2t,,,,GGGgGGggrrr
+358,semaforo,a9c2t,,,,rrrrrrrrrrr
 358,semaforo,agc2t,,,,GGGgGGggrrr
 358,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 358,semaforo,agc5t,,,,rrGggrrrrrrgrrgGGrrrrrr
@@ -15970,7 +15970,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 394,vehiculo,moto_76,moto__motorcycle,1224.97,1013.37,
 394,vehiculo,moto_77,moto__motorcycle,814.29,764.92,
 394,vehiculo,moto_78,moto__motorcycle,1305.51,1135.63,
-394,semaforo,a9c2t,,,,Gyyyyyyyrrr
+394,semaforo,a9c2t,,,,GGGgGGggrrr
 394,semaforo,agc2t,,,,Gyyyyyyyrrr
 394,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 394,semaforo,agc5t,,,,rrrrrrrrGGGrrrrrrrrrrGG
@@ -16026,7 +16026,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 395,vehiculo,moto_77,moto__motorcycle,818.67,742.18,
 395,vehiculo,moto_78,moto__motorcycle,1308.21,1120.23,
 395,vehiculo,moto_79,moto__motorcycle,1102.06,990.36,
-395,semaforo,a9c2t,,,,Gyyyyyyyrrr
+395,semaforo,a9c2t,,,,GGGgGGggrrr
 395,semaforo,agc2t,,,,Gyyyyyyyrrr
 395,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 395,semaforo,agc5t,,,,rrrrrrrrGGGrrrrrrrrrrGG
@@ -16082,7 +16082,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 396,vehiculo,moto_77,moto__motorcycle,822.65,721.48,
 396,vehiculo,moto_78,moto__motorcycle,1310.79,1105.52,
 396,vehiculo,moto_79,moto__motorcycle,1105.03,978.0,
-396,semaforo,a9c2t,,,,Gyyyyyyyrrr
+396,semaforo,a9c2t,,,,GGGgGGggrrr
 396,semaforo,agc2t,,,,Gyyyyyyyrrr
 396,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 396,semaforo,agc5t,,,,rrrrrrrrGGGrrrrrrrrrrGG
@@ -16138,7 +16138,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 397,vehiculo,moto_77,moto__motorcycle,826.65,700.81,
 397,vehiculo,moto_78,moto__motorcycle,1313.64,1090.69,
 397,vehiculo,moto_79,moto__motorcycle,1107.4,968.17,
-397,semaforo,a9c2t,,,,rrrrrrrrrrr
+397,semaforo,a9c2t,,,,GGGgGGggrrr
 397,semaforo,agc2t,,,,rrrrrrrrrrr
 397,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 397,semaforo,agc5t,,,,rrrrrrrrGGGrrrrrrrrrrGG
@@ -16193,7 +16193,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 398,vehiculo,moto_77,moto__motorcycle,831.1,678.44,
 398,vehiculo,moto_78,moto__motorcycle,1316.38,1077.49,
 398,vehiculo,moto_79,moto__motorcycle,1108.42,964.51,
-398,semaforo,a9c2t,,,,rrrrrrrrrrr
+398,semaforo,a9c2t,,,,GGGgGGggrrr
 398,semaforo,agc2t,,,,rrrrrrrrrrr
 398,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 398,semaforo,agc5t,,,,rrrrrrrrGGGrrrrrrrrrrGG
@@ -16523,7 +16523,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 404,vehiculo,moto_78,moto__motorcycle,1347.78,1053.32,
 404,vehiculo,moto_79,moto__motorcycle,1179.7,972.91,
 404,vehiculo,moto_80,moto__motorcycle,1673.6,923.91,
-404,semaforo,a9c2t,,,,GGGgGGggrrr
+404,semaforo,a9c2t,,,,Gyyyyyyyrrr
 404,semaforo,agc2t,,,,GGGgGGggrrr
 404,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 404,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -16580,7 +16580,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 405,vehiculo,moto_79,moto__motorcycle,1200.0,977.01,
 405,vehiculo,moto_80,moto__motorcycle,1675.8,914.21,
 405,vehiculo,moto_81,moto__motorcycle,1456.45,425.79,
-405,semaforo,a9c2t,,,,GGGgGGggrrr
+405,semaforo,a9c2t,,,,Gyyyyyyyrrr
 405,semaforo,agc2t,,,,GGGgGGggrrr
 405,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 405,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -16636,7 +16636,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 406,vehiculo,moto_79,moto__motorcycle,1219.9,981.01,
 406,vehiculo,moto_80,moto__motorcycle,1677.77,905.55,
 406,vehiculo,moto_81,moto__motorcycle,1471.23,428.89,
-406,semaforo,a9c2t,,,,GGGgGGggrrr
+406,semaforo,a9c2t,,,,Gyyyyyyyrrr
 406,semaforo,agc2t,,,,GGGgGGggrrr
 406,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 406,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -16691,7 +16691,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 407,vehiculo,moto_79,moto__motorcycle,1240.35,984.98,
 407,vehiculo,moto_80,moto__motorcycle,1679.95,895.97,
 407,vehiculo,moto_81,moto__motorcycle,1485.77,431.94,
-407,semaforo,a9c2t,,,,GGGgGGggrrr
+407,semaforo,a9c2t,,,,rrrrrrrrrrr
 407,semaforo,agc2t,,,,GGGgGGggrrr
 407,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 407,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -16746,7 +16746,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 408,vehiculo,moto_79,moto__motorcycle,1262.32,988.91,
 408,vehiculo,moto_80,moto__motorcycle,1679.75,886.98,
 408,vehiculo,moto_81,moto__motorcycle,1499.46,434.82,
-408,semaforo,a9c2t,,,,GGGgGGggrrr
+408,semaforo,a9c2t,,,,rrrrrrrrrrr
 408,semaforo,agc2t,,,,GGGgGGggrrr
 408,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 408,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -18691,7 +18691,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 444,vehiculo,moto_86,moto__motorcycle,1574.35,1034.38,
 444,vehiculo,moto_87,moto__motorcycle,1192.76,892.41,
 444,vehiculo,moto_88,moto__motorcycle,54.17,223.3,
-444,semaforo,a9c2t,,,,Gyyyyyyyrrr
+444,semaforo,a9c2t,,,,GGGgGGggrrr
 444,semaforo,agc2t,,,,Gyyyyyyyrrr
 444,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 444,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -18743,7 +18743,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 445,vehiculo,moto_87,moto__motorcycle,1190.58,902.91,
 445,vehiculo,moto_88,moto__motorcycle,66.95,224.6,
 445,vehiculo,moto_89,moto__motorcycle,843.47,550.03,
-445,semaforo,a9c2t,,,,Gyyyyyyyrrr
+445,semaforo,a9c2t,,,,GGGgGGggrrr
 445,semaforo,agc2t,,,,Gyyyyyyyrrr
 445,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 445,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -18795,7 +18795,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 446,vehiculo,moto_87,moto__motorcycle,1188.43,913.29,
 446,vehiculo,moto_88,moto__motorcycle,79.77,225.91,
 446,vehiculo,moto_89,moto__motorcycle,823.48,549.97,
-446,semaforo,a9c2t,,,,Gyyyyyyyrrr
+446,semaforo,a9c2t,,,,GGGgGGggrrr
 446,semaforo,agc2t,,,,Gyyyyyyyrrr
 446,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 446,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -18847,7 +18847,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 447,vehiculo,moto_87,moto__motorcycle,1186.17,924.29,
 447,vehiculo,moto_88,moto__motorcycle,93.4,227.29,
 447,vehiculo,moto_89,moto__motorcycle,803.09,549.91,
-447,semaforo,a9c2t,,,,rrrrrrrrrrr
+447,semaforo,a9c2t,,,,GGGgGGggrrr
 447,semaforo,agc2t,,,,rrrrrrrrrrr
 447,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 447,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -18900,7 +18900,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 448,vehiculo,moto_87,moto__motorcycle,1183.91,935.58,
 448,vehiculo,moto_88,moto__motorcycle,106.52,227.77,
 448,vehiculo,moto_89,moto__motorcycle,784.61,549.85,
-448,semaforo,a9c2t,,,,rrrrrrrrrrr
+448,semaforo,a9c2t,,,,GGGgGGggrrr
 448,semaforo,agc2t,,,,rrrrrrrrrrr
 448,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 448,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -19213,7 +19213,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 454,vehiculo,moto_88,moto__motorcycle,184.38,228.49,
 454,vehiculo,moto_89,moto__motorcycle,668.75,549.48,
 454,vehiculo,moto_90,moto__motorcycle,1754.52,997.28,
-454,semaforo,a9c2t,,,,GGGgGGggrrr
+454,semaforo,a9c2t,,,,Gyyyyyyyrrr
 454,semaforo,agc2t,,,,GGGgGGggrrr
 454,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 454,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -19265,7 +19265,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 455,vehiculo,moto_89,moto__motorcycle,652.39,549.43,
 455,vehiculo,moto_90,moto__motorcycle,1753.31,1004.31,
 455,vehiculo,moto_91,moto__motorcycle,1476.99,472.74,
-455,semaforo,a9c2t,,,,GGGgGGggrrr
+455,semaforo,a9c2t,,,,Gyyyyyyyrrr
 455,semaforo,agc2t,,,,GGGgGGggrrr
 455,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 455,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -19317,7 +19317,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 456,vehiculo,moto_89,moto__motorcycle,646.03,549.41,
 456,vehiculo,moto_90,moto__motorcycle,1751.43,1015.29,
 456,vehiculo,moto_91,moto__motorcycle,1487.77,474.35,
-456,semaforo,a9c2t,,,,GGGgGGggrrr
+456,semaforo,a9c2t,,,,Gyyyyyyyrrr
 456,semaforo,agc2t,,,,GGGgGGggrrr
 456,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 456,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -19367,7 +19367,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 457,vehiculo,moto_89,moto__motorcycle,643.56,547.82,
 457,vehiculo,moto_90,moto__motorcycle,1749.54,1026.23,
 457,vehiculo,moto_91,moto__motorcycle,1490.78,474.81,
-457,semaforo,a9c2t,,,,GGGgGGggrrr
+457,semaforo,a9c2t,,,,rrrrrrrrrrr
 457,semaforo,agc2t,,,,GGGgGGggrrr
 457,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 457,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -19416,7 +19416,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 458,vehiculo,moto_89,moto__motorcycle,641.8,545.59,
 458,vehiculo,moto_90,moto__motorcycle,1744.23,1030.79,
 458,vehiculo,moto_91,moto__motorcycle,1498.11,476.83,
-458,semaforo,a9c2t,,,,GGGgGGggrrr
+458,semaforo,a9c2t,,,,rrrrrrrrrrr
 458,semaforo,agc2t,,,,GGGgGGggrrr
 458,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 458,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -21184,7 +21184,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 494,vehiculo,moto_96,moto__motorcycle,1535.72,1034.99,
 494,vehiculo,moto_97,moto__motorcycle,552.56,275.31,
 494,vehiculo,moto_98,moto__motorcycle,250.69,694.28,
-494,semaforo,a9c2t,,,,Gyyyyyyyrrr
+494,semaforo,a9c2t,,,,GGGgGGggrrr
 494,semaforo,agc2t,,,,Gyyyyyyyrrr
 494,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 494,semaforo,agc5t,,,,rryyyrrrrrryrryyyrrrrrr
@@ -21235,7 +21235,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 495,vehiculo,moto_97,moto__motorcycle,565.14,275.36,
 495,vehiculo,moto_98,moto__motorcycle,265.71,694.38,
 495,vehiculo,moto_99,moto__motorcycle,1445.84,291.03,
-495,semaforo,a9c2t,,,,Gyyyyyyyrrr
+495,semaforo,a9c2t,,,,GGGgGGggrrr
 495,semaforo,agc2t,,,,Gyyyyyyyrrr
 495,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 495,semaforo,agc5t,,,,rryyyrrrrrryrryyyrrrrrr
@@ -21285,7 +21285,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 496,vehiculo,moto_97,moto__motorcycle,578.01,275.42,
 496,vehiculo,moto_98,moto__motorcycle,281.42,694.48,
 496,vehiculo,moto_99,moto__motorcycle,1461.05,293.97,
-496,semaforo,a9c2t,,,,Gyyyyyyyrrr
+496,semaforo,a9c2t,,,,GGGgGGggrrr
 496,semaforo,agc2t,,,,Gyyyyyyyrrr
 496,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 496,semaforo,agc5t,,,,rryyyrrrrrryrryyyrrrrrr
@@ -21334,7 +21334,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 497,vehiculo,moto_97,moto__motorcycle,592.49,275.49,
 497,vehiculo,moto_98,moto__motorcycle,297.28,694.58,
 497,vehiculo,moto_99,moto__motorcycle,1477.75,297.46,
-497,semaforo,a9c2t,,,,rrrrrrrrrrr
+497,semaforo,a9c2t,,,,GGGgGGggrrr
 497,semaforo,agc2t,,,,rrrrrrrrrrr
 497,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 497,semaforo,agc5t,,,,rrrrrrrrrrrrrrrrrrrrrrr
@@ -21382,7 +21382,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 498,vehiculo,moto_97,moto__motorcycle,604.92,275.54,
 498,vehiculo,moto_98,moto__motorcycle,311.5,694.67,
 498,vehiculo,moto_99,moto__motorcycle,1493.0,300.73,
-498,semaforo,a9c2t,,,,rrrrrrrrrrr
+498,semaforo,a9c2t,,,,GGGgGGggrrr
 498,semaforo,agc2t,,,,rrrrrrrrrrr
 498,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 498,semaforo,agc5t,,,,rrrrrrrrrrrrrrrrrrrrrrr
@@ -21681,7 +21681,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 504,vehiculo,moto_97,moto__motorcycle,640.65,262.16,
 504,vehiculo,moto_98,moto__motorcycle,399.58,695.24,
 504,vehiculo,moto_99,moto__motorcycle,1530.28,337.79,
-504,semaforo,a9c2t,,,,GGGgGGggrrr
+504,semaforo,a9c2t,,,,Gyyyyyyyrrr
 504,semaforo,agc2t,,,,GGGgGGggrrr
 504,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 504,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -21732,7 +21732,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 505,vehiculo,moto_97,moto__motorcycle,640.67,255.3,
 505,vehiculo,moto_98,moto__motorcycle,414.55,695.34,
 505,vehiculo,moto_99,moto__motorcycle,1528.68,344.43,
-505,semaforo,a9c2t,,,,GGGgGGggrrr
+505,semaforo,a9c2t,,,,Gyyyyyyyrrr
 505,semaforo,agc2t,,,,GGGgGGggrrr
 505,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 505,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -21781,7 +21781,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 506,vehiculo,moto_97,moto__motorcycle,640.68,248.21,
 506,vehiculo,moto_98,moto__motorcycle,429.12,695.44,
 506,vehiculo,moto_99,moto__motorcycle,1526.58,354.16,
-506,semaforo,a9c2t,,,,GGGgGGggrrr
+506,semaforo,a9c2t,,,,Gyyyyyyyrrr
 506,semaforo,agc2t,,,,GGGgGGggrrr
 506,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 506,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -21829,7 +21829,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 507,vehiculo,moto_97,moto__motorcycle,640.7,239.81,
 507,vehiculo,moto_98,moto__motorcycle,444.79,695.54,
 507,vehiculo,moto_99,moto__motorcycle,1523.93,368.08,
-507,semaforo,a9c2t,,,,GGGgGGggrrr
+507,semaforo,a9c2t,,,,rrrrrrrrrrr
 507,semaforo,agc2t,,,,GGGgGGggrrr
 507,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 507,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -21876,7 +21876,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 508,vehiculo,moto_97,moto__motorcycle,641.03,233.8,
 508,vehiculo,moto_98,moto__motorcycle,460.98,695.64,
 508,vehiculo,moto_99,moto__motorcycle,1521.53,381.64,
-508,semaforo,a9c2t,,,,GGGgGGggrrr
+508,semaforo,a9c2t,,,,rrrrrrrrrrr
 508,semaforo,agc2t,,,,GGGgGGggrrr
 508,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 508,semaforo,agc5t,,,,GGrrrrrrrrrrGGrrrrrrrrr
@@ -23487,7 +23487,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 544,vehiculo,moto_97,moto__motorcycle,888.26,343.3,
 544,vehiculo,moto_98,moto__motorcycle,873.66,533.82,
 544,vehiculo,moto_99,moto__motorcycle,1565.76,936.1,
-544,semaforo,a9c2t,,,,Gyyyyyyyrrr
+544,semaforo,a9c2t,,,,GGGgGGggrrr
 544,semaforo,agc2t,,,,Gyyyyyyyrrr
 544,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 544,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -23535,7 +23535,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 545,vehiculo,moto_97,moto__motorcycle,888.26,343.3,
 545,vehiculo,moto_98,moto__motorcycle,887.33,523.57,
 545,vehiculo,moto_99,moto__motorcycle,1568.04,944.28,
-545,semaforo,a9c2t,,,,Gyyyyyyyrrr
+545,semaforo,a9c2t,,,,GGGgGGggrrr
 545,semaforo,agc2t,,,,Gyyyyyyyrrr
 545,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 545,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -23583,7 +23583,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 546,vehiculo,moto_97,moto__motorcycle,888.26,343.3,
 546,vehiculo,moto_98,moto__motorcycle,905.03,510.64,
 546,vehiculo,moto_99,moto__motorcycle,1567.71,947.07,
-546,semaforo,a9c2t,,,,Gyyyyyyyrrr
+546,semaforo,a9c2t,,,,GGGgGGggrrr
 546,semaforo,agc2t,,,,Gyyyyyyyrrr
 546,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 546,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -23629,7 +23629,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 547,vehiculo,moto_97,moto__motorcycle,888.26,343.3,
 547,vehiculo,moto_98,moto__motorcycle,924.44,496.45,
 547,vehiculo,moto_99,moto__motorcycle,1565.69,949.17,
-547,semaforo,a9c2t,,,,rrrrrrrrrrr
+547,semaforo,a9c2t,,,,GGGgGGggrrr
 547,semaforo,agc2t,,,,rrrrrrrrrrr
 547,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 547,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -23675,7 +23675,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 548,vehiculo,moto_97,moto__motorcycle,888.26,343.3,
 548,vehiculo,moto_98,moto__motorcycle,945.62,480.97,
 548,vehiculo,moto_99,moto__motorcycle,1564.47,947.18,
-548,semaforo,a9c2t,,,,rrrrrrrrrrr
+548,semaforo,a9c2t,,,,GGGgGGggrrr
 548,semaforo,agc2t,,,,rrrrrrrrrrr
 548,semaforo,a9c5t,,,,rrrrrGGggrrrrrGGgg
 548,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -23948,7 +23948,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 554,vehiculo,moto_96,moto__motorcycle,1624.26,559.0,
 554,vehiculo,moto_97,moto__motorcycle,888.26,343.3,
 554,vehiculo,moto_98,moto__motorcycle,1008.27,435.25,
-554,semaforo,a9c2t,,,,GGGgGGggrrr
+554,semaforo,a9c2t,,,,Gyyyyyyyrrr
 554,semaforo,agc2t,,,,GGGgGGggrrr
 554,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 554,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -23995,7 +23995,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 555,vehiculo,moto_96,moto__motorcycle,1624.26,559.0,
 555,vehiculo,moto_97,moto__motorcycle,888.31,349.14,
 555,vehiculo,moto_98,moto__motorcycle,1008.42,435.14,
-555,semaforo,a9c2t,,,,GGGgGGggrrr
+555,semaforo,a9c2t,,,,Gyyyyyyyrrr
 555,semaforo,agc2t,,,,GGGgGGggrrr
 555,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 555,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -24042,7 +24042,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 556,vehiculo,moto_96,moto__motorcycle,1624.26,559.0,
 556,vehiculo,moto_97,moto__motorcycle,888.39,358.64,
 556,vehiculo,moto_98,moto__motorcycle,1008.49,435.09,
-556,semaforo,a9c2t,,,,GGGgGGggrrr
+556,semaforo,a9c2t,,,,Gyyyyyyyrrr
 556,semaforo,agc2t,,,,GGGgGGggrrr
 556,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 556,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -24088,7 +24088,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 557,vehiculo,moto_96,moto__motorcycle,1624.26,559.0,
 557,vehiculo,moto_97,moto__motorcycle,888.54,372.97,
 557,vehiculo,moto_98,moto__motorcycle,1008.5,435.08,
-557,semaforo,a9c2t,,,,GGGgGGggrrr
+557,semaforo,a9c2t,,,,rrrrrrrrrrr
 557,semaforo,agc2t,,,,GGGgGGggrrr
 557,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 557,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr
@@ -24134,7 +24134,7 @@ tiempo,tipo,id,subtipo_o_veh,x,y,estado_semaforo
 558,vehiculo,moto_96,moto__motorcycle,1624.26,559.0,
 558,vehiculo,moto_97,moto__motorcycle,888.74,391.47,
 558,vehiculo,moto_98,moto__motorcycle,1008.5,435.08,
-558,semaforo,a9c2t,,,,GGGgGGggrrr
+558,semaforo,a9c2t,,,,rrrrrrrrrrr
 558,semaforo,agc2t,,,,GGGgGGggrrr
 558,semaforo,a9c5t,,,,GGGggrrrrGGGggrrrr
 558,semaforo,agc5t,,,,rrrrrGGGrrrrrrrrrGGGGrr

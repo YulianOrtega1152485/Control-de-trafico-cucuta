@@ -210,8 +210,16 @@
 
   .lateral { display: flex; flex-direction: column; gap: 16px; }
 
-  .opciones { display: flex; gap: 8px; }
-  .opciones .boton { flex: 1; text-align: center; }
+  .opciones {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .opciones .boton {
+    flex: 1 1 auto;
+    text-align: center;
+    font-size: 13px;
+  }
   .opciones .boton.nivel-bajo.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
   .opciones .boton.modo-webster.activo { background: var(--purpura); border-color: var(--purpura); color: #ffffff; }
   .opciones .boton.modo-adaptativo.activo { background: var(--teal); border-color: var(--teal); color: #04211b; }
@@ -577,9 +585,14 @@
     ctx.roundRect(-anchoPlaca / 2, -altoPlaca / 2, anchoPlaca, altoPlaca, 2 * esc);
     ctx.fillStyle = resaltar ? "#252d3d" : "#141820";
     ctx.fill();
-    ctx.strokeStyle = enRespaldo ? "#e2963a" : (resaltar ? "#6b7890" : "#3a4356");
-    ctx.lineWidth = enRespaldo ? 1.8 : (resaltar ? 1.2 : 0.75);
+    ctx.strokeStyle = enRespaldo ? "#ffae00" : (resaltar ? "#6b7890" : "#3a4356");
+    ctx.lineWidth = enRespaldo ? 3 : (resaltar ? 1.2 : 0.75);
+    if (enRespaldo) {
+      ctx.shadowColor = "#ffae00";
+      ctx.shadowBlur = 10;
+    }
     ctx.stroke();
+    ctx.shadowBlur = 0;
 
     fases.forEach((nombre, i) => {
       const py = (i - 1) * separacion;

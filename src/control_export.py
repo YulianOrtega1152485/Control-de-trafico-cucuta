@@ -366,7 +366,13 @@ def correr(escenario, modo, duracion_segundos, fuente_datos="traci", semilla=42,
             fuente.paso()
 
             if falla_tls is not None and isinstance(fuente, FuenteDetectoresE2):
-                caido = falla_desde <= paso < falla_hasta
+                # Simulamos múltiples ventanas de falla para mayor realismo (B5)
+                ventanas_falla = [
+                    (falla_desde, falla_hasta),
+                    (falla_desde + 240, falla_hasta + 240),
+                    (falla_desde + 480, falla_hasta + 480)
+                ]
+                caido = any(inicio <= paso < fin for inicio, fin in ventanas_falla)
                 for carril in CARRILES[falla_tls]:
                     fuente.marcar_falla(carril, caido)
 
