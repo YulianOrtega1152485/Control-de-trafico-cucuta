@@ -60,9 +60,13 @@ La interfaz es una página HTML + JavaScript con canvas (no Streamlit): selector
 
 **Hecho (B1):** `src/monitor_seguridad.py` integrado en `control_export.py` (0 violaciones en las corridas).
 
+**Hecho (B2):** Implementación del Plan de Webster en `src/control_export.py` y soporte en la interfaz web para comparativa (Fijo vs Adaptativo vs Webster).
+
 **Hecho (B5):** soporte de falla simulada con `--falla-tls`.
 
 **Hecho (B10):** `src/nodo_mqtt.py`, `src/control_remoto.py`, `mqtt/mosquitto.conf`, demo en `data/resultados_demo/demo_mqtt.csv` (latencia ~28 ms).
+
+**Hecho (Interfaz):** Optimización de layout en `interfaz/index.html` para alineación de paneles laterales y expansión dinámica del log de MQTT.
 
 ## 4. Qué se quiere hacer ahora (Entrega 2, semana 13, demo en vivo)
 

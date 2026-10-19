@@ -1,1050 +1,1339 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Control de tráfico — Guaimaral / Libertadores, Cúcuta</title>
-<style>
-  :root {
-    --bg: #0c0f14;
-    --panel: #151a22;
-    --panel-border: #232a35;
-    --texto: #e7ebf1;
-    --texto-tenue: #8b93a3;
-    --naranja: #e2963a;
-    --teal: #35c9ad;
-    --verde: #3ecf6a;
-    --amarillo: #e2b93a;
-    --rojo: #e2543a;
-    --azul: #4f8ef7;
-    --purpura: #a855f7;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de tráfico — Guaimaral / Libertadores, Cúcuta</title>
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --panel: #151a22;
+      --panel-border: #232a35;
+      --texto: #e7ebf1;
+      --texto-tenue: #8b93a3;
+      --naranja: #e2963a;
+      --teal: #35c9ad;
+      --verde: #3ecf6a;
+      --amarillo: #e2b93a;
+      --rojo: #e2543a;
+      --azul: #4f8ef7;
+      --purpura: #a855f7;
 
-    /* escala de espaciado: todo el layout usa solo estos valores */
-    --e1: 6px;
-    --e2: 10px;
-    --e3: 16px;
-    --e4: 24px;
-    --e5: 32px;
-    --ancho-max: 1480px;
-    --ancho-lateral: 320px;
-  }
+      /* escala de espaciado: todo el layout usa solo estos valores */
+      --e1: 6px;
+      --e2: 10px;
+      --e3: 16px;
+      --e4: 24px;
+      --e5: 32px;
+      --ancho-max: 1480px;
+      --ancho-lateral: 320px;
+    }
 
-  * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--texto);
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--texto);
+      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
 
-  /* ---------- estructura general ---------- */
-  .pagina {
-    max-width: var(--ancho-max);
-    margin: 0 auto;
-    padding: var(--e5) var(--e4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--e4);
-  }
+    /* ---------- estructura general ---------- */
+    .pagina {
+      max-width: var(--ancho-max);
+      margin: 0 auto;
+      padding: var(--e5) var(--e4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--e4);
+    }
 
-  .encabezado { display: flex; flex-direction: column; gap: var(--e2); }
-  .encabezado .rotulo { color: var(--naranja); font-size: 13px; letter-spacing: 0.04em; }
-  .encabezado h1 { font-size: 26px; line-height: 1.2; margin: 0; }
-  .encabezado p { color: var(--texto-tenue); max-width: 720px; line-height: 1.55; margin: 0; }
+    .encabezado {
+      display: flex;
+      flex-direction: column;
+      gap: var(--e2);
+    }
 
-  .rejilla {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--ancho-lateral);
-    gap: var(--e4);
-    align-items: stretch;
-  }
-  .principal, .lateral { display: flex; flex-direction: column; gap: var(--e3); min-width: 0; }
+    .encabezado .rotulo {
+      color: var(--naranja);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+    }
 
-  /* ---------- panel base ---------- */
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: 10px;
-    padding: var(--e3) var(--e4) var(--e4);
-  }
-  .panel h2 {
-    font-size: 13px;
-    color: var(--texto-tenue);
-    margin: 0 0 var(--e3);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
+    .encabezado h1 {
+      font-size: 26px;
+      line-height: 1.2;
+      margin: 0;
+    }
 
-  /* ---------- simulación ---------- */
-  .lienzo-envoltura { position: relative; }
-  canvas {
-    width: 100%;
-    aspect-ratio: 12 / 7;
-    background: #05070a;
-    border-radius: 8px;
-    display: block;
-    cursor: grab;
-  }
-  canvas:active { cursor: grabbing; }
-  .tiempo-actual {
-    position: absolute;
-    top: var(--e2);
-    right: var(--e3);
-    color: var(--naranja);
-    font-size: 13px;
-  }
+    .encabezado p {
+      color: var(--texto-tenue);
+      max-width: 720px;
+      line-height: 1.55;
+      margin: 0;
+    }
 
-  .barra-herramientas {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--e2) var(--e3);
-    margin-top: var(--e3);
-  }
-  .grupo-herramientas { display: flex; align-items: center; gap: var(--e1); }
-  .grupo-herramientas.derecha { margin-left: auto; }
+    .rejilla {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--ancho-lateral);
+      gap: var(--e4);
+      align-items: stretch;
+    }
 
-  .boton {
-    background: #1c2330;
-    border: 1px solid var(--panel-border);
-    color: var(--texto);
-    border-radius: 6px;
-    padding: 8px 14px;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1.2;
-  }
-  .boton:hover { background: #262e3d; }
-  .boton.activo { background: var(--naranja); color: #201203; border-color: var(--naranja); }
+    .principal,
+    .lateral {
+      display: flex;
+      flex-direction: column;
+      gap: var(--e3);
+      min-width: 0;
+    }
 
-  .grupo-velocidad { display: flex; gap: var(--e1); }
-  .grupo-velocidad .boton { padding: 8px 12px; font-size: 13px; min-width: 44px; }
-  .etiqueta-grupo { font-size: 12px; color: var(--texto-tenue); margin-right: 2px; }
+    /* ---------- panel base ---------- */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: var(--e3) var(--e4) var(--e4);
+    }
 
-  .ayuda {
-    color: var(--texto-tenue);
-    font-size: 12px;
-    line-height: 1.5;
-    margin: var(--e2) 0 0;
-  }
+    .panel h2 {
+      font-size: 13px;
+      color: var(--texto-tenue);
+      margin: 0 0 var(--e3);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
 
-  .leyenda {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--e2) var(--e4);
-    margin-top: var(--e3);
-    padding-top: var(--e3);
-    border-top: 1px solid var(--panel-border);
-    font-size: 12px;
-    color: var(--texto-tenue);
-  }
-  .leyenda span { display: inline-flex; align-items: center; gap: var(--e1); }
-  .punto { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    /* ---------- simulación ---------- */
+    .lienzo-envoltura {
+      position: relative;
+    }
 
-  .icono-semaforo {
-    display: inline-flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 3px 4px;
-    background: #1a1f28;
-    border: 1px solid #3a4356;
-    border-radius: 4px;
-    vertical-align: middle;
-  }
-  .icono-semaforo i { display: block; width: 7px; height: 7px; border-radius: 50%; opacity: 0.35; }
-  .icono-semaforo i.rojo { background: var(--rojo); opacity: 1; }
-  .icono-semaforo i.amarillo { background: var(--amarillo); }
-  .icono-semaforo i.verde { background: var(--verde); }
-  .linea-sensor {
-    display: inline-block;
-    width: 16px;
-    height: 3px;
-    border-radius: 2px;
-    background: rgba(53, 201, 173, 0.6);
-  }
+    canvas {
+      width: 100%;
+      aspect-ratio: 12 / 7;
+      background: #05070a;
+      border-radius: 8px;
+      display: block;
+      cursor: grab;
+    }
 
-  /* ---------- tooltip ---------- */
-  .tooltip-semaforo {
-    position: absolute;
-    pointer-events: none;
-    z-index: 5;
-    max-width: 220px;
-    padding: var(--e2) 12px;
-    background: #1c2330;
-    border: 1px solid var(--panel-border);
-    border-radius: 8px;
-    font-size: 12px;
-    line-height: 1.45;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-    opacity: 0;
-    transform: translate(-50%, -100%) translateY(-8px);
-    transition: opacity 0.12s ease;
-  }
-  .tooltip-semaforo.visible { opacity: 1; }
-  .tooltip-semaforo .titulo { font-weight: 600; color: var(--texto); margin-bottom: var(--e1); }
-  .tooltip-semaforo .fase { display: inline-flex; align-items: center; gap: var(--e1); margin-top: 4px; }
-  .tooltip-semaforo .lampara-mini {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-  }
+    canvas:active {
+      cursor: grabbing;
+    }
 
-  /* ---------- modal del mapa ---------- */
-  .modal-mapa {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(5, 7, 10, 0.85);
-    z-index: 50;
-    align-items: center;
-    justify-content: center;
-    padding: var(--e5);
-  }
-  .modal-mapa.visible { display: flex; }
-  .modal-mapa .contenido { position: relative; max-width: 95vw; max-height: 95vh; }
-  .modal-mapa img {
-    max-width: 95vw;
-    max-height: 90vh;
-    display: block;
-    border-radius: 10px;
-    border: 1px solid var(--panel-border);
-  }
-  .modal-mapa .cerrar {
-    position: absolute;
-    top: -14px;
-    right: -14px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--naranja);
-    color: #201203;
-    border: none;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    .tiempo-actual {
+      position: absolute;
+      top: var(--e2);
+      right: var(--e3);
+      color: var(--naranja);
+      font-size: 13px;
+    }
 
-  /* ---------- columna lateral ---------- */
-  .sub-etiqueta { font-size: 12px; color: var(--texto-tenue); margin-bottom: var(--e1); }
-  .bloque + .bloque { margin-top: var(--e3); }
+    .barra-herramientas {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--e2) var(--e3);
+      margin-top: var(--e3);
+    }
 
-  .opciones { display: flex; gap: var(--e1); }
-  .opciones .boton { flex: 1 1 0; text-align: center; font-size: 13px; padding: 8px 6px; }
-  .opciones .boton.nivel-bajo.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
-  .opciones .boton.nivel-medio.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
-  .opciones .boton.nivel-alto.activo { background: var(--naranja); border-color: var(--naranja); color: #201203; }
-  .opciones .boton.modo-fijo.activo { background: #4d5568; border-color: #4d5568; color: #ffffff; }
-  .opciones .boton.modo-webster.activo { background: var(--purpura); border-color: var(--purpura); color: #ffffff; }
-  .opciones .boton.modo-adaptativo.activo { background: var(--teal); border-color: var(--teal); color: #04211b; }
+    .grupo-herramientas {
+      display: flex;
+      align-items: center;
+      gap: var(--e1);
+    }
 
-  .toggle-falla {
-    display: flex;
-    gap: var(--e2);
-    align-items: flex-start;
-    margin-top: var(--e3);
-    padding-top: var(--e3);
-    border-top: 1px solid var(--panel-border);
-    font-size: 12px;
-    line-height: 1.5;
-    color: var(--texto-tenue);
-    cursor: pointer;
-  }
-  .toggle-falla input { margin-top: 2px; accent-color: var(--naranja); }
-  .toggle-falla b { color: var(--texto); }
-  .toggle-falla.deshabilitado { opacity: 0.45; cursor: not-allowed; }
+    .grupo-herramientas.derecha {
+      margin-left: auto;
+    }
 
-  /* filas etiqueta / valor alineadas */
-  .metrica {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--e3);
-    padding: var(--e2) 0;
-    border-bottom: 1px solid var(--panel-border);
-  }
-  .metrica:first-of-type { padding-top: 0; }
-  .metrica:last-of-type { border-bottom: none; padding-bottom: 0; }
-  .metrica .etiqueta { font-size: 12px; color: var(--texto-tenue); line-height: 1.4; }
-  .metrica .valor { font-size: 20px; font-weight: 600; text-align: right; white-space: nowrap; }
-  .metrica .valor.muted { color: var(--texto-tenue); font-weight: 400; }
-  .metrica .valor.pequeno { font-size: 14px; white-space: normal; }
+    .boton {
+      background: #1c2330;
+      border: 1px solid var(--panel-border);
+      color: var(--texto);
+      border-radius: 6px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1.2;
+    }
 
-  .mqtt-cabecera {
-    display: flex;
-    align-items: center;
-    gap: var(--e1);
-    font-size: 12px;
-    color: var(--texto-tenue);
-    margin-bottom: var(--e3);
-  }
-  .registro-mqtt {
-    margin-top: var(--e3);
-    padding-top: var(--e2);
-    border-top: 1px solid var(--panel-border);
-    height: 200px;
-    overflow-y: auto;
-    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-    font-size: 11px;
-    line-height: 1.7;
-  }
-  .registro-mqtt .msg { display: flex; gap: var(--e1); white-space: nowrap; }
-  .registro-mqtt .msg .t { color: var(--texto-tenue); min-width: 42px; }
-  .registro-mqtt .msg .tls { color: var(--texto); min-width: 44px; }
-  .registro-mqtt .msg .flecha { color: var(--texto-tenue); }
-  .registro-mqtt .msg.estado .senal { color: var(--verde); }
-  .registro-mqtt .msg.comando { color: var(--teal); }
-  .registro-mqtt .msg.comando .senal { color: var(--teal); }
+    .boton:hover {
+      background: #262e3d;
+    }
 
-  /* ---------- comparativo ---------- */
-  .barras {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 190px;
-    padding: var(--e4) var(--e4) 0;
-  }
-  .grupo-barra { display: flex; flex-direction: column; align-items: center; gap: var(--e2); width: 110px; }
-  .par-barras { display: flex; align-items: flex-end; gap: var(--e1); height: 140px; }
-  .barra { width: 30px; border-radius: 4px 4px 0 0; position: relative; }
-  .barra.fijo { background: #4d5568; }
-  .barra.webster { background: var(--purpura); }
-  .barra.adaptativo { background: var(--teal); }
-  .barra .num {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 11px;
-    color: var(--texto-tenue);
-    white-space: nowrap;
-  }
-  .grupo-barra .etiqueta-nivel { font-size: 13px; color: var(--texto); text-transform: capitalize; }
-  .clave-barras {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--e2) var(--e4);
-    justify-content: center;
-    margin-top: var(--e3);
-    padding-top: var(--e3);
-    border-top: 1px solid var(--panel-border);
-    font-size: 12px;
-    color: var(--texto-tenue);
-  }
-  .clave-barras span { display: inline-flex; align-items: center; gap: var(--e1); }
+    .boton.activo {
+      background: var(--naranja);
+      color: #201203;
+      border-color: var(--naranja);
+    }
 
-  /* ---------- adaptable ---------- */
-  @media (max-width: 1100px) {
-    .rejilla { grid-template-columns: minmax(0, 1fr); }
-  }
-  @media (max-width: 640px) {
-    .pagina { padding: var(--e3); }
-    .panel { padding: var(--e3); }
-    .grupo-herramientas.derecha { margin-left: 0; }
-    .barras { padding-left: 0; padding-right: 0; }
-  }
-</style>
+    .grupo-velocidad {
+      display: flex;
+      gap: var(--e1);
+    }
+
+    .grupo-velocidad .boton {
+      padding: 8px 12px;
+      font-size: 13px;
+      min-width: 44px;
+    }
+
+    .etiqueta-grupo {
+      font-size: 12px;
+      color: var(--texto-tenue);
+      margin-right: 2px;
+    }
+
+    .ayuda {
+      color: var(--texto-tenue);
+      font-size: 12px;
+      line-height: 1.5;
+      margin: var(--e2) 0 0;
+    }
+
+    .leyenda {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--e2) var(--e4);
+      margin-top: var(--e3);
+      padding-top: var(--e3);
+      border-top: 1px solid var(--panel-border);
+      font-size: 12px;
+      color: var(--texto-tenue);
+    }
+
+    .leyenda span {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--e1);
+    }
+
+    .punto {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .icono-semaforo {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 3px 4px;
+      background: #1a1f28;
+      border: 1px solid #3a4356;
+      border-radius: 4px;
+      vertical-align: middle;
+    }
+
+    .icono-semaforo i {
+      display: block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      opacity: 0.35;
+    }
+
+    .icono-semaforo i.rojo {
+      background: var(--rojo);
+      opacity: 1;
+    }
+
+    .icono-semaforo i.amarillo {
+      background: var(--amarillo);
+    }
+
+    .icono-semaforo i.verde {
+      background: var(--verde);
+    }
+
+    .linea-sensor {
+      display: inline-block;
+      width: 16px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(53, 201, 173, 0.6);
+    }
+
+    /* ---------- tooltip ---------- */
+    .tooltip-semaforo {
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+      max-width: 220px;
+      padding: var(--e2) 12px;
+      background: #1c2330;
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transform: translate(-50%, -100%) translateY(-8px);
+      transition: opacity 0.12s ease;
+    }
+
+    .tooltip-semaforo.visible {
+      opacity: 1;
+    }
+
+    .tooltip-semaforo .titulo {
+      font-weight: 600;
+      color: var(--texto);
+      margin-bottom: var(--e1);
+    }
+
+    .tooltip-semaforo .fase {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--e1);
+      margin-top: 4px;
+    }
+
+    .tooltip-semaforo .lampara-mini {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* ---------- modal del mapa ---------- */
+    .modal-mapa {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 7, 10, 0.85);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      padding: var(--e5);
+    }
+
+    .modal-mapa.visible {
+      display: flex;
+    }
+
+    .modal-mapa .contenido {
+      position: relative;
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+
+    .modal-mapa img {
+      max-width: 95vw;
+      max-height: 90vh;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--panel-border);
+    }
+
+    .modal-mapa .cerrar {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--naranja);
+      color: #201203;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---------- columna lateral ---------- */
+    .sub-etiqueta {
+      font-size: 12px;
+      color: var(--texto-tenue);
+      margin-bottom: var(--e1);
+    }
+
+    .bloque+.bloque {
+      margin-top: var(--e3);
+    }
+
+    .opciones {
+      display: flex;
+      gap: var(--e1);
+    }
+
+    .opciones .boton {
+      flex: 1 1 0;
+      text-align: center;
+      font-size: 13px;
+      padding: 8px 6px;
+    }
+
+    .opciones .boton.nivel-bajo.activo {
+      background: var(--naranja);
+      border-color: var(--naranja);
+      color: #201203;
+    }
+
+    .opciones .boton.nivel-medio.activo {
+      background: var(--naranja);
+      border-color: var(--naranja);
+      color: #201203;
+    }
+
+    .opciones .boton.nivel-alto.activo {
+      background: var(--naranja);
+      border-color: var(--naranja);
+      color: #201203;
+    }
+
+    .opciones .boton.modo-fijo.activo {
+      background: #4d5568;
+      border-color: #4d5568;
+      color: #ffffff;
+    }
+
+    .opciones .boton.modo-webster.activo {
+      background: var(--purpura);
+      border-color: var(--purpura);
+      color: #ffffff;
+    }
+
+    .opciones .boton.modo-adaptativo.activo {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #04211b;
+    }
+
+    .toggle-falla {
+      display: flex;
+      gap: var(--e2);
+      align-items: flex-start;
+      margin-top: var(--e3);
+      padding-top: var(--e3);
+      border-top: 1px solid var(--panel-border);
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--texto-tenue);
+      cursor: pointer;
+    }
+
+    .toggle-falla input {
+      margin-top: 2px;
+      accent-color: var(--naranja);
+    }
+
+    .toggle-falla b {
+      color: var(--texto);
+    }
+
+    .toggle-falla.deshabilitado {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* filas etiqueta / valor alineadas */
+    .metrica {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--e3);
+      padding: var(--e2) 0;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    .metrica:first-of-type {
+      padding-top: 0;
+    }
+
+    .metrica:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .metrica .etiqueta {
+      font-size: 12px;
+      color: var(--texto-tenue);
+      line-height: 1.4;
+    }
+
+    .metrica .valor {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .metrica .valor.muted {
+      color: var(--texto-tenue);
+      font-weight: 400;
+    }
+
+    .metrica .valor.pequeno {
+      font-size: 14px;
+      white-space: normal;
+    }
+
+    .mqtt-cabecera {
+      display: flex;
+      align-items: center;
+      gap: var(--e1);
+      font-size: 12px;
+      color: var(--texto-tenue);
+      margin-bottom: var(--e3);
+    }
+
+    .registro-mqtt {
+      margin-top: var(--e3);
+      padding-top: var(--e2);
+      border-top: 1px solid var(--panel-border);
+      height: 200px;
+      overflow-y: auto;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .registro-mqtt .msg {
+      display: flex;
+      gap: var(--e1);
+      white-space: nowrap;
+    }
+
+    .registro-mqtt .msg .t {
+      color: var(--texto-tenue);
+      min-width: 42px;
+    }
+
+    .registro-mqtt .msg .tls {
+      color: var(--texto);
+      min-width: 44px;
+    }
+
+    .registro-mqtt .msg .flecha {
+      color: var(--texto-tenue);
+    }
+
+    .registro-mqtt .msg.estado .senal {
+      color: var(--verde);
+    }
+
+    .registro-mqtt .msg.comando {
+      color: var(--teal);
+    }
+
+    .registro-mqtt .msg.comando .senal {
+      color: var(--teal);
+    }
+
+    /* ---------- comparativo ---------- */
+    .barras {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      height: 190px;
+      padding: var(--e4) var(--e4) 0;
+    }
+
+    .grupo-barra {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--e2);
+      width: 110px;
+    }
+
+    .par-barras {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--e1);
+      height: 140px;
+    }
+
+    .barra {
+      width: 30px;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+    }
+
+    .barra.fijo {
+      background: #4d5568;
+    }
+
+    .barra.webster {
+      background: var(--purpura);
+    }
+
+    .barra.adaptativo {
+      background: var(--teal);
+    }
+
+    .barra .num {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--texto-tenue);
+      white-space: nowrap;
+    }
+
+    .grupo-barra .etiqueta-nivel {
+      font-size: 13px;
+      color: var(--texto);
+      text-transform: capitalize;
+    }
+
+    .clave-barras {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--e2) var(--e4);
+      justify-content: center;
+      margin-top: var(--e3);
+      padding-top: var(--e3);
+      border-top: 1px solid var(--panel-border);
+      font-size: 12px;
+      color: var(--texto-tenue);
+    }
+
+    .clave-barras span {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--e1);
+    }
+
+    /* ---------- adaptable ---------- */
+    @media (max-width: 1100px) {
+      .rejilla {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .pagina {
+        padding: var(--e3);
+      }
+
+      .panel {
+        padding: var(--e3);
+      }
+
+      .grupo-herramientas.derecha {
+        margin-left: 0;
+      }
+
+      .barras {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="pagina">
+  <div class="pagina">
 
-  <header class="encabezado">
-    <div class="rotulo">SEMINARIO INTEGRADOR — UFPS · SIMULACIÓN EN SUMO</div>
-    <h1>Control de tráfico del corredor Guaimaral / Libertadores, Cúcuta</h1>
-    <p>Simulación real de 7 intersecciones semaforizadas. Elige un nivel de tráfico y compara, en la misma corrida, cómo se comporta un esquema de tiempo fijo frente al algoritmo de control adaptativo propuesto en este proyecto.</p>
-  </header>
+    <header class="encabezado">
+      <div class="rotulo">SEMINARIO INTEGRADOR — UFPS · SIMULACIÓN EN SUMO</div>
+      <h1>Control de tráfico del corredor Guaimaral / Libertadores, Cúcuta</h1>
+      <p>Simulación real de 7 intersecciones semaforizadas. Elige un nivel de tráfico y compara, en la misma corrida,
+        cómo se comporta un esquema de tiempo fijo frente al algoritmo de control adaptativo propuesto en este proyecto.
+      </p>
+    </header>
 
-  <div class="rejilla">
+    <div class="rejilla">
 
-    <!-- Columna principal: simulación + comparativo -->
-    <main class="principal">
-      <section class="panel">
-        <h2>SIMULACIÓN EN VIVO</h2>
-        <div class="lienzo-envoltura">
-          <canvas id="lienzo" width="1200" height="700"></canvas>
-          <div class="tiempo-actual" id="etiquetaTiempo">t = 0 s</div>
-          <div class="tooltip-semaforo" id="tooltipSemaforo" aria-hidden="true"></div>
-        </div>
-
-        <div class="barra-herramientas">
-          <div class="grupo-herramientas">
-            <button class="boton" id="botonJugar">▶ Reproducir</button>
-            <button class="boton" id="botonReiniciar">↺ Reiniciar</button>
+      <!-- Columna principal: simulación + comparativo -->
+      <main class="principal">
+        <section class="panel">
+          <h2>SIMULACIÓN EN VIVO</h2>
+          <div class="lienzo-envoltura">
+            <canvas id="lienzo" width="1200" height="700"></canvas>
+            <div class="tiempo-actual" id="etiquetaTiempo">t = 0 s</div>
+            <div class="tooltip-semaforo" id="tooltipSemaforo" aria-hidden="true"></div>
           </div>
-          <div class="grupo-herramientas">
-            <span class="etiqueta-grupo">Velocidad</span>
-            <div class="grupo-velocidad">
-              <button class="boton velocidad activo" data-velocidad="1">1×</button>
-              <button class="boton velocidad" data-velocidad="2">2×</button>
-              <button class="boton velocidad" data-velocidad="4">4×</button>
+
+          <div class="barra-herramientas">
+            <div class="grupo-herramientas">
+              <button class="boton" id="botonJugar">▶ Reproducir</button>
+              <button class="boton" id="botonReiniciar">↺ Reiniciar</button>
+            </div>
+            <div class="grupo-herramientas">
+              <span class="etiqueta-grupo">Velocidad</span>
+              <div class="grupo-velocidad">
+                <button class="boton velocidad activo" data-velocidad="1">1×</button>
+                <button class="boton velocidad" data-velocidad="2">2×</button>
+                <button class="boton velocidad" data-velocidad="4">4×</button>
+              </div>
+            </div>
+            <div class="grupo-herramientas derecha">
+              <button class="boton" id="botonResetZoom">🔍 Restablecer zoom</button>
+              <button class="boton" id="botonVerMapa">🗺️ Ver en Maps</button>
             </div>
           </div>
-          <div class="grupo-herramientas derecha">
-            <button class="boton" id="botonResetZoom">🔍 Restablecer zoom</button>
-            <button class="boton" id="botonVerMapa">🗺️ Ver en Maps</button>
+          <p class="ayuda">Rueda del mouse para zoom · arrastrar para mover · pasa el cursor sobre un semáforo para ver
+            su estado</p>
+
+          <div class="leyenda">
+            <span><span class="punto" style="background: var(--azul)"></span> Carro</span>
+            <span><span class="punto" style="background: var(--naranja)"></span> Moto</span>
+            <span><span class="punto" style="background: #b06fe0"></span> Bus</span>
+            <span>
+              <span class="icono-semaforo" aria-hidden="true"><i class="rojo"></i><i class="amarillo"></i><i
+                  class="verde"></i></span>
+              Semáforo (luz encendida = paso del carril)
+            </span>
+            <span>
+              <span class="linea-sensor"></span>
+              Sensor E2 (detector de carril)
+            </span>
           </div>
-        </div>
-        <p class="ayuda">Rueda del mouse para zoom · arrastrar para mover · pasa el cursor sobre un semáforo para ver su estado</p>
+        </section>
 
-        <div class="leyenda">
-          <span><span class="punto" style="background: var(--azul)"></span> Carro</span>
-          <span><span class="punto" style="background: var(--naranja)"></span> Moto</span>
-          <span><span class="punto" style="background: #b06fe0"></span> Bus</span>
-          <span>
-            <span class="icono-semaforo" aria-hidden="true"><i class="rojo"></i><i class="amarillo"></i><i class="verde"></i></span>
-            Semáforo (luz encendida = paso del carril)
-          </span>
-          <span>
-            <span class="linea-sensor"></span>
-            Sensor E2 (detector de carril)
-          </span>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>COMPARATIVO — tiempo de espera promedio por vehículo (segundos), datos reales de esta simulación</h2>
-        <div class="barras" id="contenedorBarras"></div>
-        <div class="clave-barras">
-          <span><span class="punto" style="background:#4d5568"></span> Tiempo fijo</span>
-          <span><span class="punto" style="background:var(--purpura)"></span> Plan Webster</span>
-          <span><span class="punto" style="background: var(--teal)"></span> Adaptativo</span>
-        </div>
-      </section>
-    </main>
-
-    <!-- Columna lateral: escenario y resultados -->
-    <aside class="lateral">
-      <section class="panel">
-        <h2>ESCENARIO</h2>
-        <div class="bloque">
-          <div class="sub-etiqueta">Nivel de tráfico</div>
-          <div class="opciones">
-            <button class="boton nivel-bajo activo" data-nivel="bajo">Bajo</button>
-            <button class="boton nivel-medio" data-nivel="medio">Medio</button>
-            <button class="boton nivel-alto" data-nivel="alto">Alto</button>
+        <section class="panel">
+          <h2>COMPARATIVO — tiempo de espera promedio por vehículo (segundos), datos reales de esta simulación</h2>
+          <div class="barras" id="contenedorBarras"></div>
+          <div class="clave-barras">
+            <span><span class="punto" style="background:#4d5568"></span> Tiempo fijo</span>
+            <span><span class="punto" style="background:var(--purpura)"></span> Plan Webster</span>
+            <span><span class="punto" style="background: var(--teal)"></span> Adaptativo</span>
           </div>
-        </div>
-        <div class="bloque">
-          <div class="sub-etiqueta">Modo de control</div>
-          <div class="opciones">
-            <button class="boton modo-fijo" data-modo="fijo">Fijo</button>
-            <button class="boton modo-webster" data-modo="webster">Webster</button>
-            <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
+        </section>
+      </main>
+
+      <!-- Columna lateral: escenario y resultados -->
+      <aside class="lateral">
+        <section class="panel">
+          <h2>ESCENARIO</h2>
+          <div class="bloque">
+            <div class="sub-etiqueta">Nivel de tráfico</div>
+            <div class="opciones">
+              <button class="boton nivel-bajo activo" data-nivel="bajo">Bajo</button>
+              <button class="boton nivel-medio" data-nivel="medio">Medio</button>
+              <button class="boton nivel-alto" data-nivel="alto">Alto</button>
+            </div>
           </div>
-        </div>
-        <label class="toggle-falla" id="etiquetaFalla">
-          <input type="checkbox" id="checkFalla">
-          <span><b>Simular falla de detector</b><br>
-          La intersección a9c2t cae y vuelve sola al plan fijo, luego se recupera.</span>
-        </label>
-      </section>
+          <div class="bloque">
+            <div class="sub-etiqueta">Modo de control</div>
+            <div class="opciones">
+              <button class="boton modo-fijo" data-modo="fijo">Fijo</button>
+              <button class="boton modo-webster" data-modo="webster">Webster</button>
+              <button class="boton modo-adaptativo activo" data-modo="adaptativo">Adaptativo</button>
+            </div>
+          </div>
+          <label class="toggle-falla" id="etiquetaFalla">
+            <input type="checkbox" id="checkFalla">
+            <span><b>Simular falla de detector</b><br>
+              La intersección a9c2t cae y vuelve sola al plan fijo, luego se recupera.</span>
+          </label>
+        </section>
 
-      <section class="panel">
-        <h2>MÉTRICAS</h2>
-        <div class="metrica">
-          <div class="etiqueta">Vehículos activos</div>
-          <div class="valor" id="metricaVehiculos">—</div>
-        </div>
-        <div class="metrica">
-          <div class="etiqueta">Espera promedio por vehículo (corrida completa)</div>
-          <div class="valor" id="metricaEspera">—</div>
-        </div>
-      </section>
+        <section class="panel">
+          <h2>MÉTRICAS</h2>
+          <div class="metrica">
+            <div class="etiqueta">Vehículos activos</div>
+            <div class="valor" id="metricaVehiculos">—</div>
+          </div>
+          <div class="metrica">
+            <div class="etiqueta">Espera promedio por vehículo (corrida completa)</div>
+            <div class="valor" id="metricaEspera">—</div>
+          </div>
+        </section>
 
-      <section class="panel">
-        <h2>SEGURIDAD Y RESPALDO</h2>
-        <div class="metrica">
-          <div class="etiqueta">Violaciones de seguridad</div>
-          <div class="valor" id="metricaViolaciones">0</div>
-        </div>
-        <div class="metrica">
-          <div class="etiqueta">Estado de respaldo</div>
-          <div class="valor muted pequeno" id="metricaRespaldo">sin fallas</div>
-        </div>
-      </section>
+        <section class="panel">
+          <h2>SEGURIDAD Y RESPALDO</h2>
+          <div class="metrica">
+            <div class="etiqueta">Violaciones de seguridad</div>
+            <div class="valor" id="metricaViolaciones">0</div>
+          </div>
+          <div class="metrica">
+            <div class="etiqueta">Estado de respaldo</div>
+            <div class="valor muted pequeno" id="metricaRespaldo">sin fallas</div>
+          </div>
+        </section>
 
-      <section class="panel" style="flex: 1; display: flex; flex-direction: column;">
-        <h2>INTEGRACIÓN MQTT</h2>
-        <div class="mqtt-cabecera">
-          <span class="punto" style="background: var(--verde)"></span>
-          broker local · grabación real (escenario alto)
-        </div>
-        <div class="metrica">
-          <div class="etiqueta">Mensajes publicados</div>
-          <div class="valor" id="mqttMensajes">0</div>
-        </div>
-        <div class="metrica">
-          <div class="etiqueta">Comandos aplicados</div>
-          <div class="valor" id="mqttComandos">0</div>
-        </div>
-        <div class="metrica">
-          <div class="etiqueta">Latencia publicar→actuar (promedio)</div>
-          <div class="valor" id="mqttLatencia">—</div>
-        </div>
-        <div class="registro-mqtt" id="registroMqtt" style="flex: 1;"></div>
-      </section>
-    </aside>
-  </div>
+        <section class="panel" style="flex: 1; display: flex; flex-direction: column;">
+          <h2>INTEGRACIÓN MQTT</h2>
+          <div class="mqtt-cabecera">
+            <span class="punto" style="background: var(--verde)"></span>
+            broker local · grabación real (escenario alto)
+          </div>
+          <div class="metrica">
+            <div class="etiqueta">Mensajes publicados</div>
+            <div class="valor" id="mqttMensajes">0</div>
+          </div>
+          <div class="metrica">
+            <div class="etiqueta">Comandos aplicados</div>
+            <div class="valor" id="mqttComandos">0</div>
+          </div>
+          <div class="metrica">
+            <div class="etiqueta">Latencia publicar→actuar (promedio)</div>
+            <div class="valor" id="mqttLatencia">—</div>
+          </div>
+          <div class="registro-mqtt" id="registroMqtt" style="flex: 1;"></div>
+        </section>
+      </aside>
+    </div>
 
   </div>
-</div>
-
-<div class="modal-mapa" id="modalMapa">
-  <div class="contenido">
-    <button class="cerrar" id="cerrarModalMapa">✕</button>
-    <img src="image/maps.png" alt="Ubicación en Google Maps — Guaimaral / Libertadores, Cúcuta">
   </div>
-</div>
 
-<script src="datos.js"></script>
-<script>
-(function () {
-  const datos = typeof DATOS_SIMULACION !== "undefined" ? DATOS_SIMULACION : null;
+  <div class="modal-mapa" id="modalMapa">
+    <div class="contenido">
+      <button class="cerrar" id="cerrarModalMapa">✕</button>
+      <img src="image/maps.png" alt="Ubicación en Google Maps — Guaimaral / Libertadores, Cúcuta">
+    </div>
+  </div>
 
-  const lienzo = document.getElementById("lienzo");
-  const ctx = lienzo.getContext("2d");
-  const etiquetaTiempo = document.getElementById("etiquetaTiempo");
-  const metricaVehiculos = document.getElementById("metricaVehiculos");
-  const metricaEspera = document.getElementById("metricaEspera");
-  const metricaViolaciones = document.getElementById("metricaViolaciones");
-  const metricaRespaldo = document.getElementById("metricaRespaldo");
-  const checkFalla = document.getElementById("checkFalla");
-  const etiquetaFalla = document.getElementById("etiquetaFalla");
-  const mqttMensajes = document.getElementById("mqttMensajes");
-  const mqttComandos = document.getElementById("mqttComandos");
-  const mqttLatencia = document.getElementById("mqttLatencia");
-  const registroMqtt = document.getElementById("registroMqtt");
-  const botonJugar = document.getElementById("botonJugar");
-  const botonReiniciar = document.getElementById("botonReiniciar");
-  const tooltipSemaforo = document.getElementById("tooltipSemaforo");
-  const envolturaLienzo = lienzo.parentElement;
+  <script src="datos.js"></script>
+  <script>
+    (function () {
+      const datos = typeof DATOS_SIMULACION !== "undefined" ? DATOS_SIMULACION : null;
 
-  const COLOR_VEHICULO = { carro: "#5b9bff", moto: "#ffab3d", bus: "#c98bff" };
+      const lienzo = document.getElementById("lienzo");
+      const ctx = lienzo.getContext("2d");
+      const etiquetaTiempo = document.getElementById("etiquetaTiempo");
+      const metricaVehiculos = document.getElementById("metricaVehiculos");
+      const metricaEspera = document.getElementById("metricaEspera");
+      const metricaViolaciones = document.getElementById("metricaViolaciones");
+      const metricaRespaldo = document.getElementById("metricaRespaldo");
+      const checkFalla = document.getElementById("checkFalla");
+      const etiquetaFalla = document.getElementById("etiquetaFalla");
+      const mqttMensajes = document.getElementById("mqttMensajes");
+      const mqttComandos = document.getElementById("mqttComandos");
+      const mqttLatencia = document.getElementById("mqttLatencia");
+      const registroMqtt = document.getElementById("registroMqtt");
+      const botonJugar = document.getElementById("botonJugar");
+      const botonReiniciar = document.getElementById("botonReiniciar");
+      const tooltipSemaforo = document.getElementById("tooltipSemaforo");
+      const envolturaLienzo = lienzo.parentElement;
 
-  let nivel = "bajo";
-  let modo = "adaptativo";
-  let verFalla = false;
-  let indiceFrame = 0;
-  let reproduciendo = false;
-  let velocidad = 1;
-  let temporizador = null;
+      const COLOR_VEHICULO = { carro: "#5b9bff", moto: "#ffab3d", bus: "#c98bff" };
 
-  // --- panel MQTT pregrabado ---
-  const mqtt = datos && datos.mqtt ? datos.mqtt : null;
-  let mqttPtr = 0;
-  let mqttNumMensajes = 0;
-  let mqttNumComandos = 0;
-  let mqttSumaLatencia = 0;
-  const MAX_FILAS_MQTT = 60;
+      let nivel = "bajo";
+      let modo = "adaptativo";
+      let verFalla = false;
+      let indiceFrame = 0;
+      let reproduciendo = false;
+      let velocidad = 1;
+      let temporizador = null;
 
-  // --- seguridad y respaldo ---
-  let tlsRespaldoActual = new Set();
+      // --- panel MQTT pregrabado ---
+      const mqtt = datos && datos.mqtt ? datos.mqtt : null;
+      let mqttPtr = 0;
+      let mqttNumMensajes = 0;
+      let mqttNumComandos = 0;
+      let mqttSumaLatencia = 0;
+      const MAX_FILAS_MQTT = 60;
 
-  // --- estado de zoom / desplazamiento del mapa ---
-  let zoom = 1;
-  let panX = 0;
-  let panY = 0;
-  let arrastrando = false;
-  let ultimoMouse = { x: 0, y: 0 };
-  let semaforosParaHover = [];
-  let semaforoHoverId = null;
+      // --- seguridad y respaldo ---
+      let tlsRespaldoActual = new Set();
 
-  // --- para poder orientar el rectángulo de cada vehículo según hacia dónde se mueve ---
-  let posicionesAnteriores = new Map();
-  const anguloPorVehiculo = new Map();
+      // --- estado de zoom / desplazamiento del mapa ---
+      let zoom = 1;
+      let panX = 0;
+      let panY = 0;
+      let arrastrando = false;
+      let ultimoMouse = { x: 0, y: 0 };
+      let semaforosParaHover = [];
+      let semaforoHoverId = null;
 
-  function claveActual() {
-    if (verFalla && modo === "adaptativo") return `${nivel}_adaptativo_detectores`;
-    return `${nivel}_${modo}`;
-  }
+      // --- para poder orientar el rectángulo de cada vehículo según hacia dónde se mueve ---
+      let posicionesAnteriores = new Map();
+      const anguloPorVehiculo = new Map();
 
-  function corridaActual() {
-    if (!datos) return null;
-    return datos.corridas[claveActual()] || null;
-  }
-
-  function colorEnlace(caracter) {
-    if (caracter === "G" || caracter === "g") return "#3ecf6a";
-    if (caracter === "y" || caracter === "Y") return "#e2b93a";
-    if (caracter === "r" || caracter === "R") return "#e2543a";
-    return "#555555";
-  }
-
-  function dibujarRed() {
-    if (!datos) return;
-    for (const calle of datos.red.calles) {
-      ctx.beginPath();
-      ctx.strokeStyle = "#4a5568";
-      ctx.lineWidth = 6;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      calle.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
-      ctx.stroke();
-    }
-
-  }
-
-  function dibujarDetectores() {
-    if (!datos || !datos.red.detectores) return;
-    for (const det of datos.red.detectores) {
-      const [ax, ay] = det.a;
-      const [bx, by] = det.b;
-      const enRespaldo = det.tls && tlsRespaldoActual.has(det.tls);
-      ctx.beginPath();
-      ctx.strokeStyle = enRespaldo ? "#e2963a" : "rgba(53, 201, 173, 0.5)";
-      ctx.lineWidth = enRespaldo ? 3 : 2;
-      ctx.lineCap = "round";
-      ctx.moveTo(ax, ay);
-      ctx.lineTo(bx, by);
-      ctx.stroke();
-    }
-  }
-
-  function fasePrioritaria(caracteres) {
-    if (caracteres.some((c) => c === "G" || c === "g")) return "verde";
-    if (caracteres.some((c) => c === "y" || c === "Y")) return "amarillo";
-    if (caracteres.some((c) => c === "r" || c === "R")) return "rojo";
-    return "apagado";
-  }
-
-  const COLORES_LAMPARA = {
-    rojo: { apagada: "#4a2220", encendida: "#e2543a" },
-    amarillo: { apagada: "#4a4020", encendida: "#e2b93a" },
-    verde: { apagada: "#204a28", encendida: "#3ecf6a" },
-  };
-
-  const ETIQUETA_FASE = {
-    verde: "Verde — paso permitido",
-    amarillo: "Amarillo — precaución",
-    rojo: "Rojo — detenerse",
-    apagado: "Sin señal",
-  };
-
-  function anguloVia(tlsId, indiceVia, x, y) {
-    const angulos = datos.red.angulos_enlace && datos.red.angulos_enlace[tlsId];
-    if (angulos && angulos[indiceVia] != null) return angulos[indiceVia];
-    const centro = datos.red.semaforos && datos.red.semaforos[tlsId];
-    if (!centro) return 0;
-    return Math.atan2(centro[1] - y, centro[0] - x);
-  }
-
-  /** Un poco aguas arriba del punto de parada, siguiendo el sentido del carril. */
-  function posicionEnVia(x, y, anguloFlujo) {
-    const retroceso = 9;
-    return [x - Math.cos(anguloFlujo) * retroceso, y - Math.sin(anguloFlujo) * retroceso];
-  }
-
-  function dibujarMiniSemaforo(x, y, anguloFlujo, faseActiva, escala, resaltar, enRespaldo) {
-    const esc = escala || 1;
-    const fases = ["rojo", "amarillo", "verde"];
-    const separacion = 4.2 * esc;
-    const radio = 2.4 * esc;
-
-    ctx.save();
-    ctx.translate(x, y);
-    // Columna alineada con el sentido del carril: rojo aguas arriba, verde hacia la intersección.
-    ctx.rotate(anguloFlujo);
-
-    const anchoPlaca = radio * 2 + 3.5 * esc;
-    const altoPlaca = separacion * 2 + radio * 2 + 3.5 * esc;
-    ctx.beginPath();
-    ctx.roundRect(-anchoPlaca / 2, -altoPlaca / 2, anchoPlaca, altoPlaca, 2 * esc);
-    ctx.fillStyle = resaltar ? "#252d3d" : "#141820";
-    ctx.fill();
-    ctx.strokeStyle = enRespaldo ? "#ffae00" : (resaltar ? "#6b7890" : "#3a4356");
-    ctx.lineWidth = enRespaldo ? 3 : (resaltar ? 1.2 : 0.75);
-    if (enRespaldo) {
-      ctx.shadowColor = "#ffae00";
-      ctx.shadowBlur = 10;
-    }
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    fases.forEach((nombre, i) => {
-      const py = (i - 1) * separacion;
-      const activa = nombre === faseActiva;
-      const colores = COLORES_LAMPARA[nombre];
-
-      if (activa) {
-        ctx.shadowColor = colores.encendida;
-        ctx.shadowBlur = resaltar ? 8 : 5;
+      function claveActual() {
+        if (verFalla && modo === "adaptativo") return `${nivel}_adaptativo_detectores`;
+        return `${nivel}_${modo}`;
       }
 
-      ctx.beginPath();
-      ctx.arc(0, py, radio, 0, Math.PI * 2);
-      ctx.fillStyle = activa ? colores.encendida : colores.apagada;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      ctx.strokeStyle = activa ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)";
-      ctx.lineWidth = 0.6;
-      ctx.stroke();
-    });
-
-    ctx.restore();
-  }
-
-  function caracteresEnPunto(tlsId, indicePunto, estado) {
-    const indicesPorPunto = datos.red.indices_enlace ? datos.red.indices_enlace[tlsId] : null;
-    const indices = indicesPorPunto ? indicesPorPunto[indicePunto] : [indicePunto];
-    const libres = new Set((datos.red.indices_libres && datos.red.indices_libres[tlsId]) || []);
-
-    // Si el carril mezcla un movimiento "libre" (siempre verde, sin relación
-    // con el ciclo semafórico, ej. un giro canalizado) con otro que sí cicla,
-    // ignoramos el libre para que el color mostrado refleje el movimiento
-    // real controlado por el semáforo.
-    const indicesControlados = indices.filter((i) => !libres.has(i));
-    const indicesAUsar = indicesControlados.length > 0 ? indicesControlados : indices;
-
-    return estado ? indicesAUsar.map((i) => estado[i]).filter(Boolean) : [];
-  }
-
-  function dibujarSemaforos(estados) {
-    if (!datos || !datos.red.enlaces) return;
-    semaforosParaHover = [];
-
-    for (const [tlsId, puntos] of Object.entries(datos.red.enlaces)) {
-      const estado = estados ? estados[tlsId] : "";
-
-      puntos.forEach((punto, indiceVia) => {
-        if (!punto) return;
-        const [x0, y0] = punto;
-        const angulo = anguloVia(tlsId, indiceVia, x0, y0);
-        const [x, y] = posicionEnVia(x0, y0, angulo);
-        const caracteres = caracteresEnPunto(tlsId, indiceVia, estado);
-        const fase = fasePrioritaria(caracteres);
-
-        const resaltar = semaforoHoverId === `${tlsId}:${indiceVia}`;
-        dibujarMiniSemaforo(x, y, angulo, fase, 0.95, resaltar, tlsRespaldoActual.has(tlsId));
-
-        semaforosParaHover.push({
-          id: `${tlsId}:${indiceVia}`,
-          tlsId,
-          indiceCarril: indiceVia + 1,
-          x,
-          y,
-          fase,
-          radio: 11,
-          tipo: "carril",
-        });
-      });
-    }
-  }
-
-  function dibujarVehiculos(vehiculosActuales, vehiculosSiguientes, fraccion) {
-    const posicionesActuales = new Map();
-    const siguientesPorId = new Map((vehiculosSiguientes || []).map((v) => [v[0], v]));
-
-    for (const [id, tipo, x0, y0] of vehiculosActuales) {
-      let x = x0, y = y0;
-      const siguiente = siguientesPorId.get(id);
-      if (siguiente) {
-        const [, , x1, y1] = siguiente;
-        x = x0 + (x1 - x0) * fraccion;
-        y = y0 + (y1 - y0) * fraccion;
+      function corridaActual() {
+        if (!datos) return null;
+        return datos.corridas[claveActual()] || null;
       }
 
-      let angulo = anguloPorVehiculo.get(id) || 0;
-      const anterior = posicionesAnteriores.get(id);
-      if (anterior) {
-        const dx = x - anterior[0];
-        const dy = y - anterior[1];
-        if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
-          angulo = Math.atan2(dy, dx);
-          anguloPorVehiculo.set(id, angulo);
+      function colorEnlace(caracter) {
+        if (caracter === "G" || caracter === "g") return "#3ecf6a";
+        if (caracter === "y" || caracter === "Y") return "#e2b93a";
+        if (caracter === "r" || caracter === "R") return "#e2543a";
+        return "#555555";
+      }
+
+      function dibujarRed() {
+        if (!datos) return;
+        for (const calle of datos.red.calles) {
+          ctx.beginPath();
+          ctx.strokeStyle = "#4a5568";
+          ctx.lineWidth = 6;
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          calle.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
+          ctx.stroke();
+        }
+
+      }
+
+      function dibujarDetectores() {
+        if (!datos || !datos.red.detectores) return;
+        for (const det of datos.red.detectores) {
+          const [ax, ay] = det.a;
+          const [bx, by] = det.b;
+          const enRespaldo = det.tls && tlsRespaldoActual.has(det.tls);
+          ctx.beginPath();
+          ctx.strokeStyle = enRespaldo ? "#e2963a" : "rgba(53, 201, 173, 0.5)";
+          ctx.lineWidth = enRespaldo ? 3 : 2;
+          ctx.lineCap = "round";
+          ctx.moveTo(ax, ay);
+          ctx.lineTo(bx, by);
+          ctx.stroke();
         }
       }
-    
-      posicionesActuales.set(id, [x, y]);
 
-      const largo = tipo === "bus" ? 15 : tipo === "moto" ? 7 : 10;
-      const ancho = tipo === "bus" ? 6.5 : tipo === "moto" ? 4 : 5.5;
-
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(angulo);
-      ctx.fillStyle = COLOR_VEHICULO[tipo] || COLOR_VEHICULO.carro;
-      ctx.strokeStyle = "#0c0f14";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.roundRect(-largo / 2, -ancho / 2, largo, ancho, 1.5);
-      ctx.fill();
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    posicionesAnteriores = posicionesActuales;
-  }
-
-  function dibujarFrame(fraccion = 0) {
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, lienzo.width, lienzo.height);
-    ctx.restore();
-
-    ctx.save();
-    ctx.translate(panX, panY);
-    ctx.scale(zoom, zoom);
-
-    dibujarRed();
-    dibujarDetectores();
-
-    const corrida = corridaActual();
-    if (!corrida || corrida.frames.length === 0) {
-      ctx.fillStyle = "#8b93a3";
-      ctx.font = "14px sans-serif";
-      ctx.fillText("No hay datos para esta combinación todavía.", 20, 30);
-      ctx.restore();
-      actualizarPanelMQTT(0);
-      actualizarSeguridad(0);
-      return;
-    }
-
-    const frame = corrida.frames[indiceFrame];
-    const siguienteIndice = (indiceFrame + 1) % corrida.frames.length;
-    const frameSiguiente = corrida.frames[siguienteIndice];
-
-    dibujarSemaforos(frame.s);
-    dibujarVehiculos(frame.v, frameSiguiente ? frameSiguiente.v : null, fraccion);
-
-    ctx.restore();
-
-    const tInterpolado = frame.t + (frameSiguiente ? (frameSiguiente.t - frame.t) * fraccion : 0);
-    etiquetaTiempo.textContent = `t = ${tInterpolado.toFixed(1)} s`;
-    metricaVehiculos.textContent = frame.v.length;
-    actualizarPanelMQTT(tInterpolado);
-    actualizarSeguridad(tInterpolado);
-  }
-
-  function actualizarMetricaEspera() {
-    const clave = claveActual();
-    const valor = datos && datos.esperas ? datos.esperas[clave] : null;
-    metricaEspera.textContent = valor != null ? `${valor.toFixed(1)} s` : "—";
-  }
-
-  // --- panel MQTT pregrabado: revela los mensajes al ritmo del tiempo de reproducción ---
-  function reiniciarPanelMQTT() {
-    mqttPtr = 0;
-    mqttNumMensajes = 0;
-    mqttNumComandos = 0;
-    mqttSumaLatencia = 0;
-    if (mqttMensajes) mqttMensajes.textContent = "0";
-    if (mqttComandos) mqttComandos.textContent = "0";
-    if (mqttLatencia) mqttLatencia.textContent = "—";
-    if (registroMqtt) registroMqtt.innerHTML = "";
-  }
-
-  function agregarFilaMQTT(t, tls, tipo, resumen) {
-    if (!registroMqtt) return;
-    const fila = document.createElement("div");
-    fila.className = `msg ${tipo}`;
-    const flecha = tipo === "comando" ? "←" : "→";
-    fila.innerHTML =
-      `<span class="t">t=${String(t).padStart(4, "0")}</span>` +
-      `<span class="tls">${tls}</span>` +
-      `<span class="flecha">${flecha}</span>` +
-      `<span class="senal">${resumen}</span>`;
-    registroMqtt.appendChild(fila);
-    while (registroMqtt.childElementCount > MAX_FILAS_MQTT) {
-      registroMqtt.removeChild(registroMqtt.firstChild);
-    }
-    registroMqtt.scrollTop = registroMqtt.scrollHeight;
-  }
-
-  function actualizarPanelMQTT(t) {
-    if (!mqtt) return;
-    while (mqttPtr < mqtt.eventos.length && mqtt.eventos[mqttPtr][0] <= t) {
-      const [ti, tls, tipo, resumen, latencia] = mqtt.eventos[mqttPtr];
-      mqttNumMensajes += 1;
-      if (tipo === "comando") {
-        mqttNumComandos += 1;
-        if (latencia != null) mqttSumaLatencia += latencia;
+      function fasePrioritaria(caracteres) {
+        if (caracteres.some((c) => c === "G" || c === "g")) return "verde";
+        if (caracteres.some((c) => c === "y" || c === "Y")) return "amarillo";
+        if (caracteres.some((c) => c === "r" || c === "R")) return "rojo";
+        return "apagado";
       }
-      agregarFilaMQTT(ti, tls, tipo, resumen);
-      mqttPtr += 1;
-    }
-    if (mqttMensajes) mqttMensajes.textContent = mqttNumMensajes;
-    if (mqttComandos) mqttComandos.textContent = mqttNumComandos;
-    if (mqttLatencia) {
-      mqttLatencia.textContent =
-        mqttNumComandos > 0 ? `${(mqttSumaLatencia / mqttNumComandos).toFixed(1)} ms` : "—";
-    }
-  }
 
-  // --- seguridad y respaldo ---
-  function tlsEnRespaldoEnTiempo(eventos, t) {
-    const estados = {};
-    for (const [ti, tls, ev] of eventos || []) {
-      if (ti > t) break;
-      estados[tls] = ev === "entra_respaldo";
-    }
-    return new Set(Object.keys(estados).filter((k) => estados[k]));
-  }
+      const COLORES_LAMPARA = {
+        rojo: { apagada: "#4a2220", encendida: "#e2543a" },
+        amarillo: { apagada: "#4a4020", encendida: "#e2b93a" },
+        verde: { apagada: "#204a28", encendida: "#3ecf6a" },
+      };
 
-  function actualizarSeguridad(t) {
-    const clave = claveActual();
+      const ETIQUETA_FASE = {
+        verde: "Verde — paso permitido",
+        amarillo: "Amarillo — precaución",
+        rojo: "Rojo — detenerse",
+        apagado: "Sin señal",
+      };
 
-    const seg = datos && datos.seguridad ? datos.seguridad[clave] : null;
-    const violaciones = seg ? seg.violaciones : 0;
-    metricaViolaciones.textContent = violaciones;
-    metricaViolaciones.style.color = violaciones === 0 ? "var(--verde)" : "var(--rojo)";
+      function anguloVia(tlsId, indiceVia, x, y) {
+        const angulos = datos.red.angulos_enlace && datos.red.angulos_enlace[tlsId];
+        if (angulos && angulos[indiceVia] != null) return angulos[indiceVia];
+        const centro = datos.red.semaforos && datos.red.semaforos[tlsId];
+        if (!centro) return 0;
+        return Math.atan2(centro[1] - y, centro[0] - x);
+      }
 
-    const eventos = datos && datos.respaldo ? datos.respaldo[clave] : null;
-    tlsRespaldoActual = tlsEnRespaldoEnTiempo(eventos, t);
-    const huboFalla = eventos && eventos.length > 0 && t >= eventos[0][0];
+      /** Un poco aguas arriba del punto de parada, siguiendo el sentido del carril. */
+      function posicionEnVia(x, y, anguloFlujo) {
+        const retroceso = 9;
+        return [x - Math.cos(anguloFlujo) * retroceso, y - Math.sin(anguloFlujo) * retroceso];
+      }
 
-    if (tlsRespaldoActual.size > 0) {
-      metricaRespaldo.textContent = `⚠ ${[...tlsRespaldoActual].join(", ")} en plan fijo`;
-      metricaRespaldo.style.color = "var(--naranja)";
-    } else if (huboFalla) {
-      metricaRespaldo.textContent = "recuperado (adaptativo)";
-      metricaRespaldo.style.color = "var(--verde)";
-    } else {
-      metricaRespaldo.textContent = "sin fallas";
-      metricaRespaldo.style.color = "var(--texto-tenue)";
-    }
-  }
+      function dibujarMiniSemaforo(x, y, anguloFlujo, faseActiva, escala, resaltar, enRespaldo) {
+        const esc = escala || 1;
+        const fases = ["rojo", "amarillo", "verde"];
+        const separacion = 4.2 * esc;
+        const radio = 2.4 * esc;
 
-  const MS_POR_SEGUNDO_SIM = 220;
+        ctx.save();
+        ctx.translate(x, y);
+        // Columna alineada con el sentido del carril: rojo aguas arriba, verde hacia la intersección.
+        ctx.rotate(anguloFlujo);
 
-  let idAnimacion = null;
-  let tiempoInicioPaso = 0;
-  let duracionPasoActual = 0;
+        const anchoPlaca = radio * 2 + 3.5 * esc;
+        const altoPlaca = separacion * 2 + radio * 2 + 3.5 * esc;
+        ctx.beginPath();
+        ctx.roundRect(-anchoPlaca / 2, -altoPlaca / 2, anchoPlaca, altoPlaca, 2 * esc);
+        ctx.fillStyle = resaltar ? "#252d3d" : "#141820";
+        ctx.fill();
+        ctx.strokeStyle = enRespaldo ? "#ffae00" : (resaltar ? "#6b7890" : "#3a4356");
+        ctx.lineWidth = enRespaldo ? 3 : (resaltar ? 1.2 : 0.75);
+        if (enRespaldo) {
+          ctx.shadowColor = "#ffae00";
+          ctx.shadowBlur = 10;
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
 
-  function prepararPaso() {
-    const corrida = corridaActual();
-    if (!corrida || corrida.frames.length === 0) { duracionPasoActual = 0; return; }
-    const frameActual = corrida.frames[indiceFrame];
-    const siguienteIndice = (indiceFrame + 1) % corrida.frames.length;
-    const frameSiguiente = corrida.frames[siguienteIndice];
-    const delta = frameSiguiente.t >= frameActual.t ? frameSiguiente.t - frameActual.t : 2;
-    duracionPasoActual = Math.max(30, (delta * MS_POR_SEGUNDO_SIM) / velocidad);
-  }
+        fases.forEach((nombre, i) => {
+          const py = (i - 1) * separacion;
+          const activa = nombre === faseActiva;
+          const colores = COLORES_LAMPARA[nombre];
 
-  function loopReproduccion(ahora) {
-    if (!reproduciendo) return;
-    const corrida = corridaActual();
-    if (!corrida || corrida.frames.length === 0) {
-      idAnimacion = requestAnimationFrame(loopReproduccion);
-      return;
-    }
+          if (activa) {
+            ctx.shadowColor = colores.encendida;
+            ctx.shadowBlur = resaltar ? 8 : 5;
+          }
 
-    if (tiempoInicioPaso === 0) {
-      tiempoInicioPaso = ahora;
-      prepararPaso();
-    }
+          ctx.beginPath();
+          ctx.arc(0, py, radio, 0, Math.PI * 2);
+          ctx.fillStyle = activa ? colores.encendida : colores.apagada;
+          ctx.fill();
+          ctx.shadowBlur = 0;
 
-    const transcurrido = ahora - tiempoInicioPaso;
-    const fraccion = duracionPasoActual > 0 ? Math.min(1, transcurrido / duracionPasoActual) : 1;
+          ctx.strokeStyle = activa ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.35)";
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        });
 
-    dibujarFrame(fraccion);
+        ctx.restore();
+      }
 
-    if (transcurrido >= duracionPasoActual) {
-      indiceFrame = (indiceFrame + 1) % corrida.frames.length;
-      tiempoInicioPaso = ahora;
-      prepararPaso();
-    }
+      function caracteresEnPunto(tlsId, indicePunto, estado) {
+        const indicesPorPunto = datos.red.indices_enlace ? datos.red.indices_enlace[tlsId] : null;
+        const indices = indicesPorPunto ? indicesPorPunto[indicePunto] : [indicePunto];
+        const libres = new Set((datos.red.indices_libres && datos.red.indices_libres[tlsId]) || []);
 
-    idAnimacion = requestAnimationFrame(loopReproduccion);
-  }
+        // Si el carril mezcla un movimiento "libre" (siempre verde, sin relación
+        // con el ciclo semafórico, ej. un giro canalizado) con otro que sí cicla,
+        // ignoramos el libre para que el color mostrado refleje el movimiento
+        // real controlado por el semáforo.
+        const indicesControlados = indices.filter((i) => !libres.has(i));
+        const indicesAUsar = indicesControlados.length > 0 ? indicesControlados : indices;
 
-  function iniciarReproduccion() {
-    reproduciendo = true;
-    botonJugar.textContent = "⏸ Pausar";
-    tiempoInicioPaso = 0;
-    idAnimacion = requestAnimationFrame(loopReproduccion);
-  }
+        return estado ? indicesAUsar.map((i) => estado[i]).filter(Boolean) : [];
+      }
 
-  function detenerReproduccion() {
-    reproduciendo = false;
-    botonJugar.textContent = "▶ Reproducir";
-    if (idAnimacion) cancelAnimationFrame(idAnimacion);
-  }
+      function dibujarSemaforos(estados) {
+        if (!datos || !datos.red.enlaces) return;
+        semaforosParaHover = [];
 
-  function reiniciar() {
-    detenerReproduccion();
-    indiceFrame = 0;
-    posicionesAnteriores = new Map();
-    anguloPorVehiculo.clear();
-    reiniciarPanelMQTT();
-    dibujarFrame();
-  }
+        for (const [tlsId, puntos] of Object.entries(datos.red.enlaces)) {
+          const estado = estados ? estados[tlsId] : "";
 
-  // --- interacción de zoom (rueda del mouse) y desplazamiento (arrastrar) ---
-  lienzo.addEventListener(
-    "wheel",
-    (evento) => {
-      evento.preventDefault();
-      const factor = evento.deltaY < 0 ? 1.12 : 0.89;
-      const nuevoZoom = Math.min(6, Math.max(0.6, zoom * factor));
+          puntos.forEach((punto, indiceVia) => {
+            if (!punto) return;
+            const [x0, y0] = punto;
+            const angulo = anguloVia(tlsId, indiceVia, x0, y0);
+            const [x, y] = posicionEnVia(x0, y0, angulo);
+            const caracteres = caracteresEnPunto(tlsId, indiceVia, estado);
+            const fase = fasePrioritaria(caracteres);
 
-      const rect = lienzo.getBoundingClientRect();
-      const escalaCanvas = lienzo.width / rect.width;
-      const mx = (evento.clientX - rect.left) * escalaCanvas;
-      const my = (evento.clientY - rect.top) * escalaCanvas;
+            const resaltar = semaforoHoverId === `${tlsId}:${indiceVia}`;
+            dibujarMiniSemaforo(x, y, angulo, fase, 0.95, resaltar, tlsRespaldoActual.has(tlsId));
 
-      panX = mx - ((mx - panX) * nuevoZoom) / zoom;
-      panY = my - ((my - panY) * nuevoZoom) / zoom;
-      zoom = nuevoZoom;
+            semaforosParaHover.push({
+              id: `${tlsId}:${indiceVia}`,
+              tlsId,
+              indiceCarril: indiceVia + 1,
+              x,
+              y,
+              fase,
+              radio: 11,
+              tipo: "carril",
+            });
+          });
+        }
+      }
 
-      dibujarFrame();
-    },
-    { passive: false }
-  );
+      function dibujarVehiculos(vehiculosActuales, vehiculosSiguientes, fraccion) {
+        const posicionesActuales = new Map();
+        const siguientesPorId = new Map((vehiculosSiguientes || []).map((v) => [v[0], v]));
 
-  lienzo.addEventListener("mousedown", (evento) => {
-    arrastrando = true;
-    ultimoMouse = { x: evento.clientX, y: evento.clientY };
-  });
+        for (const [id, tipo, x0, y0] of vehiculosActuales) {
+          let x = x0, y = y0;
+          const siguiente = siguientesPorId.get(id);
+          if (siguiente) {
+            const [, , x1, y1] = siguiente;
+            x = x0 + (x1 - x0) * fraccion;
+            y = y0 + (y1 - y0) * fraccion;
+          }
 
-  const modalMapa = document.getElementById("modalMapa");
-  document.getElementById("botonVerMapa").addEventListener("click", () => {
-    modalMapa.classList.add("visible");
-  });
-  document.getElementById("cerrarModalMapa").addEventListener("click", () => {
-    modalMapa.classList.remove("visible");
-  });
-  modalMapa.addEventListener("click", (evento) => {
-    if (evento.target === modalMapa) modalMapa.classList.remove("visible"); // cerrar clickeando afuera
-  });
+          let angulo = anguloPorVehiculo.get(id) || 0;
+          const anterior = posicionesAnteriores.get(id);
+          if (anterior) {
+            const dx = x - anterior[0];
+            const dy = y - anterior[1];
+            if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+              angulo = Math.atan2(dy, dx);
+              anguloPorVehiculo.set(id, angulo);
+            }
+          }
 
-  function coordenadasMundo(clientX, clientY) {
-    const rect = lienzo.getBoundingClientRect();
-    const escalaCanvas = lienzo.width / rect.width;
-    const mx = (clientX - rect.left) * escalaCanvas;
-    const my = (clientY - rect.top) * escalaCanvas;
-    return { x: (mx - panX) / zoom, y: (my - panY) / zoom };
-  }
+          posicionesActuales.set(id, [x, y]);
 
-  function colorFase(fase) {
-    if (fase === "verde") return COLORES_LAMPARA.verde.encendida;
-    if (fase === "amarillo") return COLORES_LAMPARA.amarillo.encendida;
-    if (fase === "rojo") return COLORES_LAMPARA.rojo.encendida;
-    return "#555";
-  }
+          const largo = tipo === "bus" ? 15 : tipo === "moto" ? 7 : 10;
+          const ancho = tipo === "bus" ? 6.5 : tipo === "moto" ? 4 : 5.5;
 
-  function actualizarTooltipSemaforo(evento, objetivo) {
-    if (!objetivo) {
-      tooltipSemaforo.classList.remove("visible");
-      semaforoHoverId = null;
-      lienzo.style.cursor = arrastrando ? "grabbing" : "grab";
-      return;
-    }
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(angulo);
+          ctx.fillStyle = COLOR_VEHICULO[tipo] || COLOR_VEHICULO.carro;
+          ctx.strokeStyle = "#0c0f14";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(-largo / 2, -ancho / 2, largo, ancho, 1.5);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
 
-    semaforoHoverId = objetivo.id;
-    lienzo.style.cursor = "pointer";
+        posicionesAnteriores = posicionesActuales;
+      }
 
-    const titulo =
-      objetivo.tipo === "interseccion"
-        ? `Intersección ${objetivo.tlsId}`
-        : `Vía de entrada ${objetivo.indiceCarril}`;
+      function dibujarFrame(fraccion = 0) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, lienzo.width, lienzo.height);
+        ctx.restore();
 
-    tooltipSemaforo.innerHTML = `
+        ctx.save();
+        ctx.translate(panX, panY);
+        ctx.scale(zoom, zoom);
+
+        dibujarRed();
+        dibujarDetectores();
+
+        const corrida = corridaActual();
+        if (!corrida || corrida.frames.length === 0) {
+          ctx.fillStyle = "#8b93a3";
+          ctx.font = "14px sans-serif";
+          ctx.fillText("No hay datos para esta combinación todavía.", 20, 30);
+          ctx.restore();
+          actualizarPanelMQTT(0);
+          actualizarSeguridad(0);
+          return;
+        }
+
+        const frame = corrida.frames[indiceFrame];
+        const siguienteIndice = (indiceFrame + 1) % corrida.frames.length;
+        const frameSiguiente = corrida.frames[siguienteIndice];
+
+        dibujarSemaforos(frame.s);
+        dibujarVehiculos(frame.v, frameSiguiente ? frameSiguiente.v : null, fraccion);
+
+        ctx.restore();
+
+        const tInterpolado = frame.t + (frameSiguiente ? (frameSiguiente.t - frame.t) * fraccion : 0);
+        etiquetaTiempo.textContent = `t = ${tInterpolado.toFixed(1)} s`;
+        metricaVehiculos.textContent = frame.v.length;
+        actualizarPanelMQTT(tInterpolado);
+        actualizarSeguridad(tInterpolado);
+      }
+
+      function actualizarMetricaEspera() {
+        const clave = claveActual();
+        const valor = datos && datos.esperas ? datos.esperas[clave] : null;
+        metricaEspera.textContent = valor != null ? `${valor.toFixed(1)} s` : "—";
+      }
+
+      // --- panel MQTT pregrabado: revela los mensajes al ritmo del tiempo de reproducción ---
+      function reiniciarPanelMQTT() {
+        mqttPtr = 0;
+        mqttNumMensajes = 0;
+        mqttNumComandos = 0;
+        mqttSumaLatencia = 0;
+        if (mqttMensajes) mqttMensajes.textContent = "0";
+        if (mqttComandos) mqttComandos.textContent = "0";
+        if (mqttLatencia) mqttLatencia.textContent = "—";
+        if (registroMqtt) registroMqtt.innerHTML = "";
+      }
+
+      function agregarFilaMQTT(t, tls, tipo, resumen) {
+        if (!registroMqtt) return;
+        const fila = document.createElement("div");
+        fila.className = `msg ${tipo}`;
+        const flecha = tipo === "comando" ? "←" : "→";
+        fila.innerHTML =
+          `<span class="t">t=${String(t).padStart(4, "0")}</span>` +
+          `<span class="tls">${tls}</span>` +
+          `<span class="flecha">${flecha}</span>` +
+          `<span class="senal">${resumen}</span>`;
+        registroMqtt.appendChild(fila);
+        while (registroMqtt.childElementCount > MAX_FILAS_MQTT) {
+          registroMqtt.removeChild(registroMqtt.firstChild);
+        }
+        registroMqtt.scrollTop = registroMqtt.scrollHeight;
+      }
+
+      function actualizarPanelMQTT(t) {
+        if (!mqtt) return;
+        while (mqttPtr < mqtt.eventos.length && mqtt.eventos[mqttPtr][0] <= t) {
+          const [ti, tls, tipo, resumen, latencia] = mqtt.eventos[mqttPtr];
+          mqttNumMensajes += 1;
+          if (tipo === "comando") {
+            mqttNumComandos += 1;
+            if (latencia != null) mqttSumaLatencia += latencia;
+          }
+          agregarFilaMQTT(ti, tls, tipo, resumen);
+          mqttPtr += 1;
+        }
+        if (mqttMensajes) mqttMensajes.textContent = mqttNumMensajes;
+        if (mqttComandos) mqttComandos.textContent = mqttNumComandos;
+        if (mqttLatencia) {
+          mqttLatencia.textContent =
+            mqttNumComandos > 0 ? `${(mqttSumaLatencia / mqttNumComandos).toFixed(1)} ms` : "—";
+        }
+      }
+
+      // --- seguridad y respaldo ---
+      function tlsEnRespaldoEnTiempo(eventos, t) {
+        const estados = {};
+        for (const [ti, tls, ev] of eventos || []) {
+          if (ti > t) break;
+          estados[tls] = ev === "entra_respaldo";
+        }
+        return new Set(Object.keys(estados).filter((k) => estados[k]));
+      }
+
+      function actualizarSeguridad(t) {
+        const clave = claveActual();
+
+        const seg = datos && datos.seguridad ? datos.seguridad[clave] : null;
+        const violaciones = seg ? seg.violaciones : 0;
+        metricaViolaciones.textContent = violaciones;
+        metricaViolaciones.style.color = violaciones === 0 ? "var(--verde)" : "var(--rojo)";
+
+        const eventos = datos && datos.respaldo ? datos.respaldo[clave] : null;
+        tlsRespaldoActual = tlsEnRespaldoEnTiempo(eventos, t);
+        const huboFalla = eventos && eventos.length > 0 && t >= eventos[0][0];
+
+        if (tlsRespaldoActual.size > 0) {
+          metricaRespaldo.textContent = `⚠ ${[...tlsRespaldoActual].join(", ")} en plan fijo`;
+          metricaRespaldo.style.color = "var(--naranja)";
+        } else if (huboFalla) {
+          metricaRespaldo.textContent = "recuperado (adaptativo)";
+          metricaRespaldo.style.color = "var(--verde)";
+        } else {
+          metricaRespaldo.textContent = "sin fallas";
+          metricaRespaldo.style.color = "var(--texto-tenue)";
+        }
+      }
+
+      const MS_POR_SEGUNDO_SIM = 220;
+
+      let idAnimacion = null;
+      let tiempoInicioPaso = 0;
+      let duracionPasoActual = 0;
+
+      function prepararPaso() {
+        const corrida = corridaActual();
+        if (!corrida || corrida.frames.length === 0) { duracionPasoActual = 0; return; }
+        const frameActual = corrida.frames[indiceFrame];
+        const siguienteIndice = (indiceFrame + 1) % corrida.frames.length;
+        const frameSiguiente = corrida.frames[siguienteIndice];
+        const delta = frameSiguiente.t >= frameActual.t ? frameSiguiente.t - frameActual.t : 2;
+        duracionPasoActual = Math.max(30, (delta * MS_POR_SEGUNDO_SIM) / velocidad);
+      }
+
+      function loopReproduccion(ahora) {
+        if (!reproduciendo) return;
+        const corrida = corridaActual();
+        if (!corrida || corrida.frames.length === 0) {
+          idAnimacion = requestAnimationFrame(loopReproduccion);
+          return;
+        }
+
+        if (tiempoInicioPaso === 0) {
+          tiempoInicioPaso = ahora;
+          prepararPaso();
+        }
+
+        const transcurrido = ahora - tiempoInicioPaso;
+        const fraccion = duracionPasoActual > 0 ? Math.min(1, transcurrido / duracionPasoActual) : 1;
+
+        dibujarFrame(fraccion);
+
+        if (transcurrido >= duracionPasoActual) {
+          indiceFrame = (indiceFrame + 1) % corrida.frames.length;
+          tiempoInicioPaso = ahora;
+          prepararPaso();
+        }
+
+        idAnimacion = requestAnimationFrame(loopReproduccion);
+      }
+
+      function iniciarReproduccion() {
+        reproduciendo = true;
+        botonJugar.textContent = "⏸ Pausar";
+        tiempoInicioPaso = 0;
+        idAnimacion = requestAnimationFrame(loopReproduccion);
+      }
+
+      function detenerReproduccion() {
+        reproduciendo = false;
+        botonJugar.textContent = "▶ Reproducir";
+        if (idAnimacion) cancelAnimationFrame(idAnimacion);
+      }
+
+      function reiniciar() {
+        detenerReproduccion();
+        indiceFrame = 0;
+        posicionesAnteriores = new Map();
+        anguloPorVehiculo.clear();
+        reiniciarPanelMQTT();
+        dibujarFrame();
+      }
+
+      // --- interacción de zoom (rueda del mouse) y desplazamiento (arrastrar) ---
+      lienzo.addEventListener(
+        "wheel",
+        (evento) => {
+          evento.preventDefault();
+          const factor = evento.deltaY < 0 ? 1.12 : 0.89;
+          const nuevoZoom = Math.min(6, Math.max(0.6, zoom * factor));
+
+          const rect = lienzo.getBoundingClientRect();
+          const escalaCanvas = lienzo.width / rect.width;
+          const mx = (evento.clientX - rect.left) * escalaCanvas;
+          const my = (evento.clientY - rect.top) * escalaCanvas;
+
+          panX = mx - ((mx - panX) * nuevoZoom) / zoom;
+          panY = my - ((my - panY) * nuevoZoom) / zoom;
+          zoom = nuevoZoom;
+
+          dibujarFrame();
+        },
+        { passive: false }
+      );
+
+      lienzo.addEventListener("mousedown", (evento) => {
+        arrastrando = true;
+        ultimoMouse = { x: evento.clientX, y: evento.clientY };
+      });
+
+      const modalMapa = document.getElementById("modalMapa");
+      document.getElementById("botonVerMapa").addEventListener("click", () => {
+        modalMapa.classList.add("visible");
+      });
+      document.getElementById("cerrarModalMapa").addEventListener("click", () => {
+        modalMapa.classList.remove("visible");
+      });
+      modalMapa.addEventListener("click", (evento) => {
+        if (evento.target === modalMapa) modalMapa.classList.remove("visible"); // cerrar clickeando afuera
+      });
+
+      function coordenadasMundo(clientX, clientY) {
+        const rect = lienzo.getBoundingClientRect();
+        const escalaCanvas = lienzo.width / rect.width;
+        const mx = (clientX - rect.left) * escalaCanvas;
+        const my = (clientY - rect.top) * escalaCanvas;
+        return { x: (mx - panX) / zoom, y: (my - panY) / zoom };
+      }
+
+      function colorFase(fase) {
+        if (fase === "verde") return COLORES_LAMPARA.verde.encendida;
+        if (fase === "amarillo") return COLORES_LAMPARA.amarillo.encendida;
+        if (fase === "rojo") return COLORES_LAMPARA.rojo.encendida;
+        return "#555";
+      }
+
+      function actualizarTooltipSemaforo(evento, objetivo) {
+        if (!objetivo) {
+          tooltipSemaforo.classList.remove("visible");
+          semaforoHoverId = null;
+          lienzo.style.cursor = arrastrando ? "grabbing" : "grab";
+          return;
+        }
+
+        semaforoHoverId = objetivo.id;
+        lienzo.style.cursor = "pointer";
+
+        const titulo =
+          objetivo.tipo === "interseccion"
+            ? `Intersección ${objetivo.tlsId}`
+            : `Vía de entrada ${objetivo.indiceCarril}`;
+
+        tooltipSemaforo.innerHTML = `
       <div class="titulo">${titulo}</div>
       <div style="color: var(--texto-tenue)">ID semáforo: ${objetivo.tlsId}</div>
       <div class="fase">
@@ -1053,143 +1342,143 @@
       </div>
     `;
 
-    const rectEnv = envolturaLienzo.getBoundingClientRect();
-    tooltipSemaforo.style.left = `${evento.clientX - rectEnv.left}px`;
-    tooltipSemaforo.style.top = `${evento.clientY - rectEnv.top}px`;
-    tooltipSemaforo.classList.add("visible");
-  }
-
-  function buscarSemaforoBajoCursor(clientX, clientY) {
-    const { x, y } = coordenadasMundo(clientX, clientY);
-    let mejor = null;
-    let mejorDist = Infinity;
-
-    for (const item of semaforosParaHover) {
-      const radio = item.radio / zoom;
-      const dx = x - item.x;
-      const dy = y - item.y;
-      const dist = Math.hypot(dx, dy);
-      if (dist <= radio && dist < mejorDist) {
-        mejor = item;
-        mejorDist = dist;
+        const rectEnv = envolturaLienzo.getBoundingClientRect();
+        tooltipSemaforo.style.left = `${evento.clientX - rectEnv.left}px`;
+        tooltipSemaforo.style.top = `${evento.clientY - rectEnv.top}px`;
+        tooltipSemaforo.classList.add("visible");
       }
-    }
-    return mejor;
-  }
 
-  window.addEventListener("mousemove", (evento) => {
-    if (arrastrando) {
-      const escalaCanvas = lienzo.width / lienzo.getBoundingClientRect().width;
-      panX += (evento.clientX - ultimoMouse.x) * escalaCanvas;
-      panY += (evento.clientY - ultimoMouse.y) * escalaCanvas;
-      ultimoMouse = { x: evento.clientX, y: evento.clientY };
-      actualizarTooltipSemaforo(evento, null);
-      dibujarFrame();
-      return;
-    }
+      function buscarSemaforoBajoCursor(clientX, clientY) {
+        const { x, y } = coordenadasMundo(clientX, clientY);
+        let mejor = null;
+        let mejorDist = Infinity;
 
-    const bajoCursor = buscarSemaforoBajoCursor(evento.clientX, evento.clientY);
-    const idPrevio = semaforoHoverId;
-    actualizarTooltipSemaforo(evento, bajoCursor);
-    if (bajoCursor?.id !== idPrevio) dibujarFrame();
-  });
-
-  window.addEventListener("mouseup", () => {
-    arrastrando = false;
-    lienzo.style.cursor = "grab";
-  });
-
-  lienzo.addEventListener("mouseleave", () => {
-    actualizarTooltipSemaforo(null, null);
-    if (semaforoHoverId) {
-      semaforoHoverId = null;
-      dibujarFrame();
-    }
-  });
-
-  document.getElementById("botonResetZoom").addEventListener("click", () => {
-    zoom = 1;
-    panX = 0;
-    panY = 0;
-    dibujarFrame();
-  });
-
-  botonJugar.addEventListener("click", () => {
-    reproduciendo ? detenerReproduccion() : iniciarReproduccion();
-  });
-
-  botonReiniciar.addEventListener("click", reiniciar);
-
-  document.querySelectorAll(".velocidad").forEach((boton) => {
-    boton.addEventListener("click", () => {
-      document.querySelectorAll(".velocidad").forEach((b) => b.classList.remove("activo"));
-      boton.classList.add("activo");
-      velocidad = Number(boton.dataset.velocidad);
-      if (reproduciendo) {
-        detenerReproduccion();
-        iniciarReproduccion();
+        for (const item of semaforosParaHover) {
+          const radio = item.radio / zoom;
+          const dx = x - item.x;
+          const dy = y - item.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist <= radio && dist < mejorDist) {
+            mejor = item;
+            mejorDist = dist;
+          }
+        }
+        return mejor;
       }
-    });
-  });
 
-  document.querySelectorAll("[data-nivel]").forEach((boton) => {
-    boton.addEventListener("click", () => {
-      document.querySelectorAll("[data-nivel]").forEach((b) => b.classList.remove("activo"));
-      boton.classList.add("activo");
-      nivel = boton.dataset.nivel;
-      reiniciar();
-      actualizarMetricaEspera();
-    });
-  });
+      window.addEventListener("mousemove", (evento) => {
+        if (arrastrando) {
+          const escalaCanvas = lienzo.width / lienzo.getBoundingClientRect().width;
+          panX += (evento.clientX - ultimoMouse.x) * escalaCanvas;
+          panY += (evento.clientY - ultimoMouse.y) * escalaCanvas;
+          ultimoMouse = { x: evento.clientX, y: evento.clientY };
+          actualizarTooltipSemaforo(evento, null);
+          dibujarFrame();
+          return;
+        }
 
-  document.querySelectorAll("[data-modo]").forEach((boton) => {
-    boton.addEventListener("click", () => {
-      document.querySelectorAll("[data-modo]").forEach((b) => b.classList.remove("activo"));
-      boton.classList.add("activo");
-      modo = boton.dataset.modo;
-      actualizarDisponibilidadFalla();
-      reiniciar();
-      actualizarMetricaEspera();
-    });
-  });
+        const bajoCursor = buscarSemaforoBajoCursor(evento.clientX, evento.clientY);
+        const idPrevio = semaforoHoverId;
+        actualizarTooltipSemaforo(evento, bajoCursor);
+        if (bajoCursor?.id !== idPrevio) dibujarFrame();
+      });
 
-  function actualizarDisponibilidadFalla() {
-    const disponible = modo === "adaptativo";
-    checkFalla.disabled = !disponible;
-    etiquetaFalla.classList.toggle("deshabilitado", !disponible);
-    if (!disponible) {
-      checkFalla.checked = false;
-      verFalla = false;
-    }
-  }
+      window.addEventListener("mouseup", () => {
+        arrastrando = false;
+        lienzo.style.cursor = "grab";
+      });
 
-  checkFalla.addEventListener("change", () => {
-    verFalla = checkFalla.checked;
-    reiniciar();
-    actualizarMetricaEspera();
-  });
+      lienzo.addEventListener("mouseleave", () => {
+        actualizarTooltipSemaforo(null, null);
+        if (semaforoHoverId) {
+          semaforoHoverId = null;
+          dibujarFrame();
+        }
+      });
 
-  function construirBarras() {
-    const contenedor = document.getElementById("contenedorBarras");
-    if (!datos) return;
-    const maxima = Math.max(
-      ...Object.values(datos.comparativo).flatMap((n) => [n.fijo || 0, n.webster || 0, n.adaptativo || 0])
-    );
+      document.getElementById("botonResetZoom").addEventListener("click", () => {
+        zoom = 1;
+        panX = 0;
+        panY = 0;
+        dibujarFrame();
+      });
 
-    for (const nombreNivel of ["bajo", "medio", "alto"]) {
-      const valores = datos.comparativo[nombreNivel] || {};
-      const grupo = document.createElement("div");
-      grupo.className = "grupo-barra";
+      botonJugar.addEventListener("click", () => {
+        reproduciendo ? detenerReproduccion() : iniciarReproduccion();
+      });
 
-      const par = document.createElement("div");
-      par.className = "par-barras";
+      botonReiniciar.addEventListener("click", reiniciar);
 
-      const altoMaximo = 140;
-      const alturaFijo = maxima ? (valores.fijo / maxima) * altoMaximo : 0;
-      const alturaWebster = maxima ? (valores.webster / maxima) * altoMaximo : 0;
-      const alturaAdaptativo = maxima ? (valores.adaptativo / maxima) * altoMaximo : 0;
+      document.querySelectorAll(".velocidad").forEach((boton) => {
+        boton.addEventListener("click", () => {
+          document.querySelectorAll(".velocidad").forEach((b) => b.classList.remove("activo"));
+          boton.classList.add("activo");
+          velocidad = Number(boton.dataset.velocidad);
+          if (reproduciendo) {
+            detenerReproduccion();
+            iniciarReproduccion();
+          }
+        });
+      });
 
-      par.innerHTML = `
+      document.querySelectorAll("[data-nivel]").forEach((boton) => {
+        boton.addEventListener("click", () => {
+          document.querySelectorAll("[data-nivel]").forEach((b) => b.classList.remove("activo"));
+          boton.classList.add("activo");
+          nivel = boton.dataset.nivel;
+          reiniciar();
+          actualizarMetricaEspera();
+        });
+      });
+
+      document.querySelectorAll("[data-modo]").forEach((boton) => {
+        boton.addEventListener("click", () => {
+          document.querySelectorAll("[data-modo]").forEach((b) => b.classList.remove("activo"));
+          boton.classList.add("activo");
+          modo = boton.dataset.modo;
+          actualizarDisponibilidadFalla();
+          reiniciar();
+          actualizarMetricaEspera();
+        });
+      });
+
+      function actualizarDisponibilidadFalla() {
+        const disponible = modo === "adaptativo";
+        checkFalla.disabled = !disponible;
+        etiquetaFalla.classList.toggle("deshabilitado", !disponible);
+        if (!disponible) {
+          checkFalla.checked = false;
+          verFalla = false;
+        }
+      }
+
+      checkFalla.addEventListener("change", () => {
+        verFalla = checkFalla.checked;
+        reiniciar();
+        actualizarMetricaEspera();
+      });
+
+      function construirBarras() {
+        const contenedor = document.getElementById("contenedorBarras");
+        if (!datos) return;
+        const maxima = Math.max(
+          ...Object.values(datos.comparativo).flatMap((n) => [n.fijo || 0, n.webster || 0, n.adaptativo || 0])
+        );
+
+        for (const nombreNivel of ["bajo", "medio", "alto"]) {
+          const valores = datos.comparativo[nombreNivel] || {};
+          const grupo = document.createElement("div");
+          grupo.className = "grupo-barra";
+
+          const par = document.createElement("div");
+          par.className = "par-barras";
+
+          const altoMaximo = 140;
+          const alturaFijo = maxima ? (valores.fijo / maxima) * altoMaximo : 0;
+          const alturaWebster = maxima ? (valores.webster / maxima) * altoMaximo : 0;
+          const alturaAdaptativo = maxima ? (valores.adaptativo / maxima) * altoMaximo : 0;
+
+          par.innerHTML = `
         <div class="barra fijo" style="height:${alturaFijo}px">
           <span class="num">${(valores.fijo ?? 0).toFixed(1)}</span>
         </div>
@@ -1201,26 +1490,27 @@
         </div>
       `;
 
-      const etiqueta = document.createElement("div");
-      etiqueta.className = "etiqueta-nivel";
-      etiqueta.textContent = nombreNivel;
+          const etiqueta = document.createElement("div");
+          etiqueta.className = "etiqueta-nivel";
+          etiqueta.textContent = nombreNivel;
 
-      grupo.appendChild(par);
-      grupo.appendChild(etiqueta);
-      contenedor.appendChild(grupo);
-    }
-  }
+          grupo.appendChild(par);
+          grupo.appendChild(etiqueta);
+          contenedor.appendChild(grupo);
+        }
+      }
 
-  if (!datos) {
-    console.warn("No se encontró DATOS_SIMULACION — corre combinar_datos.py primero.");
-  }
+      if (!datos) {
+        console.warn("No se encontró DATOS_SIMULACION — corre combinar_datos.py primero.");
+      }
 
-  actualizarDisponibilidadFalla();
-  dibujarFrame();
-  actualizarMetricaEspera();
-  construirBarras();
-})();
-</script>
+      actualizarDisponibilidadFalla();
+      dibujarFrame();
+      actualizarMetricaEspera();
+      construirBarras();
+    })();
+  </script>
 
 </body>
+
 </html>
